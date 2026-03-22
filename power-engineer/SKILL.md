@@ -19,7 +19,7 @@ and run, and a markdown file listing plugin-based installs that must be done
 inside Claude Code.
 
 **Reference files in this skill directory** (read on demand, not upfront):
-- `references/SKILLS_CATALOG.md` — full catalog of 130+ skills
+- `references/catalog/INDEX.md` — catalog index; read this to find the right sub-file
 - `references/DECISION_MATRIX.md` — maps questionnaire answers to skill commands
 - `references/INSTALL_SCRIPT_TEMPLATE.md` — exact format for install-skills.sh
 - `references/PLUGIN_INSTALLS_TEMPLATE.md` — exact format for PLUGIN_INSTALLS.md

@@ -5,7 +5,7 @@ a complete, ready-to-run skill installation script tailored to your stack,
 discipline, and goals.
 
 Built for software engineers, AI engineers, and R&D engineers.
-130+ skills catalogued across every major category.
+150+ skills catalogued across every major category.
 
 ---
 
@@ -25,7 +25,7 @@ Run it once at the start of any project. It asks you 8 questions:
 Based on your answers it:
 
 - Detects which skills are already installed globally and locally
-- Selects the right skills from 130+ catalogued options
+- Selects the right skills from 150+ catalogued options
 - Generates `install-skills.sh` — a shell script you review and run
 - Generates `PLUGIN_INSTALLS.md` — plugin-based installs to do inside Claude Code
 - Skips anything already installed
@@ -75,50 +75,54 @@ cat PLUGIN_INSTALLS.md
 
 ```
 power-engineer-skills/
-├── README.md                              ← you are here
-├── SKILLS_CATALOG.md                      ← full catalog (human reference)
-└── power-engineer/                        ← the skill directory
-    ├── SKILL.md                           ← skill instructions (<200 lines)
+├── README.md                                  ← you are here
+└── power-engineer/                            ← the skill directory
+    ├── SKILL.md                               ← skill instructions (<200 lines)
     └── references/
-        ├── SKILLS_CATALOG.md              ← full catalog (Claude reads at runtime)
-        ├── DECISION_MATRIX.md             ← maps answers → skill commands
-        ├── INSTALL_SCRIPT_TEMPLATE.md     ← install-skills.sh format
-        └── PLUGIN_INSTALLS_TEMPLATE.md    ← PLUGIN_INSTALLS.md format
+        ├── catalog/                           ← skills catalog (split by category)
+        │   ├── INDEX.md                       ← lightweight TOC
+        │   ├── core-methodology.md            ← obra, mattpocock, github
+        │   ├── anthropic-official.md          ← anthropic skills, meta
+        │   ├── engineering/
+        │   │   ├── backend-architecture.md
+        │   │   ├── devops-infra.md
+        │   │   ├── data-ml.md
+        │   │   ├── testing-quality.md
+        │   │   ├── agentic-ai.md
+        │   │   └── security-ops.md
+        │   ├── frontend/
+        │   │   ├── react-next.md
+        │   │   ├── vue-vite.md
+        │   │   ├── design-systems.md
+        │   │   └── mobile.md
+        │   ├── cloud/
+        │   │   ├── azure.md
+        │   │   └── databases.md
+        │   ├── docs-research.md
+        │   └── power-suites.md
+        ├── DECISION_MATRIX.md                 ← maps answers to skill commands
+        ├── INSTALL_SCRIPT_TEMPLATE.md         ← install-skills.sh format
+        └── PLUGIN_INSTALLS_TEMPLATE.md        ← PLUGIN_INSTALLS.md format
 ```
 
 ---
 
 ## Skills catalog
 
-See [SKILLS_CATALOG.md](./SKILLS_CATALOG.md) for the full list of 130+ skills
-organised by category, with install commands and scope recommendations.
+Browse the catalog by category in [power-engineer/references/catalog/](./power-engineer/references/catalog/).
+Start with [INDEX.md](./power-engineer/references/catalog/INDEX.md) for an overview.
 
-Categories covered:
+### Categories
 
-| # | Category |
-|---|----------|
-| 1 | Core Methodology — obra/superpowers |
-| 2 | Planning & Product — mattpocock/skills |
-| 3 | Anthropic Official |
-| 4 | GitHub — awesome-copilot |
-| 5 | Architecture & Backend — wshobson/agents |
-| 6 | Engineering Templates — supercent-io |
-| 7 | Vercel — agent-skills, next-skills, AI SDK |
-| 8 | AI/LLM Engineering — inferen-sh |
-| 9 | Agentic Patterns |
-| 10 | Data & Research |
-| 11 | Testing |
-| 12 | Cloud & Infrastructure — Microsoft Azure |
-| 13 | Databases — Neon, Supabase, Better Auth |
-| 14 | Design — Google Stitch |
-| 15 | Design — Frontend |
-| 16 | Design — pbakaus/impeccable (14 refinement skills) |
-| 17 | Mobile — Expo |
-| 18 | Mobile — SwiftUI/iOS |
-| 19 | Vue / Vite |
-| 20 | Meta / Skill Creation |
-| 21 | Power Suites (GSD, Superpowers, UI/UX Pro Max, Designer Skills, Stitch, Pencil) |
-| 22 | Community Extras |
+| Category | Sub-categories |
+|----------|---------------|
+| **Core & Planning** | obra/superpowers, mattpocock planning, GitHub copilot |
+| **Anthropic Official** | Document generation, design, skill creation |
+| **Engineering** | Backend, DevOps/Infra, Data/ML, Testing, Agentic AI, Security |
+| **Frontend & Design** | React/Next.js, Vue/Vite, Design systems, Mobile |
+| **Cloud & Databases** | Microsoft Azure, Neon, Supabase |
+| **Docs & Research** | Technical writing, web research, data analysis |
+| **Power Suites** | GSD, Superpowers, UI/UX Pro Max, Designer Skills, Stitch, Pencil |
 
 ---
 
@@ -130,20 +134,20 @@ which ones are relevant for your project and how to install them.
 
 | Suite | Install method | Description |
 |-------|---------------|-------------|
-| **GSD — Get Shit Done** | `npx get-shit-done-cc --claude --global` | Context engineering layer: questionnaire → SPEC → phased execution → verification |
-| **Superpowers** | `/plugin install superpowers@superpowers-marketplace` | Auto-triggering dev methodology: brainstorm → TDD → verify |
+| **GSD** | `npx get-shit-done-cc --claude --global` | Context engineering: questionnaire, SPEC, phased execution, verification |
+| **Superpowers** | `/plugin install superpowers@superpowers-marketplace` | Auto-triggering dev methodology: brainstorm, TDD, verify |
 | **UI/UX Pro Max** | `/plugin install ui-ux-pro-max@ui-ux-pro-max-skill` | 97 palettes, 57 font pairings, 99 UX guidelines, 9 stacks |
 | **Designer Skills** | `/plugin marketplace add Owl-Listener/designer-skills` | 63 skills + 27 commands across 8 design disciplines |
-| **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all --global` | Text/sketch → high-fidelity UI → React/Tailwind via Gemini 2.5 Pro |
-| **Pencil** | Built-in | Native `.pen` file editor in VS Code via companion extension |
+| **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all --global` | Text/sketch to high-fidelity UI to React/Tailwind |
+| **Pencil** | Built-in | Native `.pen` file editor in VS Code |
 
 ---
 
 ## Contributing
 
 PRs welcome. If you find a skill worth adding to the catalog, open an issue or
-submit a PR updating `SKILLS_CATALOG.md`, `setup/references/SKILLS_CATALOG.md`,
-and the relevant section in `setup/references/DECISION_MATRIX.md`.
+submit a PR updating the relevant file in `power-engineer/references/catalog/`
+and the corresponding section in `power-engineer/references/DECISION_MATRIX.md`.
 
 Please include:
 - Skill name and source repo

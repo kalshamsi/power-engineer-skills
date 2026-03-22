@@ -4,6 +4,10 @@ Use this file to map questionnaire answers to skill install commands.
 Build two lists as you go: **GLOBAL** (`--global` flag) and **LOCAL** (no flag).
 De-duplicate as you go — the same skill may appear from multiple answers.
 
+**Note:** Skills from alirezarezvani/claude-skills use the Claude Code plugin system.
+To use them, first add the marketplace (once): `/plugin marketplace add alirezarezvani/claude-skills`
+Then install individual skills or bundles as shown below.
+
 ---
 
 ## Always add — Core methodology (every project, all global)
@@ -57,6 +61,8 @@ npx skills@latest add supercent-io/skills-template/testing-strategies
 npx skills@latest add supercent-io/skills-template/log-analysis
 npx skills@latest add supercent-io/skills-template/codebase-search
 npx skills@latest add supercent-io/skills-template/debugging
+# Plugin-based (alirezarezvani/claude-skills) — requires marketplace added
+# /plugin install engineering-skills@claude-code-skills (includes docker, migration, incident, secrets, tech-debt, stripe)
 ```
 
 **If answer includes 2 (AI/LLM Engineering):**
@@ -76,6 +82,9 @@ npx skills@latest add inferen-sh/skills/agent-ui
 npx skills@latest add inferen-sh/skills/tools-ui
 npx skills@latest add inferen-sh/skills/widgets-ui
 npx skills@latest add supercent-io/skills-template/security-best-practices
+# Plugin-based (alirezarezvani/claude-skills)
+# /plugin install agenthub@claude-code-skills (parallel competing subagents)
+# /plugin install engineering-advanced-skills@claude-code-skills (agent-designer, autoresearch)
 ```
 
 **If answer includes 3 (R&D / Research):**
@@ -90,6 +99,8 @@ npx skills@latest add firecrawl/cli/firecrawl
 npx skills@latest add inferen-sh/skills/python-executor
 npx skills@latest add inferen-sh/skills/web-search
 npx skills@latest add mattpocock/skills/design-an-interface
+# Plugin-based (alirezarezvani/claude-skills)
+# /plugin install engineering-advanced-skills@claude-code-skills (data-engineer, data-scientist, autoresearch)
 ```
 
 ---
@@ -110,6 +121,8 @@ npx skills@latest add mattpocock/skills/tdd
 npx skills@latest add wshobson/agents/python-performance-optimization
 npx skills@latest add inferen-sh/skills/python-executor
 npx skills@latest add inferen-sh/skills/python-sdk
+# Plugin-based (alirezarezvani/claude-skills)
+# /plugin install engineering-advanced-skills@claude-code-skills (data-engineer, data-scientist, ml-engineer, computer-vision)
 ```
 
 **If Both:** add all of the above.
@@ -145,12 +158,14 @@ npx skills@latest add antfu/skills/vite
 npx skills@latest add wshobson/agents/nodejs-backend-patterns
 npx skills@latest add supercent-io/skills-template/backend-testing
 npx skills@latest add supercent-io/skills-template/api-design
+# Plugin-based: /plugin install engineering-skills@claude-code-skills (docker, helm, terraform)
 ```
 
 **FastAPI / Flask / Django:**
 ```bash
 npx skills@latest add wshobson/agents/python-performance-optimization
 npx skills@latest add supercent-io/skills-template/backend-testing
+# Plugin-based: /plugin install engineering-skills@claude-code-skills (docker, helm, terraform)
 ```
 
 **React Native / Expo:**
@@ -344,6 +359,8 @@ npx skills@latest add supercent-io/skills-template/code-refactoring
 npx skills@latest add supercent-io/skills-template/codebase-search
 npx skills@latest add supercent-io/skills-template/changelog-maintenance
 npx skills@latest add supercent-io/skills-template/debugging
+# Plugin-based (alirezarezvani/claude-skills)
+# /plugin install engineering-advanced-skills@claude-code-skills (tech-debt-tracker, codebase-onboarding, migration-architect)
 ```
 
 **Research / prototyping:**
