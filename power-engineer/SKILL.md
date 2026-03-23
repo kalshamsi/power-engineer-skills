@@ -4,10 +4,13 @@ description: >
   Use when setting up or starting a project and you want to install the optimal
   skill stack for it. Triggers on phrases like: "set up skills for this project",
   "install project skills", "what skills should I use", "power engineer setup",
-  "configure my skill stack", or any request to set up Claude Code skills for a
-  new or existing project. Asks 8 questions about project type, stack, design
-  needs, docs, cloud, and phase — then generates a ready-to-run install-skills.sh
-  and a PLUGIN_INSTALLS.md file.
+  "configure my skill stack", "power engineer frontend", "power engineer status",
+  or any request to set up Claude Code skills for a new or existing project.
+  Also triggers on targeted requests like "power engineer backend",
+  "power engineer devops", "power engineer ai", "power engineer data",
+  "power engineer docs", "power engineer mobile", "power engineer quick",
+  "power engineer catalog", "power engineer update". Even if the user just says
+  "/power-engineer frontend" or similar shorthand, this skill handles it.
 ---
 
 # Power Engineer Setup
@@ -23,6 +26,75 @@ inside Claude Code.
 - `references/DECISION_MATRIX.md` — maps questionnaire answers to skill commands
 - `references/INSTALL_SCRIPT_TEMPLATE.md` — exact format for install-skills.sh
 - `references/PLUGIN_INSTALLS_TEMPLATE.md` — exact format for PLUGIN_INSTALLS.md
+
+---
+
+## Routing — detect what the user wants
+
+Before starting the full questionnaire, check the user's message for a
+targeted request. If the message matches one of these patterns, skip
+the full interview and go directly to that flow:
+
+| User says (examples) | Action |
+|-----------------------|--------|
+| "power engineer frontend" or "/power-engineer frontend" | Jump to **Frontend flow** |
+| "power engineer backend" | Jump to **Backend flow** |
+| "power engineer devops" | Jump to **DevOps flow** |
+| "power engineer ai" | Jump to **AI/LLM flow** |
+| "power engineer data" | Jump to **Data/ML flow** |
+| "power engineer docs" | Jump to **Docs flow** |
+| "power engineer mobile" | Jump to **Mobile flow** |
+| "power engineer quick" | Jump to **Quick setup** |
+| "power engineer status" | Jump to **Status** |
+| "power engineer catalog" | Jump to **Catalog browse** |
+| "power engineer update" | Jump to **Update** |
+| anything else (or just "power engineer") | Run the **Full interview** (Step 1 below) |
+
+### Targeted flows
+
+For each targeted flow: detect installed skills (Step 2), ask only the
+sub-questions relevant to that category, then read `references/DECISION_MATRIX.md`
+to pick the right skills and generate the install script.
+
+**Frontend flow** — Ask: Which framework? (Next.js / React / Vue / None)
+and What design level? (Full / Standard / Minimal / None). Then install
+frontend + design skills from the decision matrix.
+
+**Backend flow** — Ask: Which stack? (TypeScript / Python / Both) and
+Which database? (Azure / Supabase / Neon / None). Then install backend +
+database skills.
+
+**DevOps flow** — No sub-questions needed. Install all DevOps/infra skills
+(Docker, Terraform, Helm, CI/CD, observability, runbooks, incident response).
+
+**AI/LLM flow** — Ask: Are you using Vercel AI SDK, Anthropic Python SDK,
+or Anthropic JS/TS SDK? Then install agentic + SDK skills.
+
+**Data/ML flow** — No sub-questions needed. Install data engineering, data
+science, ML/MLOps, and computer vision skills.
+
+**Docs flow** — Ask: Full office suite or technical docs only? Then install
+the appropriate document generation skills.
+
+**Mobile flow** — Ask: React Native/Expo or SwiftUI/iOS? Then install the
+appropriate mobile skills.
+
+**Quick setup** — Auto-detect the project stack from config files (package.json,
+pyproject.toml, Dockerfile, tsconfig.json, etc.). Present what was detected,
+ask only the questions that couldn't be inferred (usually design needs, docs
+needs, project phase), confirm with the user, then generate the full install.
+
+**Status** — Run the detection commands from Step 2 and present a clean
+summary of all installed skills (global, local, universal). If nothing is
+installed, suggest running the full setup.
+
+**Catalog browse** — Read `references/catalog/INDEX.md`, present the
+categories, and let the user explore interactively without installing.
+
+**Update** — Detect installed skills, read the decision matrix, identify
+skills in the catalog that are NOT installed yet, present them to the user
+grouped by category, and offer to generate an install script for just the
+new ones.
 
 ---
 

@@ -32,14 +32,13 @@ Based on your answers it:
 
 ---
 
-## Install the skill globally
+## Install
 
 ```bash
 npx skills@latest add kalshamsi/power-engineer-skills/power-engineer --global
 ```
 
-This installs the skill to `~/.claude/skills/power-engineer/` so it is
-available in every project.
+Works with Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
 
 ---
 
@@ -49,14 +48,32 @@ Open Claude Code in any project directory and say:
 
 > "Set up skills for this project"
 
-or
+or:
 
-> "Power engineer setup"
+> "/power-engineer"
 
 Claude will run the questionnaire, detect your existing skills, and write the
 two output files to your project root.
 
-Then:
+### Targeted commands
+
+You can also skip the full interview and go straight to a specific category:
+
+| Say this | What it does |
+|----------|-------------|
+| `power engineer quick` | Auto-detect stack, minimal questions |
+| `power engineer frontend` | Install frontend/design skills |
+| `power engineer backend` | Install backend/API/DB skills |
+| `power engineer devops` | Install DevOps/infra skills |
+| `power engineer ai` | Install AI/LLM/agentic skills |
+| `power engineer data` | Install data/ML/science skills |
+| `power engineer docs` | Install documentation skills |
+| `power engineer mobile` | Install mobile skills |
+| `power engineer status` | Show installed skills |
+| `power engineer catalog` | Browse catalog interactively |
+| `power engineer update` | Find new skills since last setup |
+
+### After setup
 
 ```bash
 # Review the script
@@ -77,7 +94,7 @@ cat PLUGIN_INSTALLS.md
 power-engineer-skills/
 ├── README.md                                  ← you are here
 └── power-engineer/                            ← the skill directory
-    ├── SKILL.md                               ← skill instructions (<200 lines)
+    ├── SKILL.md                               ← skill instructions with smart routing
     └── references/
         ├── catalog/                           ← skills catalog (split by category)
         │   ├── INDEX.md                       ← lightweight TOC
@@ -128,9 +145,9 @@ Start with [INDEX.md](./power-engineer/references/catalog/INDEX.md) for an overv
 
 ## Power suites
 
-Some skill collections install via Claude Code's `/plugin` system rather than
-`npx skills add`. The setup skill generates a `PLUGIN_INSTALLS.md` listing
-which ones are relevant for your project and how to install them.
+Some skill collections install via special methods rather than `npx skills add`.
+The setup skill generates a `PLUGIN_INSTALLS.md` listing which ones are relevant
+for your project and how to install them.
 
 | Suite | Install method | Description |
 |-------|---------------|-------------|
