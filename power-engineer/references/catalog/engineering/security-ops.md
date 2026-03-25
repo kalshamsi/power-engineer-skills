@@ -4,7 +4,7 @@
 
 | Skill | Source | Install | Description |
 |-------|--------|---------|-------------|
-| security-best-practices | supercent-io | `npx skills@latest add supercent-io/skills-template/security-best-practices` | OWASP-aligned: auth, input validation, secrets management, dependency auditing. |
+| security-best-practices | supercent-io | `npx skills@latest add supercent-io/skills-template --skill security-best-practices -y` | OWASP-aligned: auth, input validation, secrets management, dependency auditing. |
 | skill-security-auditor | alirezarezvani/claude-skills | `/plugin install skill-security-auditor@claude-code-skills` | Pre-install security gate for AI agent skills: scans for malicious code, prompt injection, dependency supply chain risks, file system boundary violations. |
 
 ---

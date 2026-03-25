@@ -4,12 +4,12 @@
 
 | Skill | Scope | Install | Description |
 |-------|-------|---------|-------------|
-| vercel-react-best-practices | `local` | `npx skills@latest add vercel-labs/agent-skills/vercel-react-best-practices` | React component architecture, performance, server components, data fetching. |
-| vercel-composition-patterns | `local` | `npx skills@latest add vercel-labs/agent-skills/vercel-composition-patterns` | Advanced React composition: render props, compound components, context patterns. |
-| deploy-to-vercel | `local` | `npx skills@latest add vercel-labs/agent-skills/deploy-to-vercel` | Vercel deployment: project setup, environment variables, preview deployments, edge config. |
-| next-best-practices | `local` | `npx skills@latest add vercel-labs/next-skills/next-best-practices` | Next.js: App Router, RSC, layouts, metadata, fonts, images, deployment. |
-| next-cache-components | `local` | `npx skills@latest add vercel-labs/next-skills/next-cache-components` | Next.js caching strategies, revalidation, partial prerendering, streaming. |
-| turborepo | `local` | `npx skills@latest add vercel/turborepo/turborepo` | Turborepo monorepo: caching, pipeline config, remote caching, workspace management. |
+| vercel-react-best-practices | `local` | `npx skills@latest add vercel-labs/agent-skills --skill vercel-react-best-practices -y` | React component architecture, performance, server components, data fetching. |
+| vercel-composition-patterns | `local` | `npx skills@latest add vercel-labs/agent-skills --skill vercel-composition-patterns -y` | Advanced React composition: render props, compound components, context patterns. |
+| deploy-to-vercel | `local` | `npx skills@latest add vercel-labs/agent-skills --skill deploy-to-vercel -y` | Vercel deployment: project setup, environment variables, preview deployments, edge config. |
+| next-best-practices | `local` | `npx skills@latest add vercel-labs/next-skills --skill next-best-practices -y` | Next.js: App Router, RSC, layouts, metadata, fonts, images, deployment. |
+| next-cache-components | `local` | `npx skills@latest add vercel-labs/next-skills --skill next-cache-components -y` | Next.js caching strategies, revalidation, partial prerendering, streaming. |
+| turborepo | `local` | `npx skills@latest add vercel/turborepo --skill turborepo -y` | Turborepo monorepo: caching, pipeline config, remote caching, workspace management. |
 
 ---
 

@@ -30,4 +30,4 @@
 
 | Skill | Scope | Install | Description |
 |-------|-------|---------|-------------|
-| deployment-automation | `local` | `npx skills@latest add supercent-io/skills-template/deployment-automation` | CI/CD pipeline design, automated deployment, rollback strategies. |
+| deployment-automation | `local` | `npx skills@latest add supercent-io/skills-template --skill deployment-automation -y` | CI/CD pipeline design, automated deployment, rollback strategies. |

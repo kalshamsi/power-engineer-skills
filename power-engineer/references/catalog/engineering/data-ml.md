@@ -29,7 +29,7 @@
 
 | Skill | Install | Description |
 |-------|---------|-------------|
-| data-analysis | `npx skills@latest add supercent-io/skills-template/data-analysis` | Data exploration, statistical analysis, and visualisation patterns in Python/R. |
+| data-analysis | `npx skills@latest add supercent-io/skills-template --skill data-analysis -y` | Data exploration, statistical analysis, and visualisation patterns in Python/R. |
 
 ---
 
@@ -37,5 +37,5 @@
 
 | Skill | Source | Install | Description |
 |-------|--------|---------|-------------|
-| firecrawl | firecrawl/cli | `npx skills@latest add firecrawl/cli/firecrawl` | Web crawl and structure data from any URL for research pipelines and RAG. |
-| search | tavily-ai/skills | `npx skills@latest add tavily-ai/skills/search` | Tavily real-time search with structured result extraction for AI-grounded research. |
+| firecrawl | firecrawl/cli | `npx skills@latest add firecrawl/cli --skill firecrawl -y` | Web crawl and structure data from any URL for research pipelines and RAG. |
+| search | tavily-ai/skills | `npx skills@latest add tavily-ai/skills --skill search -y` | Tavily real-time search with structured result extraction for AI-grounded research. |

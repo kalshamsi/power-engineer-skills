@@ -30,20 +30,20 @@ that auto-activates at each stage without manual invocation.
 
 **Or individually:**
 ```bash
-npx skills@latest add obra/superpowers/brainstorming
-npx skills@latest add obra/superpowers/writing-plans
-npx skills@latest add obra/superpowers/test-driven-development
-npx skills@latest add obra/superpowers/systematic-debugging
-npx skills@latest add obra/superpowers/verification-before-completion
-npx skills@latest add obra/superpowers/requesting-code-review
-npx skills@latest add obra/superpowers/receiving-code-review
-npx skills@latest add obra/superpowers/subagent-driven-development
-npx skills@latest add obra/superpowers/dispatching-parallel-agents
-npx skills@latest add obra/superpowers/using-git-worktrees
-npx skills@latest add obra/superpowers/finishing-a-development-branch
-npx skills@latest add obra/superpowers/executing-plans
-npx skills@latest add obra/superpowers/writing-skills
-npx skills@latest add obra/superpowers/using-superpowers```
+npx skills@latest add obra/superpowers --skill brainstorming -y
+npx skills@latest add obra/superpowers --skill writing-plans -y
+npx skills@latest add obra/superpowers --skill test-driven-development -y
+npx skills@latest add obra/superpowers --skill systematic-debugging -y
+npx skills@latest add obra/superpowers --skill verification-before-completion -y
+npx skills@latest add obra/superpowers --skill requesting-code-review -y
+npx skills@latest add obra/superpowers --skill receiving-code-review -y
+npx skills@latest add obra/superpowers --skill subagent-driven-development -y
+npx skills@latest add obra/superpowers --skill dispatching-parallel-agents -y
+npx skills@latest add obra/superpowers --skill using-git-worktrees -y
+npx skills@latest add obra/superpowers --skill finishing-a-development-branch -y
+npx skills@latest add obra/superpowers --skill executing-plans -y
+npx skills@latest add obra/superpowers --skill writing-skills -y
+npx skills@latest add obra/superpowers --skill using-superpowers -y```
 
 ---
 
@@ -51,19 +51,19 @@ npx skills@latest add obra/superpowers/using-superpowers```
 
 | Skill | Install | Description |
 |-------|---------|-------------|
-| grill-me | `npx skills@latest add mattpocock/skills/grill-me` | Relentlessly interviews you about a plan until every decision branch is resolved. |
-| write-a-prd | `npx skills@latest add mattpocock/skills/write-a-prd` | Creates a PRD through interactive interview, codebase exploration, and module design. |
-| prd-to-plan | `npx skills@latest add mattpocock/skills/prd-to-plan` | Converts a PRD into a multi-phase implementation plan using tracer-bullet vertical slices. |
-| prd-to-issues | `npx skills@latest add mattpocock/skills/prd-to-issues` | Breaks a PRD into independently-grabbable GitHub issues using vertical slices. |
-| request-refactor-plan | `npx skills@latest add mattpocock/skills/request-refactor-plan` | Creates a detailed refactor plan with tiny commits via user interview. |
-| design-an-interface | `npx skills@latest add mattpocock/skills/design-an-interface` | Generates multiple radically different interface designs using parallel sub-agents. |
-| tdd | `npx skills@latest add mattpocock/skills/tdd` | TypeScript-focused TDD workflow with opinionated patterns and strict RED-GREEN-REFACTOR. |
-| setup-pre-commit | `npx skills@latest add mattpocock/skills/setup-pre-commit` | Sets up pre-commit hooks with lint, type-check, and test runs. |
-| git-guardrails-claude-code | `npx skills@latest add mattpocock/skills/git-guardrails-claude-code` | Installs hooks to block dangerous git commands: push, reset --hard, clean. |
-| write-a-skill | `npx skills@latest add mattpocock/skills/write-a-skill` | Opinionated skill authoring workflow with bundled resource patterns. |
-| ubiquitous-language | `npx skills@latest add mattpocock/skills/ubiquitous-language` | Extracts a DDD-style ubiquitous language glossary from the current conversation. |
-| obsidian-vault | `npx skills@latest add mattpocock/skills/obsidian-vault` | Search, create, and manage notes in an Obsidian vault with wikilinks. |
-| scaffold-exercises | `npx skills@latest add mattpocock/skills/scaffold-exercises` | Scaffolds coding exercises with solutions and test suites. |
+| grill-me | `npx skills@latest add mattpocock/skills --skill grill-me -y` | Relentlessly interviews you about a plan until every decision branch is resolved. |
+| write-a-prd | `npx skills@latest add mattpocock/skills --skill write-a-prd -y` | Creates a PRD through interactive interview, codebase exploration, and module design. |
+| prd-to-plan | `npx skills@latest add mattpocock/skills --skill prd-to-plan -y` | Converts a PRD into a multi-phase implementation plan using tracer-bullet vertical slices. |
+| prd-to-issues | `npx skills@latest add mattpocock/skills --skill prd-to-issues -y` | Breaks a PRD into independently-grabbable GitHub issues using vertical slices. |
+| request-refactor-plan | `npx skills@latest add mattpocock/skills --skill request-refactor-plan -y` | Creates a detailed refactor plan with tiny commits via user interview. |
+| design-an-interface | `npx skills@latest add mattpocock/skills --skill design-an-interface -y` | Generates multiple radically different interface designs using parallel sub-agents. |
+| tdd | `npx skills@latest add mattpocock/skills --skill tdd -y` | TypeScript-focused TDD workflow with opinionated patterns and strict RED-GREEN-REFACTOR. |
+| setup-pre-commit | `npx skills@latest add mattpocock/skills --skill setup-pre-commit -y` | Sets up pre-commit hooks with lint, type-check, and test runs. |
+| git-guardrails-claude-code | `npx skills@latest add mattpocock/skills --skill git-guardrails-claude-code -y` | Installs hooks to block dangerous git commands: push, reset --hard, clean. |
+| write-a-skill | `npx skills@latest add mattpocock/skills --skill write-a-skill -y` | Opinionated skill authoring workflow with bundled resource patterns. |
+| ubiquitous-language | `npx skills@latest add mattpocock/skills --skill ubiquitous-language -y` | Extracts a DDD-style ubiquitous language glossary from the current conversation. |
+| obsidian-vault | `npx skills@latest add mattpocock/skills --skill obsidian-vault -y` | Search, create, and manage notes in an Obsidian vault with wikilinks. |
+| scaffold-exercises | `npx skills@latest add mattpocock/skills --skill scaffold-exercises -y` | Scaffolds coding exercises with solutions and test suites. |
 
 ---
 
@@ -71,6 +71,6 @@ npx skills@latest add obra/superpowers/using-superpowers```
 
 | Skill | Install | Description |
 |-------|---------|-------------|
-| git-commit | `npx skills@latest add github/awesome-copilot/git-commit` | Generates conventional commit messages from staged diff with scope detection. |
-| gh-cli | `npx skills@latest add github/awesome-copilot/gh-cli` | Automates GitHub CLI workflows: PR creation, issue management, release drafts. |
-| prd | `npx skills@latest add github/awesome-copilot/prd` | GitHub Copilot's PRD workflow for turning specs into tracked GitHub issues. |
+| git-commit | `npx skills@latest add github/awesome-copilot --skill git-commit -y` | Generates conventional commit messages from staged diff with scope detection. |
+| gh-cli | `npx skills@latest add github/awesome-copilot --skill gh-cli -y` | Automates GitHub CLI workflows: PR creation, issue management, release drafts. |
+| prd | `npx skills@latest add github/awesome-copilot --skill prd -y` | GitHub Copilot's PRD workflow for turning specs into tracked GitHub issues. |

@@ -20,7 +20,7 @@ npx get-shit-done-cc --claude
 
 **Or via skills-based install:**
 ```bash
-npx skills add ctsstc/get-shit-done-skills --skill gsd
+npx skills@latest add ctsstc/get-shit-done-skills --skill gsd -y
 ```
 
 **Commands:** `/gsd:discuss-phase`, `/gsd:plan-phase`, `/gsd:execute-phase`,
@@ -88,17 +88,17 @@ Requires Stitch MCP server configured.
 
 **Install all:**
 ```bash
-npx skills add google-labs-code/stitch-skills --all
+npx skills@latest add google-labs-code/stitch-skills --all -y
 ```
 
 **Or individually:**
 ```bash
-npx skills add google-labs-code/stitch-skills --skill stitch-loop
-npx skills add google-labs-code/stitch-skills --skill enhance-prompt
-npx skills add google-labs-code/stitch-skills --skill react:components
-npx skills add google-labs-code/stitch-skills --skill design-md
-npx skills add google-labs-code/stitch-skills --skill shadcn-ui
-npx skills add google-labs-code/stitch-skills --skill remotion
+npx skills@latest add google-labs-code/stitch-skills --skill stitch-loop -y
+npx skills@latest add google-labs-code/stitch-skills --skill enhance-prompt -y
+npx skills@latest add google-labs-code/stitch-skills --skill react:components -y
+npx skills@latest add google-labs-code/stitch-skills --skill design-md -y
+npx skills@latest add google-labs-code/stitch-skills --skill shadcn-ui -y
+npx skills@latest add google-labs-code/stitch-skills --skill remotion -y
 ```
 
 ---
