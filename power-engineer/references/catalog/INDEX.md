@@ -3,8 +3,6 @@
 Read this file first to find the right sub-file for a given topic.
 Each file is self-contained with skill tables, install commands, and scope.
 
-**Scope key:** `--global` = all projects, `local` = per-project, `plugin` = inside Claude Code
-
 ---
 
 ## Core & Planning

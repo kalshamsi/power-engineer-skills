@@ -9,8 +9,8 @@ these three steps to produce the final output.
 
 Read `references/INSTALL_SCRIPT_TEMPLATE.md` for the exact output format.
 Write `install-skills.sh` to the current working directory following that
-template. Sort global commands before local commands. Mark skipped skills
-(already installed) as comments.
+template. Mark skipped
+skills (already installed) as comments.
 
 ---
 
@@ -36,7 +36,7 @@ Project:   [directory name]
 Type:      [user's answers summary]
 Stack:     [detected/chosen stack]
 
-Skills selected:  [N] global + [N] local
+Skills selected:  [N] skills
 Already present:  [N] skipped
 
 Files written:

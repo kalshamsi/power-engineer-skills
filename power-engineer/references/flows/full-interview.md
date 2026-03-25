@@ -67,26 +67,23 @@ Present each as a numbered list of options.
 Run these commands to see what is already installed:
 
 ```bash
-echo "=== GLOBAL ===" && ls ~/.claude/skills/ 2>/dev/null || echo "(none)"
-echo "=== LOCAL ===" && ls .claude/skills/ 2>/dev/null || echo "(none)"
+ls ~/.claude/skills/ .claude/skills/ 2>/dev/null || echo "(none)"
 ```
 
-Store the results as `GLOBAL_INSTALLED` and `LOCAL_INSTALLED`. Any skill
-already present will be excluded from the generated script with a comment.
+Store the results as `INSTALLED_SKILLS`. Any skill already present will be
+excluded from the generated script with a comment.
 
 ---
 
 ## Step 3 — Build skill lists
 
 Read `references/DECISION_MATRIX.md` and map every questionnaire answer to
-skill install commands. Build two lists:
-- **GLOBAL**: use `--global` flag — methodology, workflow, universal tools
-- **LOCAL**: no flag — framework-specific, project-specific
+skill install commands.
 
 Start with the "Always add — Core methodology" block (included for every
 project), then layer on skills from Q1 through Q8. De-duplicate as you go.
 
-Filter against `GLOBAL_INSTALLED` and `LOCAL_INSTALLED` from Step 2.
+Filter against `INSTALLED_SKILLS` from Step 2.
 
 ---
 

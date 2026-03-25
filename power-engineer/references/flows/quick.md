@@ -45,8 +45,7 @@ inferred. Typically these are:
 ## Step 3 — Detect installed skills
 
 ```bash
-echo "=== GLOBAL ===" && ls ~/.claude/skills/ 2>/dev/null || echo "(none)"
-echo "=== LOCAL ===" && ls .claude/skills/ 2>/dev/null || echo "(none)"
+ls ~/.claude/skills/ .claude/skills/ 2>/dev/null || echo "(none)"
 ```
 
 ## Step 4 — Build skill lists

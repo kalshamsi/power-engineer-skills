@@ -24,15 +24,8 @@ echo "Power Engineer Skills Installer"
 echo "================================"
 echo ""
 
-# -- Global skills (available across all your projects) ----------------------
-echo "Installing global skills..."
-echo ""
-
-[one command per line, each preceded by:  echo "  -> skill-name"]
-
-# -- Local skills (scoped to this project only) ------------------------------
-echo ""
-echo "Installing local skills..."
+# -- Skills (installed locally to this project) --------------------------------
+echo "Installing skills..."
 echo ""
 
 [one command per line, each preceded by:  echo "  -> skill-name"]

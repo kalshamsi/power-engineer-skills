@@ -42,7 +42,7 @@ Best for: Greenfield projects.
 
 **Terminal install (Claude Code):**
 \```bash
-npx get-shit-done-cc --claude --global
+npx get-shit-done-cc --claude
 \```
 **Skills-based install:**
 \```bash
@@ -93,17 +93,17 @@ Official Google Labs skills for the Stitch MCP server. Requires Stitch MCP
 configured. Transform text/sketches -> high-fidelity UI -> production React/Tailwind.
 
 \```bash
-npx skills add google-labs-code/stitch-skills --all --global
+npx skills add google-labs-code/stitch-skills --all
 \```
 
 Or individually:
 \```bash
-npx skills add google-labs-code/stitch-skills --skill stitch-loop --global
-npx skills add google-labs-code/stitch-skills --skill enhance-prompt --global
-npx skills add google-labs-code/stitch-skills --skill react:components --global
-npx skills add google-labs-code/stitch-skills --skill design-md --global
-npx skills add google-labs-code/stitch-skills --skill shadcn-ui --global
-npx skills add google-labs-code/stitch-skills --skill remotion --global
+npx skills add google-labs-code/stitch-skills --skill stitch-loop
+npx skills add google-labs-code/stitch-skills --skill enhance-prompt
+npx skills add google-labs-code/stitch-skills --skill react:components
+npx skills add google-labs-code/stitch-skills --skill design-md
+npx skills add google-labs-code/stitch-skills --skill shadcn-ui
+npx skills add google-labs-code/stitch-skills --skill remotion
 \```
 
 ---

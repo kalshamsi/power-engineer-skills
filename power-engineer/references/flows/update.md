@@ -6,8 +6,7 @@ already installed. Skips everything already present.
 ## Step 1 — Detect installed skills
 
 ```bash
-echo "=== GLOBAL ===" && ls ~/.claude/skills/ 2>/dev/null || echo "(none)"
-echo "=== LOCAL ===" && ls .claude/skills/ 2>/dev/null || echo "(none)"
+ls ~/.claude/skills/ .claude/skills/ 2>/dev/null || echo "(none)"
 ```
 
 ## Step 2 — Find new skills

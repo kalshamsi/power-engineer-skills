@@ -1,6 +1,6 @@
 # power-engineer-skills
 
-A global Claude Code skill that interviews you about your project and generates
+A Claude Code skill that interviews you about your project and generates
 a complete, ready-to-run skill installation script tailored to your stack,
 discipline, and goals.
 
@@ -24,7 +24,7 @@ Run it once at the start of any project. It asks you 8 questions:
 
 Based on your answers it:
 
-- Detects which skills are already installed globally and locally
+- Detects which skills are already installed
 - Selects the right skills from 150+ catalogued options
 - Generates `install-skills.sh` — a shell script you review and run
 - Generates `PLUGIN_INSTALLS.md` — plugin-based installs to do inside Claude Code
@@ -35,7 +35,7 @@ Based on your answers it:
 ## Install
 
 ```bash
-npx skills@latest add kalshamsi/power-engineer-skills/power-engineer --global
+npx skills@latest add kalshamsi/power-engineer-skills/power-engineer
 ```
 
 Works with Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
@@ -166,11 +166,11 @@ for your project and how to install them.
 
 | Suite | Install method | Description |
 |-------|---------------|-------------|
-| **GSD** | `npx get-shit-done-cc --claude --global` | Context engineering: questionnaire, SPEC, phased execution, verification |
+| **GSD** | `npx get-shit-done-cc --claude` | Context engineering: questionnaire, SPEC, phased execution, verification |
 | **Superpowers** | `/plugin install superpowers@superpowers-marketplace` | Auto-triggering dev methodology: brainstorm, TDD, verify |
 | **UI/UX Pro Max** | `/plugin install ui-ux-pro-max@ui-ux-pro-max-skill` | 97 palettes, 57 font pairings, 99 UX guidelines, 9 stacks |
 | **Designer Skills** | `/plugin marketplace add Owl-Listener/designer-skills` | 63 skills + 27 commands across 8 design disciplines |
-| **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all --global` | Text/sketch to high-fidelity UI to React/Tailwind |
+| **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all` | Text/sketch to high-fidelity UI to React/Tailwind |
 | **Pencil** | Built-in | Native `.pen` file editor in VS Code |
 
 ---
@@ -184,7 +184,6 @@ and the corresponding section in `power-engineer/references/DECISION_MATRIX.md`.
 Please include:
 - Skill name and source repo
 - Verified install command
-- Recommended scope (global/local)
 - One-line description
 
 ---
