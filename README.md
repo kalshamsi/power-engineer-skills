@@ -5,7 +5,7 @@ interview, and installs the optimal skill stack directly — no scripts to revie
 or run manually.
 
 Built for software engineers, AI engineers, and R&D engineers.
-150+ skills catalogued across every major category.
+220+ skills catalogued across every major category, including 70+ security skills.
 
 ---
 
@@ -16,7 +16,7 @@ Run it once at the start of any project. It:
 1. **Scans your codebase** — detects language, framework, SDKs, infrastructure,
    cloud/database, brand assets, existing skills, team size, and project maturity
 2. **Asks only what it can't infer** — adaptive questionnaire skips questions
-   already answered by the scan (11 questions total, typically 4-6 asked)
+   already answered by the scan (12 questions total, typically 5-7 asked)
 3. **Installs skills directly** — no script generation; skills are installed
    in real-time with progress tracking and failure handling
 4. **Configures your project** — generates/merges CLAUDE.md, creates
@@ -38,6 +38,7 @@ Run it once at the start of any project. It:
 | Q9 | Brand identity | Yes (from design tokens) |
 | Q10 | Team workflow | Yes (from git log + CI/CD) |
 | Q11 | Goals | Always asked |
+| Q12 | Security needs | Always asked |
 
 ---
 
@@ -164,7 +165,8 @@ Start with [INDEX.md](./power-engineer/references/catalog/INDEX.md) for an overv
 |----------|---------------|
 | **Core & Planning** | obra/superpowers, mattpocock planning, GitHub copilot |
 | **Anthropic Official** | Document generation, design, skill creation |
-| **Engineering** | Backend, DevOps/Infra, Data/ML, Testing, Agentic AI, Security |
+| **Engineering** | Backend, DevOps/Infra, Data/ML, Testing, Agentic AI |
+| **Security & AppSec** | SAST, DAST, SCA, secrets, containers, IaC, threat modeling, compliance, pentest, DFIR, MCP servers |
 | **Frontend & Design** | React/Next.js, Vue/Vite, Design systems, Mobile |
 | **Cloud & Databases** | Microsoft Azure, Neon, Supabase |
 | **Docs & Research** | Technical writing, web research, data analysis |
@@ -185,6 +187,32 @@ Power Engineer presents these separately after the main installation completes.
 | **Designer Skills** | `/plugin marketplace add Owl-Listener/designer-skills` | 63 skills + 27 commands across 8 design disciplines |
 | **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all` | Text/sketch to high-fidelity UI to React/Tailwind |
 | **Pencil** | Built-in | Native `.pen` file editor in VS Code |
+
+---
+
+## Security
+
+Every project gets baseline security by default: Sentry's security-review
+(independently rated #1), OWASP Top 10:2025, and secrets detection. No extra
+steps needed.
+
+For deeper security needs, Q12 asks what you need and layers on specialized
+skills:
+
+| Selection | What you get |
+|-----------|-------------|
+| **Standard** (default) | Code review, OWASP, secrets detection |
+| **Deep SAST/DAST** | Semgrep rules, CodeQL, Nuclei scanning, FFUF fuzzing |
+| **Container & IaC** | Trivy, Grype, Checkov, tfsec |
+| **Compliance** | SOC 2, HIPAA, PCI-DSS, GDPR, ISO 27001 (99% eval score) |
+| **Penetration testing** | SecLists, Burp Suite parsing, pentest agents |
+| **Threat modeling** | STRIDE/DREAD, MITRE ATT&CK, attack trees |
+
+Framework-specific security skills (Django, Laravel, Spring Boot) are
+auto-added when those frameworks are detected — no question needed.
+
+The full security catalog (70+ skills, 60+ MCP servers) is browsable via
+`power engineer catalog` → Security & Operations.
 
 ---
 

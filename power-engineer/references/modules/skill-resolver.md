@@ -46,7 +46,9 @@ npx skills@latest add mattpocock/skills --skill write-a-prd -y
 npx skills@latest add mattpocock/skills --skill prd-to-plan -y
 npx skills@latest add mattpocock/skills --skill prd-to-issues -y
 npx skills@latest add anthropics/skills --skill skill-creator -y
-npx skills@latest add supercent-io/skills-template --skill security-best-practices -y
+npx skills@latest add getsentry/skills --skill security-review -y
+npx skills@latest add agamm/claude-code-owasp -y
+npx skills@latest add majiayu000/claude-skill-registry --skill secrets-guardian -y
 npx skills@latest add github/awesome-copilot --skill git-commit -y
 npx skills@latest add supercent-io/skills-template --skill task-planning -y
 ```
@@ -93,7 +95,7 @@ npx skills@latest add inferen-sh/skills --skill chat-ui -y
 npx skills@latest add inferen-sh/skills --skill agent-ui -y
 npx skills@latest add inferen-sh/skills --skill tools-ui -y
 npx skills@latest add inferen-sh/skills --skill widgets-ui -y
-npx skills@latest add supercent-io/skills-template --skill security-best-practices -y
+npx skills@latest add aliksir/claude-code-skill-security-check -y
 # Plugin-based
 # /plugin install agenthub@claude-code-skills (parallel competing subagents)
 # /plugin install engineering-advanced-skills@claude-code-skills (agent-designer, autoresearch)
@@ -366,4 +368,77 @@ npx skills@latest add supercent-io/skills-template --skill data-analysis -y
 npx skills@latest add firecrawl/cli --skill firecrawl -y
 npx skills@latest add tavily-ai/skills --skill search -y
 npx skills@latest add mattpocock/skills --skill design-an-interface -y
+```
+
+---
+
+## Security needs (from Q12 answer)
+
+Default security (Sentry security-review, OWASP, secrets-guardian) is already
+included in "Always add" core methodology. The blocks below layer on additional
+security skills based on the user's Q12 selection.
+
+If the user selected "None" for Q12, REMOVE the three default security skills
+from the install plan (security-review, claude-code-owasp, secrets-guardian).
+
+**If Deep SAST/DAST:**
+```bash
+npx skills@latest add trailofbits/skills --skill semgrep-rule-creator -y
+npx skills@latest add trailofbits/skills --skill static-analysis -y
+npx skills@latest add trailofbits/skills --skill variant-analysis -y
+npx skills@latest add trailofbits/skills --skill differential-review -y
+npx skills@latest add trailofbits/skills --skill fp-check -y
+npx skills@latest add github/awesome-copilot --skill codeql -y
+npx skills@latest add majiayu000/claude-skill-registry --skill dast-nuclei -y
+npx skills@latest add jthack/ffuf_claude_skill -y
+npx skills@latest add majiayu000/claude-skill-registry --skill gitleaks -y
+```
+
+**If Container & IaC:**
+```bash
+npx skills@latest add majiayu000/claude-skill-registry --skill trivy -y
+npx skills@latest add AgentSecOps/SecOpsAgentKit --skill container-grype -y
+npx skills@latest add AgentSecOps/SecOpsAgentKit --skill iac-checkov -y
+npx skills@latest add majiayu000/claude-skill-registry --skill iac-scanner -y
+npx skills@latest add trailofbits/skills --skill supply-chain-risk-auditor -y
+```
+
+**If Compliance:**
+```bash
+npx skills@latest add Sushegaad/Claude-Skills-Governance-Risk-and-Compliance -y
+npx skills@latest add Tencent/AI-Infra-Guard --skill owasp-asi -y
+```
+
+**If Penetration testing:**
+```bash
+npx skills@latest add Eyadkelleh/awesome-claude-skills-security -y
+npx skills@latest add jthack/ffuf_claude_skill -y
+npx skills@latest add trailofbits/skills --skill burpsuite-project-parser -y
+npx skills@latest add trailofbits/skills --skill agentic-actions-auditor -y
+npx skills@latest add WolzenGeorgi/claude-skills-pentest -y
+```
+
+**If Threat modeling:**
+```bash
+npx skills@latest add fr33d3m0n/threat-modeling -y
+npx skills@latest add garrytan/gstack --skill cso -y
+npx skills@latest add trailofbits/skills --skill insecure-defaults -y
+npx skills@latest add trailofbits/skills --skill sharp-edges -y
+```
+
+**Framework-specific security (auto-added based on Q3 framework, no question needed):**
+
+If Django detected → also add:
+```bash
+npx skills@latest add affaan-m/everything-claude-code --skill django-security -y
+```
+
+If Laravel detected → also add:
+```bash
+npx skills@latest add affaan-m/everything-claude-code --skill laravel-security -y
+```
+
+If Spring Boot detected → also add:
+```bash
+npx skills@latest add affaan-m/everything-claude-code --skill springboot-security -y
 ```

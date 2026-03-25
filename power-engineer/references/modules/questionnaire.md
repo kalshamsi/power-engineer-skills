@@ -29,6 +29,7 @@ confident answer, SKIP the question and show the user what was detected instead.
 | Q9 Brand identity | `has_brand_assets` is true AND `has_design_tokens` is true (show detected) |
 | Q10 Team workflow | `has_ci_cd` is true AND `team_size` is known (show detected) |
 | Q11 Goals | NEVER skip |
+| Q12 Security needs | NEVER skip -- always ask (subjective preference) |
 
 ## Presenting skipped questions
 
@@ -69,6 +70,7 @@ call. The tool supports up to 4 questions per call.
 | 2 | Q4, Q5, Q6 | Design, docs, research preferences |
 | 3 | Q7, Q8 | Infrastructure and project phase |
 | 4 | Q9, Q10, Q11 | Brand, team, goals |
+| 5 | Q12 | Security |
 
 Rules:
 - If all questions in a batch are skipped, move to the next batch.
@@ -267,6 +269,37 @@ options:
     description: "Documentation, team onboarding, knowledge sharing"
 ```
 
+### Q12 -- Security needs
+
+```
+question: "What security practices does this project need?"
+header: "Security"
+multiSelect: true
+options:
+  - label: "Standard"
+    description: "Code review, OWASP, secrets detection (included by default)"
+  - label: "Deep SAST/DAST"
+    description: "Semgrep rules, CodeQL, Nuclei scanning, fuzzing"
+  - label: "Container & IaC"
+    description: "Trivy, Grype, Checkov, tfsec for containers and infrastructure"
+  - label: "Compliance"
+    description: "SOC 2, HIPAA, PCI-DSS, GDPR, ISO 27001 frameworks"
+  - label: "Penetration testing"
+    description: "Pentest tools, SecLists, offensive security, CTF"
+  - label: "Threat modeling"
+    description: "STRIDE/DREAD analysis, attack trees, MITRE ATT&CK"
+  - label: "None"
+    description: "Skip all security skills"
+```
+
+Note: "Standard" security (Sentry security-review, OWASP, secrets detection)
+is included by default in the core methodology for every project. Selecting
+"Standard" alone adds no extra skills. Selecting additional options layers on
+specialized security tooling. Selecting "None" removes the default security
+skills from the install plan.
+
+---
+
 ## Output: SkillPlan
 
 After all questions are answered (or skipped), combine scan results and answers
@@ -294,6 +327,7 @@ SkillPlan:
   brand_identity: [Q9 answer]
   team_workflow: [Q10 answer]
   goals: [Q11 answers]
+  security_needs: [Q12 answers]
 ```
 
 Pass this SkillPlan to the Skill Resolver module.

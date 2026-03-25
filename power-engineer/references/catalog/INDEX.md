@@ -17,7 +17,7 @@ Each file is self-contained with skill tables, install commands, and scope.
 - [engineering/data-ml.md](engineering/data-ml.md) — Data engineering, data science, ML/MLOps, computer vision
 - [engineering/testing-quality.md](engineering/testing-quality.md) — Testing strategies, Playwright, TDD, tech debt, code review, onboarding
 - [engineering/agentic-ai.md](engineering/agentic-ai.md) — AI/LLM SDKs, MCP, agent patterns, agenthub, autoresearch
-- [engineering/security-ops.md](engineering/security-ops.md) — Security, incident response, secrets management, skill auditing
+- [engineering/security-ops.md](engineering/security-ops.md) — Security: SAST, DAST, SCA, secrets, containers, IaC, threat modeling, compliance, pentest, DFIR, MCP servers (70+ skills)
 
 ## Frontend & Design
 - [frontend/react-next.md](frontend/react-next.md) — React, Next.js, Vercel, epic-design
@@ -37,5 +37,5 @@ Each file is self-contained with skill tables, install commands, and scope.
 
 ---
 
-*Total skills catalogued: 150+*
+*Total skills catalogued: 220+*
 *Last updated: March 2026*
