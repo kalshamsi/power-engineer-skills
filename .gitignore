@@ -1,2 +1,8 @@
 .DS_Store
 .claude/
+
+# Power Engineer state (generated per-project, not committed)
+.power-engineer/
+
+# Test artifacts
+test-projects/
