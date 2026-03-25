@@ -94,8 +94,23 @@ cat PLUGIN_INSTALLS.md
 power-engineer-skills/
 ├── README.md                                  ← you are here
 └── power-engineer/                            ← the skill directory
-    ├── SKILL.md                               ← skill instructions with smart routing
+    ├── SKILL.md                               ← thin router (~46 lines)
     └── references/
+        ├── flows/                             ← progressive disclosure (loaded on demand)
+        │   ├── full-interview.md              ← 8-question questionnaire
+        │   ├── frontend.md                    ← framework + design flow
+        │   ├── backend.md                     ← stack + database flow
+        │   ├── devops.md                      ← DevOps/infra flow
+        │   ├── ai.md                          ← AI/LLM/agentic flow
+        │   ├── data.md                        ← data/ML flow
+        │   ├── docs.md                        ← documentation flow
+        │   ├── mobile.md                      ← mobile flow
+        │   ├── quick.md                       ← auto-detect flow
+        │   ├── status.md                      ← show installed skills
+        │   ├── catalog-browse.md              ← interactive catalog
+        │   └── update.md                      ← find new skills
+        ├── shared/
+        │   └── output-steps.md                ← install script + summary generation
         ├── catalog/                           ← skills catalog (split by category)
         │   ├── INDEX.md                       ← lightweight TOC
         │   ├── core-methodology.md            ← obra, mattpocock, github
@@ -117,7 +132,7 @@ power-engineer-skills/
         │   │   └── databases.md
         │   ├── docs-research.md
         │   └── power-suites.md
-        ├── DECISION_MATRIX.md                 ← maps answers to skill commands
+        ├── DECISION_MATRIX.md                 ← full matrix (used by interview/quick/update)
         ├── INSTALL_SCRIPT_TEMPLATE.md         ← install-skills.sh format
         └── PLUGIN_INSTALLS_TEMPLATE.md        ← PLUGIN_INSTALLS.md format
 ```
