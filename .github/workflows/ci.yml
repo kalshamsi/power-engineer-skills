@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate modules & syntax
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run module tests
+        run: |
+          chmod +x tests/run-tests.sh
+          ./tests/run-tests.sh
+
+      - name: Verify no broken slash syntax in modules/flows
+        run: |
+          echo "Checking for broken three-segment slash paths..."
+          if grep -rn 'add [a-zA-Z_-]*/[a-zA-Z_-]*/[a-zA-Z_-]' \
+            power-engineer/references/modules/ \
+            power-engineer/references/flows/ \
+            | grep -v 'BROKEN'; then
+            echo "FAIL: Found broken slash syntax"
+            exit 1
+          fi
+          echo "PASS: No broken slash syntax"
+
+      - name: Verify no --global flags in install commands
+        run: |
+          echo "Checking for --global flags..."
+          if grep -rn 'npx.*--global' power-engineer/; then
+            echo "FAIL: Found --global flag in install command"
+            exit 1
+          fi
+          echo "PASS: No --global flags"
+
+      - name: Verify router references exist
+        run: |
+          echo "Checking router references..."
+          MISSING=0
+          for f in $(grep -oE 'references/[a-z/-]+\.md' power-engineer/SKILL.md | sort -u); do
+            if [ ! -f "power-engineer/$f" ]; then
+              echo "MISSING: power-engineer/$f"
+              MISSING=1
+            fi
+          done
+          if [ $MISSING -eq 1 ]; then
+            echo "FAIL: Router references missing files"
+            exit 1
+          fi
+          echo "PASS: All router references exist"
+
+      - name: Verify flow module references exist
+        run: |
+          echo "Checking flow module references..."
+          MISSING=0
+          for f in $(grep -ohE 'references/modules/[a-z-]+\.md' power-engineer/references/flows/*.md | sort -u); do
+            if [ ! -f "power-engineer/$f" ]; then
+              echo "MISSING: power-engineer/$f"
+              MISSING=1
+            fi
+          done
+          if [ $MISSING -eq 1 ]; then
+            echo "FAIL: Flows reference missing modules"
+            exit 1
+          fi
+          echo "PASS: All flow module references exist"

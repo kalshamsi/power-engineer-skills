@@ -4,9 +4,8 @@
 # Power Engineer state (generated per-project, not committed)
 .power-engineer/
 
-# Test artifacts
+# Test artifacts (runtime only, not the test scripts)
 test-projects/
-tests/
 
 # Planning docs
 PRD.md
