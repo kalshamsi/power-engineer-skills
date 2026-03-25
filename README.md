@@ -1,8 +1,8 @@
 # power-engineer-skills
 
-A Claude Code skill that interviews you about your project and generates
-a complete, ready-to-run skill installation script tailored to your stack,
-discipline, and goals.
+An intelligent Claude Code skill that scans your codebase, conducts an adaptive
+interview, and installs the optimal skill stack directly — no scripts to review
+or run manually.
 
 Built for software engineers, AI engineers, and R&D engineers.
 150+ skills catalogued across every major category.
@@ -11,31 +11,40 @@ Built for software engineers, AI engineers, and R&D engineers.
 
 ## What it does
 
-Run it once at the start of any project. It asks you 8 questions:
+Run it once at the start of any project. It:
 
-1. Project type (SWE, AI/LLM, R&D, full-stack, mobile)
-2. Primary language/stack
-3. Framework
-4. Design needs
-5. Documentation needs
-6. Research/data needs
-7. Cloud/database target
-8. Project phase
+1. **Scans your codebase** — detects language, framework, SDKs, infrastructure,
+   cloud/database, brand assets, existing skills, team size, and project maturity
+2. **Asks only what it can't infer** — adaptive questionnaire skips questions
+   already answered by the scan (11 questions total, typically 4-6 asked)
+3. **Installs skills directly** — no script generation; skills are installed
+   in real-time with progress tracking and failure handling
+4. **Configures your project** — generates/merges CLAUDE.md, creates
+   `.power-engineer/` state directory, patches skills with project context
+5. **Tracks drift** — on re-run, detects what changed and recommends new skills
 
-Based on your answers it:
+### Questions covered
 
-- Detects which skills are already installed
-- Selects the right skills from 150+ catalogued options
-- Generates `install-skills.sh` — a shell script you review and run
-- Generates `PLUGIN_INSTALLS.md` — plugin-based installs to do inside Claude Code
-- Skips anything already installed
+| # | Topic | Auto-detected? |
+|---|-------|---------------|
+| Q1 | Project type | Yes (from framework + language) |
+| Q2 | Language/stack | Yes (from config files) |
+| Q3 | Framework | Yes (from config files) |
+| Q4 | Design needs | Always asked |
+| Q5 | Documentation needs | Always asked |
+| Q6 | Research/data needs | Always asked |
+| Q7 | Cloud/database | Yes (from dependencies) |
+| Q8 | Project phase | Always asked |
+| Q9 | Brand identity | Yes (from design tokens) |
+| Q10 | Team workflow | Yes (from git log + CI/CD) |
+| Q11 | Goals | Always asked |
 
 ---
 
 ## Install
 
 ```bash
-npx skills@latest add kalshamsi/power-engineer-skills/power-engineer
+npx skills@latest add kalshamsi/power-engineer-skills --skill power-engineer -y
 ```
 
 Works with Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
@@ -52,90 +61,89 @@ or:
 
 > "/power-engineer"
 
-Claude will run the questionnaire, detect your existing skills, and write the
-two output files to your project root.
+Claude will scan your project, ask adaptive questions, install skills directly,
+and configure your project.
 
 ### Targeted commands
 
-You can also skip the full interview and go straight to a specific category:
+Skip the full interview and go straight to a specific category:
 
 | Say this | What it does |
 |----------|-------------|
-| `power engineer quick` | Auto-detect stack, minimal questions |
-| `power engineer frontend` | Install frontend/design skills |
-| `power engineer backend` | Install backend/API/DB skills |
-| `power engineer devops` | Install DevOps/infra skills |
-| `power engineer ai` | Install AI/LLM/agentic skills |
-| `power engineer data` | Install data/ML/science skills |
-| `power engineer docs` | Install documentation skills |
-| `power engineer mobile` | Install mobile skills |
-| `power engineer status` | Show installed skills |
+| `power engineer quick` | Auto-detect stack, minimal questions, smart defaults |
+| `power engineer frontend` | Frontend/design skills only |
+| `power engineer backend` | Backend/API/database skills only |
+| `power engineer devops` | DevOps/infrastructure skills only |
+| `power engineer ai` | AI/LLM/agentic skills only |
+| `power engineer data` | Data/ML/research skills only |
+| `power engineer docs` | Documentation skills only |
+| `power engineer mobile` | Mobile development skills only |
+| `power engineer status` | Show installed skills + drift report |
 | `power engineer catalog` | Browse catalog interactively |
-| `power engineer update` | Find new skills since last setup |
+| `power engineer update` | Detect changes, install new skills |
 
 ### After setup
 
-```bash
-# Review the script
-cat install-skills.sh
+Skills are installed directly — no scripts to run. Power Engineer also creates:
 
-# Make it executable and run
-chmod +x install-skills.sh && ./install-skills.sh
-
-# Then open Claude Code and follow
-cat PLUGIN_INSTALLS.md
-```
+- **CLAUDE.md** — project context with a managed `## Power Engineer` section
+- **`.power-engineer/state.json`** — full inventory for drift detection
+- **`.power-engineer/install-log.sh`** — audit log (re-runnable)
+- **`.power-engineer/brand.md`** — brand identity (if applicable)
+- **`.power-engineer/project-context.md`** — goals, team, conventions
 
 ---
 
-## Repository structure
+## Architecture
 
 ```
-power-engineer-skills/
-├── README.md                                  ← you are here
-└── power-engineer/                            ← the skill directory
-    ├── SKILL.md                               ← thin router (~46 lines)
-    └── references/
-        ├── flows/                             ← progressive disclosure (loaded on demand)
-        │   ├── full-interview.md              ← 8-question questionnaire
-        │   ├── frontend.md                    ← framework + design flow
-        │   ├── backend.md                     ← stack + database flow
-        │   ├── devops.md                      ← DevOps/infra flow
-        │   ├── ai.md                          ← AI/LLM/agentic flow
-        │   ├── data.md                        ← data/ML flow
-        │   ├── docs.md                        ← documentation flow
-        │   ├── mobile.md                      ← mobile flow
-        │   ├── quick.md                       ← auto-detect flow
-        │   ├── status.md                      ← show installed skills
-        │   ├── catalog-browse.md              ← interactive catalog
-        │   └── update.md                      ← find new skills
-        ├── shared/
-        │   └── output-steps.md                ← install script + summary generation
-        ├── catalog/                           ← skills catalog (split by category)
-        │   ├── INDEX.md                       ← lightweight TOC
-        │   ├── core-methodology.md            ← obra, mattpocock, github
-        │   ├── anthropic-official.md          ← anthropic skills, meta
-        │   ├── engineering/
-        │   │   ├── backend-architecture.md
-        │   │   ├── devops-infra.md
-        │   │   ├── data-ml.md
-        │   │   ├── testing-quality.md
-        │   │   ├── agentic-ai.md
-        │   │   └── security-ops.md
-        │   ├── frontend/
-        │   │   ├── react-next.md
-        │   │   ├── vue-vite.md
-        │   │   ├── design-systems.md
-        │   │   └── mobile.md
-        │   ├── cloud/
-        │   │   ├── azure.md
-        │   │   └── databases.md
-        │   ├── docs-research.md
-        │   └── power-suites.md
-        ├── DECISION_MATRIX.md                 ← full matrix (used by interview/quick/update)
-        ├── INSTALL_SCRIPT_TEMPLATE.md         ← install-skills.sh format
-        └── PLUGIN_INSTALLS_TEMPLATE.md        ← PLUGIN_INSTALLS.md format
+power-engineer/
+├── SKILL.md                               ← thin router (~44 lines)
+└── references/
+    ├── modules/                           ← composable instruction sets
+    │   ├── scanner.md                     ← codebase analysis → ProjectProfile
+    │   ├── questionnaire.md               ← adaptive interview → SkillPlan
+    │   ├── skill-resolver.md              ← SkillPlan → deduplicated install commands
+    │   ├── installer.md                   ← direct execution with progress tracking
+    │   ├── configurator.md                ← CLAUDE.md, state dir, skill patching
+    │   ├── drift-detector.md              ← compare state vs current project
+    │   └── ruflo.md                       ← multi-agent orchestration evaluation
+    ├── flows/                             ← route-specific module compositions
+    │   ├── full-interview.md              ← Scanner → Questionnaire → Resolver → Installer → Configurator
+    │   ├── quick.md                       ← Scanner → smart defaults → Resolver → Installer → Configurator
+    │   ├── frontend.md                    ← Scanner → targeted questions → frontend skills
+    │   ├── backend.md                     ← Scanner → targeted questions → backend skills
+    │   ├── devops.md                      ← Scanner → infra detection → devops skills
+    │   ├── ai.md                          ← Scanner → SDK detection → AI/LLM skills
+    │   ├── data.md                        ← Scanner → data/research skills
+    │   ├── docs.md                        ← Scanner → documentation skills
+    │   ├── mobile.md                      ← Scanner → mobile framework skills
+    │   ├── status.md                      ← state.json → drift report (read-only)
+    │   ├── update.md                      ← drift detection → resolve → install
+    │   └── catalog-browse.md              ← interactive catalog browser
+    ├── catalog/                           ← browsable skill documentation (16 files)
+    │   ├── INDEX.md
+    │   ├── core-methodology.md
+    │   ├── anthropic-official.md
+    │   ├── engineering/
+    │   ├── frontend/
+    │   ├── cloud/
+    │   ├── docs-research.md
+    │   └── power-suites.md
+    └── PLUGIN_INSTALLS_TEMPLATE.md        ← plugin-based install reference
 ```
+
+### Module pipeline
+
+Every flow composes modules from this pipeline:
+
+```
+Scanner → Questionnaire → Skill Resolver → Installer → Configurator
+                                                    ↗
+                                              Ruflo (optional)
+```
+
+The **Drift Detector** runs independently on `status` and `update` commands.
 
 ---
 
@@ -161,8 +169,7 @@ Start with [INDEX.md](./power-engineer/references/catalog/INDEX.md) for an overv
 ## Power suites
 
 Some skill collections install via special methods rather than `npx skills add`.
-The setup skill generates a `PLUGIN_INSTALLS.md` listing which ones are relevant
-for your project and how to install them.
+Power Engineer presents these separately after the main installation completes.
 
 | Suite | Install method | Description |
 |-------|---------------|-------------|
@@ -179,11 +186,11 @@ for your project and how to install them.
 
 PRs welcome. If you find a skill worth adding to the catalog, open an issue or
 submit a PR updating the relevant file in `power-engineer/references/catalog/`
-and the corresponding section in `power-engineer/references/DECISION_MATRIX.md`.
+and the corresponding section in `power-engineer/references/modules/skill-resolver.md`.
 
 Please include:
 - Skill name and source repo
-- Verified install command
+- Verified install command (must use `--skill` flag syntax)
 - One-line description
 
 ---
