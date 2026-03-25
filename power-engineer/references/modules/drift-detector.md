@@ -9,6 +9,25 @@ reconciliation plan.
 This module requires `.power-engineer/state.json` to exist. If it doesn't,
 report "No previous setup found" and suggest running the full setup.
 
+## Auto-drift check
+
+Before running drift detection, check if auto-drift should run:
+
+1. Read `.power-engineer/state.json`
+2. Check `preferences.auto_update`
+3. If `auto_update` is `false`, skip drift detection unless the user
+   explicitly invoked `/power-engineer update`
+
+**Routes that skip auto-drift check entirely:**
+- help
+- configure
+- status
+- catalog
+
+These routes never trigger drift detection regardless of preferences.
+
+If `preferences` object is missing from state.json, default to `auto_update: true`.
+
 ## Detection checks
 
 ### 1. Dependency changes

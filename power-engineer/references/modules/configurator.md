@@ -49,9 +49,28 @@ Write `.power-engineer/state.json`:
     "source_file_count": 0,
     "package_json_hash": "[first 8 chars of md5]",
     "dependency_count": 0
+  },
+  "preferences": {
+    "security_level": "standard",
+    "auto_update": true
   }
+
 }
 ```
+
+**Setting `security_level` from Q12 answer:**
+
+Map the Q12 security needs answer to a security level preference:
+
+| Q12 answer | security_level |
+|------------|---------------|
+| No additional security / default | `"standard"` |
+| Any single speciality (SAST/DAST, Container & IaC, etc.) | `"enhanced"` |
+| Multiple specialities selected | `"maximum"` |
+| Compliance selected | `"compliance"` |
+| Custom selection | `"custom"` |
+
+If Q12 was not asked (skipped), default to `"standard"`.
 
 ### brand.md
 
@@ -249,7 +268,43 @@ If the user selects "Yes", append to `.gitignore`:
 .power-engineer/
 ```
 
-## Step 5: Present configuration summary
+## Step 5: Generate cheatsheet
+
+Generate `.power-engineer/cheatsheet.md` as an offline reference for the
+user's installed skills.
+
+For each installed skill in `state.json`, look up its entry in the catalog
+files under `references/catalog/` to get the `Trigger` and `When to use`
+columns. Group the skills by their catalog category.
+
+Write `.power-engineer/cheatsheet.md` in this format:
+
+```markdown
+# Power Engineer Cheatsheet
+
+Generated: [ISO date]
+
+## Core Methodology
+| Trigger | When to use |
+|---------|-------------|
+| /brainstorming | Before starting any new feature or design |
+| /writing-plans | After brainstorming, to break work into tasks |
+
+## Security
+| Trigger | When to use |
+|---------|-------------|
+| /security-review | When performing a security review on any codebase |
+
+---
+[N] skills installed. Run `power engineer help` to see this list in-session.
+```
+
+### Notes
+- Only include skills, not MCP servers
+- Only include skills from the `installed_skills` array in state.json
+- Omit any category section that has no installed skills
+
+## Step 6: Present configuration summary
 
 ```
 Project configured!
@@ -258,6 +313,7 @@ Project configured!
   State directory:     .power-engineer/ created
   Skills patched:      [N] skills received project context
   Brand file:          [created | skipped (no brand info)]
+  Cheatsheet:          .power-engineer/cheatsheet.md
 
   State files:
     .power-engineer/state.json
