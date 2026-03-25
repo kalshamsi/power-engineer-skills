@@ -47,6 +47,11 @@ Run it once at the start of any project. It:
 npx skills@latest add kalshamsi/power-engineer-skills --skill power-engineer --global
 ```
 
+The installer will prompt you to select which agents to install on. Use the
+arrow keys to navigate and **press space to select** each agent you want.
+
+![Agent selector during installation](assets/install-agent-selector.png)
+
 This installs the skill globally so it's available in every project. Works with
 Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
 
