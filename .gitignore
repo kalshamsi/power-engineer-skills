@@ -6,3 +6,39 @@
 
 # Test artifacts
 test-projects/
+tests/
+
+# Planning docs
+PRD.md
+docs/
+
+# Other agent/IDE tool directories
+.adal/
+.agents/
+.augment/
+.codebuddy/
+.commandcode/
+.continue/
+.cortex/
+.crush/
+.factory/
+.goose/
+.iflow/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.vibe/
+.windsurf/
+.zencoder/
+skills/
