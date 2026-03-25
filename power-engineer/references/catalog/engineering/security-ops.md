@@ -23,6 +23,7 @@
 | variant-analysis | trailofbits/skills | `npx skills@latest add trailofbits/skills --skill variant-analysis -y` | Find similar vulnerabilities across codebases using pattern analysis. | `/variant-analysis` | When finding variants of a known vulnerability across a codebase |
 | codeql | github/awesome-copilot | `npx skills@latest add github/awesome-copilot --skill codeql -y` | Comprehensive CodeQL code scanning via GitHub Actions and CLI. | `/codeql` | When running CodeQL scans via GitHub Actions or CLI |
 | sast-configuration | sickn33/antigravity-awesome-skills | `npx skills@latest add sickn33/antigravity-awesome-skills --skill sast-configuration -y` | SAST tool setup for Semgrep/SonarQube/CodeQL. | `/sast-configuration` | When configuring SAST tooling for a new project |
+| bandit-sast | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill bandit-sast -y` | Python SAST scanning via Bandit with fallback manual checks. | `/bandit-sast` | When running Python-specific SAST with Bandit and manual fallback |
 
 ---
 
@@ -54,6 +55,7 @@
 |-------|--------|---------|-------------|---------|-------------|
 | supply-chain-risk-auditor | trailofbits/skills | `npx skills@latest add trailofbits/skills --skill supply-chain-risk-auditor -y` | Audit supply chain risks in project dependencies. | `/supply-chain-risk-auditor` | When auditing project dependencies for supply chain vulnerabilities |
 | security-reviewer | Jeffallan/claude-skills | `npx skills@latest add Jeffallan/claude-skills --skill security-reviewer -y` | Multi-tool: npm audit, Trivy, Gitleaks, TruffleHog, Semgrep, Bandit, Checkov. | `/security-reviewer` | When running a comprehensive multi-tool security scan across all dimensions |
+| socket-sca | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill socket-sca -y` | Supply chain security analysis via Socket.dev CLI. | `/socket-sca` | When performing supply chain security analysis with Socket.dev |
 
 ---
 
@@ -64,6 +66,7 @@
 | trivy | majiayu000/claude-skill-registry | `npx skills@latest add majiayu000/claude-skill-registry --skill trivy -y` | Container images, filesystems, and IaC scanning. | `trivy` | When scanning container images, filesystems, or IaC for vulnerabilities |
 | container-grype | AgentSecOps/SecOpsAgentKit | `npx skills@latest add AgentSecOps/SecOpsAgentKit --skill container-grype -y` | Container security, SCA, SBOM, CVSS, CVE scanning. | `/container-grype` | When scanning containers for CVEs and generating SBOMs |
 | grype | TerminalSkills/skills | `npx skills@latest add TerminalSkills/skills --skill grype -y` | Grype scanner with CI/CD integration and Syft SBOM. | `grype` | When integrating Grype into CI/CD with Syft SBOM generation |
+| docker-scout-scanner | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill docker-scout-scanner -y` | Container vulnerability scanning via Docker Scout. | `/docker-scout-scanner` | When scanning container images for vulnerabilities via Docker Scout |
 
 ---
 
@@ -94,6 +97,7 @@
 |-------|--------|---------|-------------|---------|-------------|
 | governance-risk-compliance | Sushegaad/Claude-Skills-Governance-Risk-and-Compliance | `npx skills@latest add Sushegaad/Claude-Skills-Governance-Risk-and-Compliance -y` | **[99% eval]** ISO 27001, SOC 2, FedRAMP, GDPR, HIPAA. | `/governance-risk-compliance` | When assessing compliance with SOC 2, HIPAA, GDPR, or ISO 27001 |
 | owasp-asi | Tencent/AI-Infra-Guard | `npx skills@latest add Tencent/AI-Infra-Guard --skill owasp-asi -y` | OWASP Top 10 for Agentic Applications 2026 classification. | `/owasp-asi` | When classifying agentic AI risks against OWASP Agentic App Top 10 |
+| pci-dss-audit | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill pci-dss-audit -y` | PCI-DSS v4.0 compliance audit for payment code. | `/pci-dss-audit` | When auditing payment-handling code for PCI-DSS v4.0 compliance |
 
 ---
 
@@ -127,6 +131,19 @@
 | laravel-security | affaan-m/everything-claude-code | `npx skills@latest add affaan-m/everything-claude-code --skill laravel-security -y` | Laravel: auth, validation, CSRF, mass assignment. | `/laravel-security` | When securing a Laravel application's auth and validation layer |
 | springboot-security | affaan-m/everything-claude-code | `npx skills@latest add affaan-m/everything-claude-code --skill springboot-security -y` | Spring Security: auth, CSRF, headers, rate limiting. | `/springboot-security` | When configuring Spring Security for auth, headers, and rate limiting |
 | perl-security | affaan-m/everything-claude-code | `npx skills@latest add affaan-m/everything-claude-code --skill perl-security -y` | Perl: taint mode, DBI parameterized queries. | `/perl-security` | When securing Perl code with taint mode and parameterized queries |
+
+---
+
+## Security Testing & Analysis
+
+| Skill | Source | Install | Description | Trigger | When to use |
+|-------|--------|---------|-------------|---------|-------------|
+| crypto-audit | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill crypto-audit -y` | Cryptographic vulnerability detection across Python, JS, Go, Rust, Java. | `/crypto-audit` | When auditing cryptographic implementations across multi-language codebases |
+| security-headers-audit | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill security-headers-audit -y` | HTTP security header configuration audit. | `/security-headers-audit` | When auditing HTTP response headers for security misconfigurations |
+| api-security-tester | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill api-security-tester -y` | API security audit for OWASP API Security Top 10:2023. | `/api-security-tester` | When auditing an API against the OWASP API Security Top 10:2023 |
+| mobile-security | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill mobile-security -y` | Mobile app security audit for OWASP Mobile Top 10:2024. | `/mobile-security` | When auditing a mobile application against OWASP Mobile Top 10:2024 |
+| security-test-generator | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill security-test-generator -y` | Generate executable security test suites for web apps. | `/security-test-generator` | When generating executable security test suites for a web application |
+| devsecops-pipeline | kalshamsi/claude-security-skills | `npx skills@latest add kalshamsi/claude-security-skills --skill devsecops-pipeline -y` | Generate GitHub Actions security CI/CD pipelines. | `/devsecops-pipeline` | When setting up a security-focused GitHub Actions CI/CD pipeline |
 
 ---
 
