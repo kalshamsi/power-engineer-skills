@@ -1,47 +1,45 @@
 # Update Flow
 
-Re-scan the project and install any new skills from the catalog that aren't
-already installed. Skips everything already present.
+Detect changes since last setup and install new/updated skills.
 
-## Step 1 — Detect installed skills
+## Step 1 -- Check for state
 
 ```bash
-ls ~/.claude/skills/ .claude/skills/ 2>/dev/null || echo "(none)"
+cat .power-engineer/state.json 2>/dev/null
 ```
 
-## Step 2 — Find new skills
+If no state exists, redirect to full interview:
+"No previous setup found. Running full setup instead."
+Then read `references/flows/full-interview.md`.
 
-Read `references/DECISION_MATRIX.md` to get the full list of available skills.
-Compare against what's installed. Build a list of skills that are in the
-catalog but NOT currently installed.
+## Step 2 -- Drift detection
 
-## Step 3 — Present new skills
+Read `references/modules/drift-detector.md` and follow its instructions.
+Present the drift report to the user.
 
-Present the new (not-yet-installed) skills to the user, grouped by category:
+## Step 3 -- Resolve new skills
 
-```
-========================================
- Power Engineer — Available Updates
-========================================
+If drift detection found changes that warrant new skills (new dependencies,
+new config files, structural changes):
 
-New skills available since last setup:
+Read `references/modules/skill-resolver.md` with updated SkillPlan.
+Include ONLY new skills not already in state.json.
 
-Core & Planning:
-  - [skill-name] — [one-line description]
+## Step 4 -- Present & confirm
 
-Engineering:
-  - [skill-name] — [one-line description]
+Show the reconciliation plan:
+- What changed in the project
+- New skills recommended
+- Skills to keep as-is
+- Any skills the user might want to remove
 
-[... more categories ...]
+Ask for confirmation.
 
-Total: [N] new skills available
-========================================
-```
+## Step 5 -- Install new skills
 
-Ask the user which ones they'd like to install, or offer to install all.
+Read `references/modules/installer.md`. Install only the new skills.
 
-## Step 4 — Generate output
+## Step 6 -- Update configuration
 
-If the user wants to install any new skills, read `references/shared/output-steps.md`
-and follow its instructions to generate the install script for just the new
-skills, along with PLUGIN_INSTALLS.md and the final summary.
+Read `references/modules/configurator.md`. Update state.json, refresh
+CLAUDE.md managed section, re-patch skills with updated project context.

@@ -1,66 +1,41 @@
 # Quick Setup Flow
 
-Auto-detect the project stack from config files, ask only what can't be
-inferred, confirm with the user, then generate the full install.
+Auto-detect the project stack, ask only what can't be inferred, confirm with
+the user, then install directly.
 
-## Step 1 — Auto-detect stack
+## Step 1 -- Scan
 
-Check for these files in the current directory to infer the project stack:
+Read `references/modules/scanner.md` and follow its instructions to produce
+a ProjectProfile.
 
-| File | Infers |
-|------|--------|
-| `package.json` | Node.js/TypeScript project |
-| `tsconfig.json` | TypeScript |
-| `pyproject.toml` or `requirements.txt` | Python |
-| `next.config.*` | Next.js framework |
-| `nuxt.config.*` | Nuxt/Vue framework |
-| `vite.config.*` | Vite (likely Vue or React) |
-| `app.json` or `expo` in package.json | Expo / React Native |
-| `*.xcodeproj` or `Package.swift` | SwiftUI / iOS |
-| `Dockerfile` | Docker/DevOps |
-| `terraform/` or `*.tf` | Terraform |
-| `.github/workflows/` | CI/CD |
-| `docker-compose.yml` | Container orchestration |
+## Step 2 -- Assess
 
-Also check `package.json` dependencies for:
-- `next` -> Next.js
-- `react` -> React
-- `vue` -> Vue
-- `@anthropic-ai/sdk` -> Anthropic JS SDK
-- `ai` (vercel) -> Vercel AI SDK
-- `expo` -> Expo
+If `is_rerun` is true: read `references/modules/drift-detector.md` instead.
 
-Check `pyproject.toml` / `requirements.txt` for:
-- `anthropic` -> Anthropic Python SDK
-- `fastapi` / `flask` / `django` -> Python web framework
+## Step 3 -- Minimal interview
 
-## Step 2 — Present detection and ask remaining questions
+Read `references/modules/questionnaire.md` but ONLY ask questions that the
+Scanner could not answer. In quick mode, also skip these questions and use
+defaults:
 
-Present what was detected, then ask only the questions that couldn't be
-inferred. Typically these are:
-- Design needs (Full / Standard / Minimal / None)
-- Documentation needs (Full / Technical / None)
-- Project phase (Greenfield / Active / Refactoring / Research)
+- Q9 (Brand): default to "Not applicable" unless brand assets were detected
+- Q10 (Team): default to "Solo developer" unless git log shows 2+ authors
+- Q11 (Goals): default to "Ship features faster"
 
-## Step 3 — Detect installed skills
+Present what was detected and the defaults. Ask: "Look right? Any changes?"
 
-```bash
-ls ~/.claude/skills/ .claude/skills/ 2>/dev/null || echo "(none)"
-```
+## Step 4 -- Resolve
 
-## Step 4 — Build skill lists
+Read `references/modules/skill-resolver.md`. Pass the SkillPlan.
 
-Read `references/DECISION_MATRIX.md` and map the detected + answered values
-to skill install commands, the same way the full interview does. Start with
-core methodology, then layer on skills per detection. De-duplicate and filter
-against already-installed skills.
+## Step 5 -- Present & confirm
 
-## Step 5 — Confirm with user
+Show the skill list. Ask for confirmation.
 
-Present the planned skill list grouped by category before generating. Ask
-the user to confirm or adjust.
+## Step 6 -- Install
 
-## Step 6 — Generate output
+Read `references/modules/installer.md`. Execute installations.
 
-Read `references/shared/output-steps.md` and follow its instructions to
-generate the install script, PLUGIN_INSTALLS.md, and the final summary.
+## Step 7 -- Configure
+
+Read `references/modules/configurator.md`. Set up project configuration.

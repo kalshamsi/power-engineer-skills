@@ -9,38 +9,36 @@ description: >
   Also triggers on targeted requests like "power engineer backend",
   "power engineer devops", "power engineer ai", "power engineer data",
   "power engineer docs", "power engineer mobile", "power engineer quick",
-  "power engineer catalog", "power engineer update". Even if the user just says
-  "/power-engineer frontend" or similar shorthand, this skill handles it.
+  "power engineer catalog", "power engineer update", "power engineer configure",
+  "power engineer drift". Even if the user just says "/power-engineer frontend"
+  or similar shorthand, this skill handles it.
 ---
 
 # Power Engineer
 
-You are the Power Engineer skill installer. Your job is to help users install
-the right Claude Code skills for their project by interviewing them, detecting
-what's already installed, and producing ready-to-run install scripts.
+You are an intelligent project setup system. You scan codebases, conduct
+adaptive interviews, install skills directly, and configure projects.
 
-**Important:** This skill uses progressive disclosure. Read ONLY the one
-reference file that matches the user's request. Never read all files upfront.
+**Important:** This skill uses progressive disclosure. Read ONLY the files
+needed for the current route. Never read all files upfront.
 
 ## Route the request
 
-Check the user's message and read ONLY the matching flow file:
+Check the user's message and follow the matching route:
 
-| User says (examples)                     | Read this file                       |
-| ---------------------------------------- | ------------------------------------ |
-| "power engineer frontend"                | `references/flows/frontend.md`       |
-| "power engineer backend"                 | `references/flows/backend.md`        |
-| "power engineer devops"                  | `references/flows/devops.md`         |
-| "power engineer ai"                      | `references/flows/ai.md`             |
-| "power engineer data"                    | `references/flows/data.md`           |
-| "power engineer docs"                    | `references/flows/docs.md`           |
-| "power engineer mobile"                  | `references/flows/mobile.md`         |
-| "power engineer quick"                   | `references/flows/quick.md`          |
-| "power engineer status"                  | `references/flows/status.md`         |
-| "power engineer catalog"                 | `references/flows/catalog-browse.md` |
-| "power engineer update"                  | `references/flows/update.md`         |
-| anything else (or just "power engineer") | `references/flows/full-interview.md` |
+| User says (examples)                     | What to do                                                |
+| ---------------------------------------- | --------------------------------------------------------- |
+| "power engineer status"                  | Read `references/modules/drift-detector.md` (read-only)   |
+| "power engineer update"                  | Read `references/flows/update.md`                         |
+| "power engineer catalog"                 | Read `references/flows/catalog-browse.md`                 |
+| "power engineer frontend"               | Read `references/flows/frontend.md`                       |
+| "power engineer backend"                | Read `references/flows/backend.md`                        |
+| "power engineer devops"                 | Read `references/flows/devops.md`                         |
+| "power engineer ai"                     | Read `references/flows/ai.md`                             |
+| "power engineer data"                   | Read `references/flows/data.md`                           |
+| "power engineer docs"                   | Read `references/flows/docs.md`                           |
+| "power engineer mobile"                 | Read `references/flows/mobile.md`                         |
+| "power engineer quick"                  | Read `references/flows/quick.md`                          |
+| anything else (or just "power engineer") | Read `references/flows/full-interview.md`                 |
 
-After routing, follow the instructions in that file completely. Each flow
-file is self-contained with the questions, skill selections, and pointers
-to output templates needed for that specific flow.
+After routing, follow the instructions in that file completely.

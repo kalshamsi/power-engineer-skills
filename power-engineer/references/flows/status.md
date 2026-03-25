@@ -1,41 +1,63 @@
 # Status Flow
 
-Show all currently installed skills with a clean summary. This flow does NOT
-generate install scripts — it only reports what's installed.
+Show current project setup status. Read-only -- does not install anything.
 
-## Detect installed skills
-
-Run these commands:
+## Step 1 -- Check for state
 
 ```bash
-ls ~/.claude/skills/ .claude/skills/ 2>/dev/null || echo "(none)"
+cat .power-engineer/state.json 2>/dev/null
 ```
 
-## Present the results
+### If state exists
 
-Format the output as a clean summary:
+Read `.power-engineer/state.json` and present:
 
 ```
 ========================================
- Power Engineer — Skill Status
+ Power Engineer -- Project Status
 ========================================
 
-Installed skills:
-  - [skill-name-1]
-  - [skill-name-2]
-  - ...
+Project:     [name]
+Last setup:  [updated date]
+Stack:       [language] + [framework]
 
-========================================
- [N] skills installed
+Installed skills ([N] total):
+
+  Core & Planning:
+    - brainstorming (obra/superpowers)
+    - writing-plans (obra/superpowers)
+    - ...
+
+  [Category]:
+    - [skill] ([repo])
+    - ...
+
+Brand:       [configured | not configured]
+CLAUDE.md:   [managed section present | not present]
+Ruflo:       [configured | not configured]
+
 ========================================
 ```
 
-If nothing is installed, suggest running the full setup:
+Then run a quick drift check: read `references/modules/drift-detector.md`
+in read-only mode (detect changes but don't offer to fix them). Show any
+detected drift at the bottom:
 
 ```
-No skills installed yet.
+Changes detected since last setup:
+  - 3 new dependencies added to package.json
+  - Docker configuration added
+  - 1 skill manually removed
+
+Run /power-engineer update to reconcile.
+```
+
+### If no state exists
+
+```
+No power-engineer state found.
 
 To get started, run:
-  /power-engineer        — full guided setup (8 questions)
-  /power-engineer quick  — auto-detect your stack
+  /power-engineer        -- full guided setup
+  /power-engineer quick  -- auto-detect your stack
 ```

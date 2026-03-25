@@ -1,93 +1,60 @@
 # Full Interview Flow
 
-Run the complete 8-question questionnaire to build a tailored skill installation.
+The complete power-engineer setup. Scans the project, asks adaptive questions,
+installs skills directly, and configures the project.
 
-## Step 1 — Questionnaire
+## Step 1 -- Scan
 
-Ask these 8 questions **one at a time**, waiting for each answer before continuing.
-Present each as a numbered list of options.
+Read `references/modules/scanner.md` and follow its instructions to produce
+a ProjectProfile.
 
-**Q1 — Project type** *(pick all that apply)*
-1. Software Engineering (APIs, services, CLIs, backend systems)
-2. AI/LLM Engineering (agents, RAG, model integration, MCP servers)
-3. R&D / Research prototype
-4. Full-stack web application
-5. Mobile application
-6. Multiple of the above
+## Step 2 -- Assess
 
-**Q2 — Primary language/stack**
-1. TypeScript / JavaScript (Node.js)
-2. Python
-3. Both TypeScript and Python
-4. Other (ask user to specify)
+Check the ProjectProfile:
+- If `is_rerun` is true: read `references/modules/drift-detector.md` instead
+  of continuing this flow. The Drift Detector handles re-runs.
+- If the project is blank/empty (no package.json, no source files): proceed
+  to Step 3 with full questionnaire (nothing to skip).
+- Otherwise: proceed to Step 3 with adaptive questionnaire.
 
-**Q3 — Framework** *(pick all that apply, or "None")*
-1. Next.js
-2. React (without a framework)
-3. Vue / Nuxt
-4. Express / Fastify / Hono
-5. FastAPI / Flask / Django
-6. React Native / Expo
-7. SwiftUI / iOS native
-8. None / not applicable
+## Step 3 -- Interview
 
-**Q4 — Design needs**
-1. Full — design systems, Stitch integration, 63-skill designer collection
-2. Standard — component library, shadcn/ui, Tailwind design system
-3. Minimal — just Anthropic's frontend-design skill
-4. None — purely backend, infra, or data
+Read `references/modules/questionnaire.md` and follow its instructions.
+Pass the ProjectProfile from Step 1. Ask all 11 questions (skipping those
+already answered by the scan). Receive a SkillPlan.
 
-**Q5 — Documentation output needs**
-1. Full office suite (Word .docx, PowerPoint, Excel, PDF)
-2. Technical docs only (API documentation, technical writing)
-3. None
+## Step 4 -- Resolve
 
-**Q6 — Research / data needs**
-1. Full — web scraping, search, data analysis, browser automation
-2. Search only
-3. Data analysis / Python only
-4. None
+Read `references/modules/skill-resolver.md` and follow its instructions.
+Pass the SkillPlan from Step 3. Receive a deduplicated list of install
+commands and plugin-based installs.
 
-**Q7 — Cloud / database target** *(pick all that apply)*
-1. Azure AI (Cognitive Services, OpenAI on Azure, AI Search, Foundry)
-2. Supabase
-3. Neon / PostgreSQL
-4. None / other
+## Step 5 -- Present & confirm
 
-**Q8 — Project phase**
-1. Greenfield — brand new project from scratch
-2. Active feature development on an existing codebase
-3. Refactoring / improving an existing codebase
-4. Research / prototyping
+Show the user the consolidated recommendation:
+- Detected stack summary
+- Recommended skills grouped by category
+- Skills that will be skipped (already installed)
+- Plugin-based installs (separate section)
+- Ruflo recommendation if warranted (see Step 7)
 
----
+Ask: "Ready to install? You can add, remove, or modify before proceeding."
 
-## Step 2 — Detect installed skills
+Wait for confirmation.
 
-Run these commands to see what is already installed:
+## Step 6 -- Install
 
-```bash
-ls ~/.claude/skills/ .claude/skills/ 2>/dev/null || echo "(none)"
-```
+Read `references/modules/installer.md` and follow its instructions.
+Execute all confirmed skill installations directly.
 
-Store the results as `INSTALLED_SKILLS`. Any skill already present will be
-excluded from the generated script with a comment.
+## Step 7 -- Ruflo evaluation
 
----
+Read `references/modules/ruflo.md` and follow its instructions.
+Check if the project warrants multi-agent orchestration. If recommended
+and user confirms, set up Ruflo.
 
-## Step 3 — Build skill lists
+## Step 8 -- Configure
 
-Read `references/DECISION_MATRIX.md` and map every questionnaire answer to
-skill install commands.
-
-Start with the "Always add — Core methodology" block (included for every
-project), then layer on skills from Q1 through Q8. De-duplicate as you go.
-
-Filter against `INSTALLED_SKILLS` from Step 2.
-
----
-
-## Step 4 — Generate output
-
-Read `references/shared/output-steps.md` and follow its instructions to
-generate the install script, PLUGIN_INSTALLS.md, and the final summary.
+Read `references/modules/configurator.md` and follow its instructions.
+Generate/merge CLAUDE.md, create state directory, patch skills with
+project context.
