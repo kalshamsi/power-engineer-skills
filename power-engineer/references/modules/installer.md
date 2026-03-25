@@ -60,6 +60,15 @@ If the user selects "Remove some first", ask which skills to exclude using
 AskUserQuestion with the skill names as options, then re-present the list.
 Wait for "Install all" before proceeding.
 
+### 1.5 Permission setup
+
+Read `references/modules/permissions.md` and follow **Step 1** (Setup).
+This adds a temporary allow rule to `.claude/settings.json` so that the
+installation loop below does not trigger per-command permission prompts.
+
+If the user declines, proceed normally -- they will see a prompt for each
+install command.
+
 ### 2. Execute installations
 
 Run each install command one at a time. Show progress:
@@ -136,6 +145,12 @@ Installation complete!
     - [skill-name]: [error message]
   You can retry these manually or run /power-engineer update later.
 ```
+
+### 5.5 Permission cleanup
+
+Read `references/modules/permissions.md` and follow **Step 2** (Cleanup).
+Offer the user the choice to keep or remove the temporary permission rule
+that was added in Step 1.5. Skip this if Step 1.5 was skipped.
 
 ### 6. Plugin-based installs
 
