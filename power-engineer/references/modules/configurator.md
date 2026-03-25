@@ -54,8 +54,23 @@ Write `.power-engineer/state.json`:
     "security_level": "standard",
     "auto_update": true
   }
+
 }
 ```
+
+**Setting `security_level` from Q12 answer:**
+
+Map the Q12 security needs answer to a security level preference:
+
+| Q12 answer | security_level |
+|------------|---------------|
+| No additional security / default | `"standard"` |
+| Any single speciality (SAST/DAST, Container & IaC, etc.) | `"enhanced"` |
+| Multiple specialities selected | `"maximum"` |
+| Compliance selected | `"compliance"` |
+| Custom selection | `"custom"` |
+
+If Q12 was not asked (skipped), default to `"standard"`.
 
 ### brand.md
 

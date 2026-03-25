@@ -142,6 +142,7 @@ Skills are installed directly — no scripts to run. Power Engineer also creates
 - **`.power-engineer/install-log.sh`** — audit log (re-runnable)
 - **`.power-engineer/brand.md`** — brand identity (if applicable)
 - **`.power-engineer/project-context.md`** — goals, team, conventions
+- **`.power-engineer/cheatsheet.md`** — installed skills quick reference
 
 ---
 
@@ -149,7 +150,7 @@ Skills are installed directly — no scripts to run. Power Engineer also creates
 
 ```
 power-engineer/
-├── SKILL.md                               ← thin router (~44 lines)
+├── SKILL.md                               ← thin router (~50 lines, 14 commands)
 └── references/
     ├── modules/                           ← composable instruction sets
     │   ├── scanner.md                     ← codebase analysis → ProjectProfile
@@ -170,7 +171,9 @@ power-engineer/
     │   ├── mobile.md                      ← Scanner → mobile framework skills
     │   ├── status.md                      ← state.json → drift report (read-only)
     │   ├── update.md                      ← drift detection → resolve → install
-    │   └── catalog-browse.md              ← interactive catalog browser
+    │   ├── catalog-browse.md              ← interactive catalog browser
+    │   ├── help.md                        ← installed skills with trigger phrases
+    │   └── configure.md                   ← manage preferences (security level, auto-update)
     ├── catalog/                           ← browsable skill documentation (16 files)
     │   ├── INDEX.md
     │   ├── core-methodology.md
