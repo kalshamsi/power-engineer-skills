@@ -51,10 +51,15 @@ Execute all confirmed skill installations directly.
 
 Read `references/modules/ruflo.md` and follow its instructions.
 Check if the project warrants multi-agent orchestration. If recommended
-and user confirms, set up Ruflo.
+and user confirms, install Ruflo via `npx ruflo@latest init`.
+
+**Important:** Ruflo MUST run BEFORE the Configurator (Step 8) because
+Ruflo creates its own CLAUDE.md and .claude/ contents. The Configurator
+will then smart-merge power-engineer's section into Ruflo's CLAUDE.md.
 
 ## Step 8 -- Configure
 
 Read `references/modules/configurator.md` and follow its instructions.
 Generate/merge CLAUDE.md, create state directory, patch skills with
-project context.
+project context. If Ruflo was installed in Step 7, the Configurator will
+merge into the CLAUDE.md that Ruflo created (not overwrite it).

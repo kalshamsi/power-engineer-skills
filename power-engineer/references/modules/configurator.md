@@ -6,7 +6,7 @@ or merges CLAUDE.md, and patches installed skills with project context.
 ## Step 1: Create .power-engineer/ state directory
 
 ```bash
-mkdir -p .power-engineer/agents
+mkdir -p .power-engineer
 ```
 
 ### state.json

@@ -34,7 +34,7 @@ Installed skills ([N] total):
 
 Brand:       [configured | not configured]
 CLAUDE.md:   [managed section present | not present]
-Ruflo:       [configured | not configured]
+Ruflo:       [installed via npx | not installed]
 
 ========================================
 ```
