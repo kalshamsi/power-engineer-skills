@@ -426,6 +426,62 @@ npx skills@latest add trailofbits/skills --skill insecure-defaults -y
 npx skills@latest add trailofbits/skills --skill sharp-edges -y
 ```
 
+## Security level (from Q12 — new security levels)
+
+Controls which of the 10 new `kalshamsi/claude-security-skills` skills get added.
+These levels are distinct from the existing Q12 branches above.
+
+**Standard:** No new skills added (existing security-review, OWASP, secrets-guardian from core methodology is sufficient)
+
+**Enhanced:** Add exactly these 3:
+```bash
+npx skills@latest add kalshamsi/claude-security-skills --skill security-headers-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill crypto-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill api-security-tester -y
+```
+
+**Maximum:** Add all of Enhanced + these 5:
+```bash
+npx skills@latest add kalshamsi/claude-security-skills --skill security-headers-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill crypto-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill api-security-tester -y
+npx skills@latest add kalshamsi/claude-security-skills --skill bandit-sast -y
+npx skills@latest add kalshamsi/claude-security-skills --skill socket-sca -y
+npx skills@latest add kalshamsi/claude-security-skills --skill docker-scout-scanner -y
+npx skills@latest add kalshamsi/claude-security-skills --skill security-test-generator -y
+npx skills@latest add kalshamsi/claude-security-skills --skill devsecops-pipeline -y
+```
+
+**Compliance:** Add all of Maximum + these 2:
+```bash
+npx skills@latest add kalshamsi/claude-security-skills --skill security-headers-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill crypto-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill api-security-tester -y
+npx skills@latest add kalshamsi/claude-security-skills --skill bandit-sast -y
+npx skills@latest add kalshamsi/claude-security-skills --skill socket-sca -y
+npx skills@latest add kalshamsi/claude-security-skills --skill docker-scout-scanner -y
+npx skills@latest add kalshamsi/claude-security-skills --skill security-test-generator -y
+npx skills@latest add kalshamsi/claude-security-skills --skill devsecops-pipeline -y
+npx skills@latest add kalshamsi/claude-security-skills --skill pci-dss-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill mobile-security -y
+```
+
+**Custom:** Present all 10 as options for user to cherry-pick:
+```bash
+npx skills@latest add kalshamsi/claude-security-skills --skill security-headers-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill crypto-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill api-security-tester -y
+npx skills@latest add kalshamsi/claude-security-skills --skill bandit-sast -y
+npx skills@latest add kalshamsi/claude-security-skills --skill socket-sca -y
+npx skills@latest add kalshamsi/claude-security-skills --skill docker-scout-scanner -y
+npx skills@latest add kalshamsi/claude-security-skills --skill security-test-generator -y
+npx skills@latest add kalshamsi/claude-security-skills --skill devsecops-pipeline -y
+npx skills@latest add kalshamsi/claude-security-skills --skill pci-dss-audit -y
+npx skills@latest add kalshamsi/claude-security-skills --skill mobile-security -y
+```
+
+---
+
 **Framework-specific security (auto-added based on Q3 framework, no question needed):**
 
 If Django detected → also add:
