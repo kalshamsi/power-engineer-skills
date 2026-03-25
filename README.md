@@ -1,25 +1,16 @@
-# power-engineer-skills
-
-An intelligent Claude Code skill that scans your codebase, conducts an adaptive interview, and installs the optimal skill stack directly — no scripts to review or run manually.
-
-Built for software engineers, AI engineers, and R&D engineers.
-290+ skills catalogued across every major category, including 70+ security skills.
-
----
-
-## Install
-
-```bash
-npx skills@latest add kalshamsi/power-engineer-skills --skill power-engineer --global
-```
-
-The installer will prompt you to select which agents to install on. Use the
-arrow keys to navigate and **press space to select** each agent you want.
-
-![Agent selector during installation](assets/install-agent-selector.png)
-
-This installs the skill globally so it's available in every project. Works with
-Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
+<p align="center">
+  <h1 align="center">Power Engineer</h1>
+  <p align="center">
+    The skill stack manager for Claude Code.<br>
+    Scan. Interview. Install. Configure. Done.
+  </p>
+  <p align="center">
+    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.0.0"><img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version 1.0.0"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
+    <img src="https://img.shields.io/badge/skills-290%2B-orange" alt="290+ Skills">
+    <img src="https://img.shields.io/badge/tests-312%20passing-brightgreen" alt="312 Tests Passing">
+  </p>
+</p>
 
 ---
 
@@ -31,118 +22,140 @@ Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
 npx skills@latest add kalshamsi/power-engineer-skills --skill power-engineer --global
 ```
 
-**Step 2 — Run in any project**
+Select which agents to install on — use arrow keys to navigate and **space to select**.
 
-Open Claude Code in your project directory and say:
+![Agent selector during installation](assets/install-agent-selector.png)
+
+**Step 2 — Run**
 
 ```
 /power-engineer
 ```
 
-**Step 3 — Done**
+**Step 3 — Done.** Skills are installed and active immediately.
 
-Power Engineer scans your codebase, asks 5–7 adaptive questions, and installs the right skills directly. No scripts. No copy-paste. Skills are active immediately.
+> Power Engineer scans your codebase, asks 5–7 adaptive questions, and installs the right skills directly. No scripts. No copy-paste.
 
 ---
 
-## What is this? (Beginner guide)
+## What is Power Engineer? (Beginner guide)
 
-### What are Claude Code skills?
-
-Claude Code skills are reusable instruction sets that extend what Claude can do inside your project. Each skill gives Claude a specialized workflow — for example, a `test-driven-development` skill teaches Claude the exact TDD loop to follow when writing code, and a `systematic-debugging` skill gives it a structured approach to diagnosing bugs.
-
-Skills are installed per-project (or globally) and referenced in your `CLAUDE.md`. Once installed, you trigger them by name: `/skill-name` in chat, or they activate automatically when Claude detects the right context.
+**Power Engineer** is an intelligent project setup skill for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It replaces the manual process of researching, picking, and installing skills one by one with a single automated run.
 
 ### What does Power Engineer do?
 
-Instead of manually researching, picking, and installing individual skills one by one, Power Engineer does it all in a single run:
+```
+Scan codebase → Adaptive interview → Resolve skills → Install → Configure → Track drift
+```
 
-1. **Scans your codebase** — detects language, framework, SDKs, infrastructure, cloud/database, brand assets, existing skills, team size, and project maturity
-2. **Asks only what it can't infer** — adaptive questionnaire skips questions already answered by the scan (12 questions total, typically 5–7 asked)
-3. **Installs skills directly** — no script generation; skills are installed in real-time with progress tracking and failure handling
-4. **Configures your project** — generates/merges CLAUDE.md, creates `.power-engineer/` state directory, patches skills with project context
-5. **Tracks drift** — on re-run, detects what changed and recommends new skills
+1. **Scans your project** — detects language, framework, SDKs, infrastructure, cloud, brand assets, existing skills, team size, and project maturity
+2. **Asks only what it can't infer** — 12 questions total, typically 5–7 asked after auto-detection
+3. **Installs skills directly** — real-time execution with progress tracking and failure handling
+4. **Configures your project** — generates CLAUDE.md, state directory, skill patching with project context
+5. **Tracks drift** — on re-run, detects changes to your stack and recommends new skills
 
-### Why would you want it?
+### What are Claude Code skills?
 
-- You start a new project and don't know which Claude Code skills are relevant
-- You want your whole AI toolchain set up in one command, not assembled piece by piece
-- You want skills configured with your actual project context (repo name, stack, conventions), not generic defaults
-- You want drift detection: when your stack evolves, Power Engineer tells you what new skills to add
+Skills are reusable instruction sets that extend what Claude can do inside your project. A `test-driven-development` skill teaches Claude TDD. A `systematic-debugging` skill gives it structured root-cause analysis. Skills activate by name (`/skill-name`) or automatically when Claude detects the right context.
+
+**Power Engineer curates 290+ of them** across 16 catalog files and installs exactly the ones your project needs.
 
 ---
 
 ## Command reference
 
+All commands are prefixed with `power engineer` in chat (e.g., `power engineer frontend`).
+
 | Command | Description |
 |---------|-------------|
-| `power-engineer` | Full interview: scan → adaptive questionnaire → install → configure |
+| `/power-engineer` | Full interview — scan, questionnaire, install, configure |
 | `quick` | Auto-detect stack, minimal questions, smart defaults |
-| `frontend` | Frontend/design skills only |
-| `backend` | Backend/API/database skills only |
-| `devops` | DevOps/infrastructure skills only |
-| `ai` | AI/LLM/agentic skills only |
-| `data` | Data/ML/research skills only |
+| `frontend` | Frontend and design skills only |
+| `backend` | Backend, API, and database skills only |
+| `devops` | DevOps and infrastructure skills only |
+| `ai` | AI, LLM, and agentic skills only |
+| `data` | Data, ML, and research skills only |
 | `docs` | Documentation skills only |
 | `mobile` | Mobile development skills only |
-| `status` | Show installed skills + drift report |
-| `update` | Detect changes, install new skills |
-| `catalog` | Browse catalog interactively |
-| `help` | Show command reference and usage hints |
-| `configure` | Re-run configuration step only (CLAUDE.md + state dir) |
-
-Trigger any command by saying `power engineer <command>` in Claude Code chat, or use the slash trigger: `/power-engineer`.
+| `status` | Show installed skills and drift report (read-only) |
+| `update` | Detect project changes, install recommended skills |
+| `catalog` | Browse the full skill catalog interactively |
+| `help` | Show installed skills with trigger phrases and usage hints |
+| `configure` | Manage preferences — security level, auto-update toggle |
 
 ---
 
-## Skills catalog
+## Catalog
 
-290+ skills catalogued across every major category. Browse by category in [power-engineer/references/catalog/](./power-engineer/references/catalog/). Start with [INDEX.md](./power-engineer/references/catalog/INDEX.md) for an overview.
+290+ skills across 16 catalog files. Browse at [`power-engineer/references/catalog/`](./power-engineer/references/catalog/) or start with [`INDEX.md`](./power-engineer/references/catalog/INDEX.md).
 
-### Categories
-
-| Category | Sub-categories |
-|----------|---------------|
-| **Core & Planning** | obra/superpowers, mattpocock planning, GitHub copilot |
-| **Anthropic Official** | Document generation, design, skill creation |
-| **Engineering** | Backend, DevOps/Infra, Data/ML, Testing, Agentic AI |
-| **Security & AppSec** | SAST, DAST, SCA, secrets, containers, IaC, threat modeling, compliance, pentest, DFIR, MCP servers |
-| **Frontend & Design** | React/Next.js, Vue/Vite, Design systems, Mobile |
-| **Cloud & Databases** | Microsoft Azure, Neon, Supabase |
-| **Docs & Research** | Technical writing, web research, data analysis |
+| Category | What's included |
+|----------|----------------|
+| **Core & Planning** | obra/superpowers methodology, mattpocock planning, GitHub copilot workflows |
+| **Anthropic Official** | Document generation (docx/pptx/xlsx/pdf), design, skill creation |
+| **Backend & Architecture** | API design, TypeScript, Node.js patterns, database schemas, auth, payments |
+| **DevOps & Infrastructure** | Docker, Terraform, Helm, CI/CD, migrations, runbooks |
+| **Data & ML** | Data engineering, data science, ML/MLOps, computer vision |
+| **Testing & Quality** | Playwright, TDD, tech debt tracking, code review, onboarding |
+| **Agentic AI** | AI/LLM SDKs, MCP builders, agent patterns, Vercel AI SDK |
+| **Security & AppSec** | 80+ skills — SAST, DAST, SCA, secrets, containers, IaC, threat modeling, compliance, pentest, DFIR |
+| **Frontend** | React/Next.js, Vue/Vite, design systems, shadcn/ui, Stitch |
+| **Mobile** | Expo, React Native, SwiftUI/iOS |
+| **Cloud & Databases** | Microsoft Azure, Neon, Supabase, Better Auth |
+| **Docs & Research** | Technical writing, web research, Firecrawl, Tavily |
 | **Power Suites** | GSD, Superpowers, UI/UX Pro Max, Designer Skills, Stitch, Pencil |
 
 ---
 
-## What it does
+## Security
 
-### Questions covered
+Every project gets baseline security by default — no extra steps:
+
+| Level | What's included |
+|-------|----------------|
+| **Standard** (default) | Sentry security-review (#1 rated), OWASP Top 10:2025, secrets detection |
+| **Enhanced** | Standard + HTTP headers audit, crypto audit, API security testing |
+| **Maximum** | Enhanced + Bandit SAST, Socket SCA, Docker Scout, security test generation, DevSecOps pipeline |
+| **Compliance** | Maximum + PCI-DSS v4.0 audit, OWASP Mobile Top 10:2024 |
+| **Custom** | Cherry-pick from all available security skills |
+
+Additional specialized options: Deep SAST/DAST (Semgrep, CodeQL, Nuclei), Container & IaC (Trivy, Grype, Checkov), Penetration testing (SecLists, Burp Suite), Threat modeling (STRIDE, MITRE ATT&CK). Framework-specific security (Django, Laravel, Spring Boot) is auto-added when detected.
+
+Full security catalog: **80+ skills, 60+ MCP servers** — browse via `power engineer catalog`.
+
+---
+
+## After setup
+
+Power Engineer creates the following in your project:
+
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | Project context with managed `## Power Engineer` section |
+| `.power-engineer/state.json` | Skill inventory, preferences, scan snapshot for drift detection |
+| `.power-engineer/cheatsheet.md` | Installed skills quick reference with trigger phrases |
+| `.power-engineer/install-log.sh` | Audit log of all install commands (re-runnable) |
+| `.power-engineer/brand.md` | Brand identity — colors, fonts, tokens (if applicable) |
+| `.power-engineer/project-context.md` | Goals, team workflow, conventions |
+
+### Adaptive questionnaire
 
 | # | Topic | Auto-detected? |
-|---|-------|---------------|
-| Q1 | Project type | Yes (from framework + language) |
-| Q2 | Language/stack | Yes (from config files) |
-| Q3 | Framework | Yes (from config files) |
-| Q4 | Design needs | Always asked |
-| Q5 | Documentation needs | Always asked |
-| Q6 | Research/data needs | Always asked |
-| Q7 | Cloud/database | Yes (from dependencies) |
-| Q8 | Project phase | Always asked |
-| Q9 | Brand identity | Yes (from design tokens) |
-| Q10 | Team workflow | Yes (from git log + CI/CD) |
-| Q11 | Goals | Always asked |
-| Q12 | Security needs | Always asked |
+|---|-------|:---:|
+| Q1 | Project type | Yes |
+| Q2 | Language / stack | Yes |
+| Q3 | Framework | Yes |
+| Q4 | Design needs | — |
+| Q5 | Documentation needs | — |
+| Q6 | Research / data needs | — |
+| Q7 | Cloud / database | Yes |
+| Q8 | Project phase | — |
+| Q9 | Brand identity | Yes |
+| Q10 | Team workflow | Yes |
+| Q11 | Goals | — |
+| Q12 | Security needs | — |
 
-### After setup
-
-Skills are installed directly — no scripts to run. Power Engineer also creates:
-
-- **CLAUDE.md** — project context with a managed `## Power Engineer` section
-- **`.power-engineer/state.json`** — full inventory for drift detection
-- **`.power-engineer/install-log.sh`** — audit log (re-runnable)
-- **`.power-engineer/brand.md`** — brand identity (if applicable)
-- **`.power-engineer/project-context.md`** — goals, team, conventions
-- **`.power-engineer/cheatsheet.md`** — installed skills quick reference
+Questions marked **Yes** are skipped when the scan already has the answer.
 
 ---
 
@@ -150,108 +163,64 @@ Skills are installed directly — no scripts to run. Power Engineer also creates
 
 ```
 power-engineer/
-├── SKILL.md                               ← thin router (~50 lines, 14 commands)
+├── SKILL.md                          ← Router (14 commands, ~50 lines)
 └── references/
-    ├── modules/                           ← composable instruction sets
-    │   ├── scanner.md                     ← codebase analysis → ProjectProfile
-    │   ├── questionnaire.md               ← adaptive interview → SkillPlan
-    │   ├── skill-resolver.md              ← SkillPlan → deduplicated install commands
-    │   ├── installer.md                   ← direct execution with progress tracking
-    │   ├── configurator.md                ← CLAUDE.md, state dir, skill patching
-    │   └── drift-detector.md              ← compare state vs current project
-    ├── flows/                             ← route-specific module compositions
-    │   ├── full-interview.md              ← Scanner → Questionnaire → Resolver → Installer → Configurator
-    │   ├── quick.md                       ← Scanner → smart defaults → Resolver → Installer → Configurator
-    │   ├── frontend.md                    ← Scanner → targeted questions → frontend skills
-    │   ├── backend.md                     ← Scanner → targeted questions → backend skills
-    │   ├── devops.md                      ← Scanner → infra detection → devops skills
-    │   ├── ai.md                          ← Scanner → SDK detection → AI/LLM skills
-    │   ├── data.md                        ← Scanner → data/research skills
-    │   ├── docs.md                        ← Scanner → documentation skills
-    │   ├── mobile.md                      ← Scanner → mobile framework skills
-    │   ├── status.md                      ← state.json → drift report (read-only)
-    │   ├── update.md                      ← drift detection → resolve → install
-    │   ├── catalog-browse.md              ← interactive catalog browser
-    │   ├── help.md                        ← installed skills with trigger phrases
-    │   └── configure.md                   ← manage preferences (security level, auto-update)
-    ├── catalog/                           ← browsable skill documentation (16 files)
-    │   ├── INDEX.md
-    │   ├── core-methodology.md
-    │   ├── anthropic-official.md
-    │   ├── engineering/
-    │   ├── frontend/
-    │   ├── cloud/
-    │   ├── docs-research.md
-    │   └── power-suites.md
-    └── PLUGIN_INSTALLS_TEMPLATE.md        ← plugin-based install reference
+    ├── modules/                      ← Composable instruction sets
+    │   ├── scanner.md                ← Codebase analysis → ProjectProfile
+    │   ├── questionnaire.md          ← Adaptive interview → SkillPlan
+    │   ├── skill-resolver.md         ← SkillPlan → deduplicated install commands
+    │   ├── installer.md              ← Direct execution with progress tracking
+    │   ├── configurator.md           ← CLAUDE.md, state dir, cheatsheet, skill patching
+    │   └── drift-detector.md         ← Compare state vs current project
+    ├── flows/                        ← Route-specific module compositions
+    │   ├── full-interview.md         ← Scan → Interview → Resolve → Install → Configure
+    │   ├── quick.md                  ← Scan → smart defaults → Install → Configure
+    │   ├── frontend.md               ← Targeted frontend skill flow
+    │   ├── backend.md                ← Targeted backend skill flow
+    │   ├── devops.md                 ← Targeted devops skill flow
+    │   ├── ai.md                     ← Targeted AI/LLM skill flow
+    │   ├── data.md                   ← Targeted data/research skill flow
+    │   ├── docs.md                   ← Targeted documentation skill flow
+    │   ├── mobile.md                 ← Targeted mobile skill flow
+    │   ├── update.md                 ← Drift detection → resolve → install
+    │   ├── catalog-browse.md         ← Interactive catalog browser
+    │   ├── help.md                   ← Installed skills with triggers
+    │   └── configure.md              ← Manage preferences
+    └── catalog/                      ← 16 browsable skill catalog files
 ```
 
-### Module pipeline
-
-Every flow composes modules from this pipeline:
-
-```
-Scanner → Questionnaire → Skill Resolver → Installer → Configurator
-```
-
-The **Drift Detector** runs independently on `status` and `update` commands.
+**Module pipeline:** Every flow composes from `Scanner → Questionnaire → Skill Resolver → Installer → Configurator`. The **Drift Detector** runs independently on `status` and `update` commands, and auto-runs when `preferences.auto_update` is enabled.
 
 ---
 
-## Power suites
+## Power Suites
 
-Some skill collections install via special methods rather than `npx skills add`.
-Power Engineer presents these separately after the main installation completes.
+Curated skill collections that install via specialized methods. Power Engineer presents these after the main installation.
 
-| Suite | Install method | Description |
-|-------|---------------|-------------|
-| **GSD** | `npx get-shit-done-cc --claude` | Context engineering: questionnaire, SPEC, phased execution, verification |
-| **Superpowers** | `/plugin install superpowers@superpowers-marketplace` | Auto-triggering dev methodology: brainstorm, TDD, verify |
-| **UI/UX Pro Max** | `/plugin install ui-ux-pro-max@ui-ux-pro-max-skill` | 97 palettes, 57 font pairings, 99 UX guidelines, 9 stacks |
+| Suite | Install | Skills |
+|-------|---------|--------|
+| **GSD** | `npx get-shit-done-cc --claude` | Context engineering with phased execution and verification |
+| **Superpowers** | `/plugin install superpowers@superpowers-marketplace` | Auto-triggering dev methodology — brainstorm, plan, TDD, verify |
+| **UI/UX Pro Max** | `/plugin install ui-ux-pro-max@ui-ux-pro-max-skill` | 50+ styles, 97 palettes, 57 font pairings, 99 UX guidelines |
 | **Designer Skills** | `/plugin marketplace add Owl-Listener/designer-skills` | 63 skills + 27 commands across 8 design disciplines |
-| **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all` | Text/sketch to high-fidelity UI to React/Tailwind |
-| **Pencil** | Built-in | Native `.pen` file editor in VS Code |
-
----
-
-## Security
-
-Every project gets baseline security by default: Sentry's security-review
-(independently rated #1), OWASP Top 10:2025, and secrets detection. No extra
-steps needed.
-
-For deeper security needs, Q12 asks what you need and layers on specialized
-skills:
-
-| Selection | What you get |
-|-----------|-------------|
-| **Standard** (default) | Code review, OWASP, secrets detection |
-| **Deep SAST/DAST** | Semgrep rules, CodeQL, Nuclei scanning, FFUF fuzzing |
-| **Container & IaC** | Trivy, Grype, Checkov, tfsec |
-| **Compliance** | SOC 2, HIPAA, PCI-DSS, GDPR, ISO 27001 (99% eval score) |
-| **Penetration testing** | SecLists, Burp Suite parsing, pentest agents |
-| **Threat modeling** | STRIDE/DREAD, MITRE ATT&CK, attack trees |
-
-Framework-specific security skills (Django, Laravel, Spring Boot) are
-auto-added when those frameworks are detected — no question needed.
-
-The full security catalog (70+ skills, 60+ MCP servers) is browsable via
-`power engineer catalog` → Security & Operations.
+| **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all` | Text/sketch → high-fidelity UI → React/Tailwind code |
+| **Pencil** | Built-in (VS Code extension) | Native `.pen` design file editor |
 
 ---
 
 ## Contributing
 
-See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full contributor guide,
-including how to add skills to the catalog, improve the tool, and submit PRs.
+See [**CONTRIBUTING.md**](docs/CONTRIBUTING.md) for the full guide — adding skills to the catalog, improving the tool, and submitting PRs.
 
-Quick summary:
-- Catalog additions go in `power-engineer/references/catalog/`
-- Follow the 6-column table format: Skill | Source | Install | Description | Trigger | When to use
-- Run `bash tests/run-tests.sh` before submitting
+**Quick version:**
+
+1. Find the right file in `power-engineer/references/catalog/`
+2. Add a row with all 6 columns: `Skill | Source | Install | Description | Trigger | When to use`
+3. Run `bash tests/run-tests.sh`
+4. Open a PR with a conventional commit message
 
 ---
 
 ## License
 
-MIT
+[MIT](LICENSE)
