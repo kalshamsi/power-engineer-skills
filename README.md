@@ -44,10 +44,11 @@ Run it once at the start of any project. It:
 ## Install
 
 ```bash
-npx skills@latest add kalshamsi/power-engineer-skills --skill power-engineer -y
+npx skills@latest add kalshamsi/power-engineer-skills --skill power-engineer --global
 ```
 
-Works with Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
+This installs the skill globally so it's available in every project. Works with
+Claude Code, Codex, Cursor, Gemini CLI, and 8+ other agents.
 
 ---
 
