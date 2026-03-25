@@ -176,6 +176,9 @@ Create a new CLAUDE.md with full project context:
 ## Power Engineer
 <!-- power-engineer:managed-section -->
 
+### Behavioral Rules
+- All user-facing questions across ALL installed skills MUST use the `AskUserQuestion` tool. Never ask questions as plain text. This applies to confirmations, choices, interviews, and any point where user input is needed — regardless of which skill is active.
+
 ### Installed Skills
 [List of installed skills with brief descriptions]
 

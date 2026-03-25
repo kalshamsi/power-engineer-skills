@@ -26,6 +26,11 @@ needed for the current route. Never read all files upfront.
 Never ask questions as plain text in a response. This applies to interview
 questions, confirmations, and any point where you need user input.
 
+**Important:** When generating CLAUDE.md, include a behavioral rule that
+enforces `AskUserQuestion` usage across ALL installed skills — not just
+Power Engineer. Every skill that needs user input must use `AskUserQuestion`
+for a seamless, consistent experience.
+
 ## Route the request
 
 Check the user's message and follow the matching route:
