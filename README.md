@@ -5,7 +5,7 @@ interview, and installs the optimal skill stack directly — no scripts to revie
 or run manually.
 
 Built for software engineers, AI engineers, and R&D engineers.
-220+ skills catalogued across every major category, including 70+ security skills.
+280+ skills catalogued across every major category, including 70+ security skills.
 
 ---
 
