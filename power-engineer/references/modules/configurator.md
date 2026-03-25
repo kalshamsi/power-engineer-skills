@@ -1,0 +1,258 @@
+# Configurator Module
+
+Post-installation project configuration. Creates state directory, generates
+or merges CLAUDE.md, and patches installed skills with project context.
+
+## Step 1: Create .power-engineer/ state directory
+
+```bash
+mkdir -p .power-engineer/agents
+```
+
+### state.json
+
+Write `.power-engineer/state.json`:
+
+```json
+{
+  "version": "2.0",
+  "created": "[ISO date]",
+  "updated": "[ISO date]",
+  "project": {
+    "name": "[directory name]",
+    "language": "[from SkillPlan]",
+    "framework": "[from SkillPlan]",
+    "sdks": [],
+    "cloud_database": [],
+    "team_size": 0,
+    "is_monorepo": false
+  },
+  "questionnaire_answers": {
+    "project_type": "[Q1]",
+    "design_needs": "[Q4]",
+    "documentation": "[Q5]",
+    "research_data": "[Q6]",
+    "project_phase": "[Q8]",
+    "brand_identity": "[Q9]",
+    "team_workflow": "[Q10]",
+    "goals": "[Q11]"
+  },
+  "installed_skills": [
+    {
+      "name": "[skill-name]",
+      "repo": "[user/repo]",
+      "installed_at": "[ISO date]",
+      "installed_by": "power-engineer"
+    }
+  ],
+  "scan_snapshot": {
+    "source_file_count": 0,
+    "package_json_hash": "[first 8 chars of md5]",
+    "dependency_count": 0
+  }
+}
+```
+
+### brand.md
+
+Write `.power-engineer/brand.md` (only if brand information was collected):
+
+```markdown
+---
+name: [project name]
+colors:
+  primary: "[hex]"
+  secondary: "[hex]"
+  accent: "[hex]"
+fonts:
+  heading: "[font name]"
+  body: "[font name]"
+logo: "[path to logo file or null]"
+---
+
+# Brand Identity
+
+[Human-readable brand description based on detected tokens and user answers]
+
+## Color Palette
+[Extracted from tailwind.config or CSS custom properties]
+
+## Typography
+[Extracted from font configurations]
+
+## Design Tokens
+[Any additional design tokens detected]
+```
+
+### project-context.md
+
+Write `.power-engineer/project-context.md`:
+
+```markdown
+# Project Context
+
+## Goals
+[From Q11 answers]
+
+## Team
+[From Q10 answers + git log team size]
+
+## Conventions
+[Detected from codebase: naming patterns, directory structure, test patterns]
+
+## Architecture
+[Detected: monorepo?, services, deployment targets]
+```
+
+### drift-history.json
+
+Write `.power-engineer/drift-history.json`:
+
+```json
+{
+  "runs": [
+    {
+      "date": "[ISO date]",
+      "type": "initial-setup",
+      "skills_installed": 0,
+      "skills_skipped": 0,
+      "skills_failed": 0
+    }
+  ]
+}
+```
+
+### agent-performance.json
+
+Write `.power-engineer/agent-performance.json`:
+
+```json
+{
+  "agents": [],
+  "tracking_started": "[ISO date]"
+}
+```
+
+## Step 2: CLAUDE.md generation / smart merge
+
+### If no CLAUDE.md exists
+
+Create a new CLAUDE.md with full project context:
+
+```markdown
+# CLAUDE.md
+
+## Project Overview
+[Project name] is a [framework] project using [language].
+
+## Tech Stack
+- Language: [language]
+- Framework: [framework]
+- Database: [cloud_database]
+- SDKs: [sdks list]
+
+## Conventions
+[Detected conventions from codebase]
+
+## Power Engineer
+<!-- power-engineer:managed-section -->
+
+### Installed Skills
+[List of installed skills with brief descriptions]
+
+### Brand Context
+[Reference to .power-engineer/brand.md if exists]
+
+### Project Goals
+[From Q11 answers]
+
+### Team Workflow
+[From Q10 answers]
+
+<!-- /power-engineer:managed-section -->
+```
+
+### If CLAUDE.md already exists
+
+1. Read the existing CLAUDE.md completely
+2. Search for `<!-- power-engineer:managed-section -->`
+3. If found: replace everything between the opening and closing delimiters
+4. If not found: append the `## Power Engineer` section at the end
+5. **NEVER modify any content outside the managed section**
+
+## Step 3: Skill patching with Project Context
+
+For each installed skill where project context is materially useful, append
+a `## Project Context` section.
+
+### Which skills to patch
+
+| Skill category | Patch with |
+|---------------|------------|
+| Design skills (frontend-design, tailwind-design-system, shadcn, etc.) | Brand tokens, color palette, typography |
+| Backend skills (api-design-principles, nodejs-backend-patterns, etc.) | API conventions, naming patterns, database schema patterns |
+| Testing skills (tdd, test-driven-development, backend-testing, etc.) | Test directory structure, test naming patterns, test runner config |
+| Documentation skills (technical-writing, api-documentation, etc.) | Project terminology, audience, documentation standards |
+
+### Patching format
+
+Append to the end of the skill's SKILL.md file:
+
+```markdown
+<!-- power-engineer:project-context -->
+## Project Context
+
+This project uses [framework] with [language].
+
+[Category-specific context from the table above]
+
+### Brand
+[If design skill: include brand tokens from .power-engineer/brand.md]
+
+### Conventions
+[Relevant conventions for this skill category]
+<!-- /power-engineer:project-context -->
+```
+
+### On re-run
+
+When patching skills on re-run:
+1. Search for `<!-- power-engineer:project-context -->`
+2. If found: replace everything between the delimiters
+3. If not found: append the section
+
+## Step 4: .gitignore check
+
+Check if `.power-engineer/` is in `.gitignore`:
+
+```bash
+grep -q '.power-engineer' .gitignore 2>/dev/null
+```
+
+If not present, ask the user: "Should I add `.power-engineer/` to your .gitignore?
+This directory contains local state and install logs."
+
+If yes, append to `.gitignore`:
+```
+# Power Engineer state
+.power-engineer/
+```
+
+## Step 5: Present configuration summary
+
+```
+Project configured!
+
+  CLAUDE.md:           [created | updated (merged Power Engineer section)]
+  State directory:     .power-engineer/ created
+  Skills patched:      [N] skills received project context
+  Brand file:          [created | skipped (no brand info)]
+
+  State files:
+    .power-engineer/state.json
+    .power-engineer/brand.md
+    .power-engineer/project-context.md
+    .power-engineer/install-log.sh
+    .power-engineer/drift-history.json
+    .power-engineer/agent-performance.json
+```
