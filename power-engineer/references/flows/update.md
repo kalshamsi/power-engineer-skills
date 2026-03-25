@@ -27,13 +27,27 @@ Include ONLY new skills not already in state.json.
 
 ## Step 4 -- Present & confirm
 
-Show the reconciliation plan:
+Show the reconciliation plan as plain text:
 - What changed in the project
 - New skills recommended
 - Skills to keep as-is
 - Any skills the user might want to remove
 
-Ask for confirmation.
+Then use AskUserQuestion to confirm:
+
+```
+AskUserQuestion:
+  question: "Ready to install the new skills recommended above?"
+  header: "Update"
+  options:
+    - label: "Install all new skills"
+      description: "Proceed with the recommended additions"
+    - label: "Let me pick"
+      description: "I want to select which new skills to install"
+    - label: "Skip for now"
+      description: "Don't install anything, just keep the drift report"
+  multiSelect: false
+```
 
 ## Step 5 -- Install new skills
 

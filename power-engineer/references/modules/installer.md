@@ -40,9 +40,25 @@ Already installed (skipping):
 Total: [N] to install, [N] already present (skipping)
 ```
 
-Ask the user: **"Ready to install? You can also remove skills from the list first."**
+Use AskUserQuestion to confirm:
 
-Wait for confirmation before proceeding.
+```
+AskUserQuestion:
+  question: "Ready to install these [N] skills?"
+  header: "Install"
+  options:
+    - label: "Install all"
+      description: "Proceed with the full list above"
+    - label: "Remove some first"
+      description: "I want to exclude certain skills before installing"
+    - label: "Cancel"
+      description: "Don't install anything right now"
+  multiSelect: false
+```
+
+If the user selects "Remove some first", ask which skills to exclude using
+AskUserQuestion with the skill names as options, then re-present the list.
+Wait for "Install all" before proceeding.
 
 ### 2. Execute installations
 

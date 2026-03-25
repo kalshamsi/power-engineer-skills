@@ -20,8 +20,9 @@ Check the ProjectProfile:
 ## Step 3 -- Interview
 
 Read `references/modules/questionnaire.md` and follow its instructions.
-Pass the ProjectProfile from Step 1. Ask all 11 questions (skipping those
-already answered by the scan). Receive a SkillPlan.
+Pass the ProjectProfile from Step 1. Use the `AskUserQuestion` tool for every
+question — never ask as plain text. Batch questions thematically (2-3 per call).
+Receive a SkillPlan.
 
 ## Step 4 -- Resolve
 
@@ -31,16 +32,15 @@ commands and plugin-based installs.
 
 ## Step 5 -- Present & confirm
 
-Show the user the consolidated recommendation:
+Show the user the consolidated recommendation as plain text:
 - Detected stack summary
 - Recommended skills grouped by category
 - Skills that will be skipped (already installed)
 - Plugin-based installs (separate section)
 - Ruflo recommendation if warranted (see Step 7)
 
-Ask: "Ready to install? You can add, remove, or modify before proceeding."
-
-Wait for confirmation.
+Then use AskUserQuestion to confirm (the installer module handles this —
+see `references/modules/installer.md` Step 1).
 
 ## Step 6 -- Install
 

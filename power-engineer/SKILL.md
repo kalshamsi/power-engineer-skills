@@ -22,6 +22,10 @@ adaptive interviews, install skills directly, and configure projects.
 **Important:** This skill uses progressive disclosure. Read ONLY the files
 needed for the current route. Never read all files upfront.
 
+**Important:** All user-facing questions MUST use the `AskUserQuestion` tool.
+Never ask questions as plain text in a response. This applies to interview
+questions, confirmations, and any point where you need user input.
+
 ## Route the request
 
 Check the user's message and follow the matching route:

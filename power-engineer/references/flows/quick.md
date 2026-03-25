@@ -22,7 +22,22 @@ defaults:
 - Q10 (Team): default to "Solo developer" unless git log shows 2+ authors
 - Q11 (Goals): default to "Ship features faster"
 
-Present what was detected and the defaults. Ask: "Look right? Any changes?"
+Present what was detected and the defaults as plain text, then confirm with
+AskUserQuestion:
+
+```
+AskUserQuestion:
+  question: "I've auto-detected your stack and applied smart defaults. Look right?"
+  header: "Quick"
+  options:
+    - label: "Looks good, proceed"
+      description: "Use these settings and install skills"
+    - label: "Adjust settings"
+      description: "I want to change some of the detected values or defaults"
+  multiSelect: false
+```
+
+If "Adjust settings", fall back to the full questionnaire for unanswered questions.
 
 ## Step 4 -- Resolve
 
@@ -30,7 +45,8 @@ Read `references/modules/skill-resolver.md`. Pass the SkillPlan.
 
 ## Step 5 -- Present & confirm
 
-Show the skill list. Ask for confirmation.
+Show the skill list. The installer module handles confirmation via
+AskUserQuestion (see `references/modules/installer.md` Step 1).
 
 ## Step 6 -- Install
 

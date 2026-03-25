@@ -229,10 +229,21 @@ Check if `.power-engineer/` is in `.gitignore`:
 grep -q '.power-engineer' .gitignore 2>/dev/null
 ```
 
-If not present, ask the user: "Should I add `.power-engineer/` to your .gitignore?
-This directory contains local state and install logs."
+If not present, use AskUserQuestion:
 
-If yes, append to `.gitignore`:
+```
+AskUserQuestion:
+  question: "Should I add .power-engineer/ to your .gitignore?"
+  header: "Gitignore"
+  options:
+    - label: "Yes, add it (Recommended)"
+      description: "Keeps local state and install logs out of version control"
+    - label: "No, leave .gitignore as-is"
+      description: "The .power-engineer/ directory will be tracked by git"
+  multiSelect: false
+```
+
+If the user selects "Yes", append to `.gitignore`:
 ```
 # Power Engineer state
 .power-engineer/
