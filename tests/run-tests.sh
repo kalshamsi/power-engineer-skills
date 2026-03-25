@@ -55,7 +55,7 @@ echo ""
 # --- Questionnaire Tests ---
 echo "Questionnaire Module:"
 check "Has skip rules" "grep -q 'Skip if' power-engineer/references/modules/questionnaire.md"
-check "Has 11 questions" "grep -c '^\*\*Q[0-9]' power-engineer/references/modules/questionnaire.md | grep -q '11\|1[0-1]'"
+check "Has 11 questions" "grep -c '^### Q[0-9]' power-engineer/references/modules/questionnaire.md | grep -q '11\|1[0-1]'"
 check "New Q9 brand identity" "grep -q 'Brand identity' power-engineer/references/modules/questionnaire.md"
 check "New Q10 team workflow" "grep -q 'Team workflow' power-engineer/references/modules/questionnaire.md"
 check "New Q11 goals" "grep -q 'Goals' power-engineer/references/modules/questionnaire.md"
