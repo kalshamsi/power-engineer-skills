@@ -49,6 +49,10 @@ Write `.power-engineer/state.json`:
     "source_file_count": 0,
     "package_json_hash": "[first 8 chars of md5]",
     "dependency_count": 0
+  },
+  "preferences": {
+    "security_level": "standard",
+    "auto_update": true
   }
 }
 ```

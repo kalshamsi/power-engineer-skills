@@ -36,6 +36,7 @@ Check the user's message and follow the matching route:
 | "power engineer update"                  | Read `references/flows/update.md`                         |
 | "power engineer catalog"                 | Read `references/flows/catalog-browse.md`                 |
 | "power engineer help"                   | Read `references/flows/help.md`                           |
+| "power engineer configure"             | Read `references/flows/configure.md`                      |
 | "power engineer frontend"               | Read `references/flows/frontend.md`                       |
 | "power engineer backend"                | Read `references/flows/backend.md`                        |
 | "power engineer devops"                 | Read `references/flows/devops.md`                         |
