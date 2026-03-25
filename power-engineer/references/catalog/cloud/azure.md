@@ -1,14 +1,14 @@
 # Microsoft Azure
 
-| Skill | Scope | Install | Description |
-|-------|-------|---------|-------------|
-| azure-ai | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-ai -y` | Azure AI Services: Cognitive Services, OpenAI on Azure, AI Search, model deployment. |
-| azure-observability | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-observability -y` | Monitoring AI workloads: token usage tracking, latency dashboards, cost attribution. |
-| azure-compute | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-compute -y` | Azure VM, container, and serverless compute patterns and sizing guidance. |
-| azure-postgres | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-postgres -y` | Azure Database for PostgreSQL: setup, scaling, connection pooling, migration. |
-| azure-cloud-migrate | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-cloud-migrate -y` | Cloud migration strategy, assessment, and lift-and-shift patterns. |
-| azure-hosted-copilot-sdk | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-hosted-copilot-sdk -y` | Azure-hosted Copilot SDK: extensions, plugins, custom copilot integration. |
-| microsoft-foundry | `local` | `npx skills@latest add microsoft/azure-skills --skill microsoft-foundry -y` | Azure AI Foundry: model fine-tuning, evaluation pipelines, production serving. |
-| azure-quotas | `local` | `npx skills@latest add microsoft/azure-skills --skill azure-quotas -y` | Azure quota management, increase requests, and capacity planning. |
-| azure-upgrade | `local` | `npx skills@latest add microsoft/azure-skills --skill azure-upgrade -y` | Azure service upgrades, deprecation handling, and migration paths. |
-| azure-observability (azure-skills) | `local` | `npx skills@latest add microsoft/azure-skills --skill azure-observability -y` | Azure Monitor, Log Analytics, Application Insights for cloud workloads. |
+| Skill | Scope | Install | Description | Trigger | When to use |
+|-------|-------|---------|-------------|---------|-------------|
+| azure-ai | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-ai -y` | Azure AI Services: Cognitive Services, OpenAI on Azure, AI Search, model deployment. | `/azure-ai` | When deploying AI models or integrating Azure Cognitive Services |
+| azure-observability | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-observability -y` | Monitoring AI workloads: token usage tracking, latency dashboards, cost attribution. | `/azure-observability` | When monitoring AI workload costs, latency, and token usage on Azure |
+| azure-compute | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-compute -y` | Azure VM, container, and serverless compute patterns and sizing guidance. | `/azure-compute` | When selecting and sizing Azure compute (VM, containers, serverless) |
+| azure-postgres | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-postgres -y` | Azure Database for PostgreSQL: setup, scaling, connection pooling, migration. | `/azure-postgres` | When setting up or migrating Azure Database for PostgreSQL |
+| azure-cloud-migrate | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-cloud-migrate -y` | Cloud migration strategy, assessment, and lift-and-shift patterns. | `/azure-cloud-migrate` | When planning a cloud migration to Azure with lift-and-shift strategy |
+| azure-hosted-copilot-sdk | `local` | `npx skills@latest add microsoft/github-copilot-for-azure --skill azure-hosted-copilot-sdk -y` | Azure-hosted Copilot SDK: extensions, plugins, custom copilot integration. | `/azure-hosted-copilot-sdk` | When building custom Copilot extensions or plugins on Azure |
+| microsoft-foundry | `local` | `npx skills@latest add microsoft/azure-skills --skill microsoft-foundry -y` | Azure AI Foundry: model fine-tuning, evaluation pipelines, production serving. | `/microsoft-foundry` | When fine-tuning models or running evaluation pipelines on Azure AI Foundry |
+| azure-quotas | `local` | `npx skills@latest add microsoft/azure-skills --skill azure-quotas -y` | Azure quota management, increase requests, and capacity planning. | `/azure-quotas` | When hitting Azure quota limits or planning capacity increases |
+| azure-upgrade | `local` | `npx skills@latest add microsoft/azure-skills --skill azure-upgrade -y` | Azure service upgrades, deprecation handling, and migration paths. | `/azure-upgrade` | When navigating Azure service deprecations or upgrade paths |
+| azure-observability (azure-skills) | `local` | `npx skills@latest add microsoft/azure-skills --skill azure-observability -y` | Azure Monitor, Log Analytics, Application Insights for cloud workloads. | `/azure-observability` | When setting up Azure Monitor or Application Insights for a workload |

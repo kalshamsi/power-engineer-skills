@@ -26,6 +26,10 @@ npx skills@latest add ctsstc/get-shit-done-skills --skill gsd -y
 **Commands:** `/gsd:discuss-phase`, `/gsd:plan-phase`, `/gsd:execute-phase`,
 `/gsd:verify-work`, `/gsd:ship`, `/gsd:map-codebase`
 
+| Suite | Trigger | When to use |
+|-------|---------|-------------|
+| GSD | `/gsd:discuss-phase` | When starting a greenfield project and need a structured end-to-end shipping workflow |
+
 ---
 
 ## Superpowers by obra
@@ -43,6 +47,10 @@ TDD -> verify at every stage. 20+ battle-tested skills.
 
 **Commands:** `/superpowers:brainstorm`, `/superpowers:write-plan`,
 `/superpowers:execute-plan` + 17 auto-activating skills.
+
+| Suite | Trigger | When to use |
+|-------|---------|-------------|
+| Superpowers | `/superpowers:brainstorm` | When you want auto-activating brainstorm → plan → TDD → verify at every dev stage |
 
 ---
 
@@ -63,6 +71,10 @@ shadcn/ui, Jetpack Compose, HTML+Tailwind. Auto-activates on any UI/UX request.
 npm install -g uipro-cli && uipro init --ai claude
 ```
 
+| Suite | Trigger | When to use |
+|-------|---------|-------------|
+| UI/UX Pro Max | `auto` on UI/UX requests | When building UI for React, Next.js, Vue, SwiftUI, or any of 9 supported tech stacks |
+
 ---
 
 ## Designer Skills Collection -- 63 skills + 27 commands
@@ -77,6 +89,10 @@ Prototyping & Testing, Design Ops, Designer Toolkit.
 ```
 /plugin marketplace add Owl-Listener/designer-skills
 ```
+
+| Suite | Trigger | When to use |
+|-------|---------|-------------|
+| Designer Skills Collection | `/discover` | When doing UX research, design systems, prototyping, or design ops work |
 
 ---
 
@@ -101,6 +117,10 @@ npx skills@latest add google-labs-code/stitch-skills --skill shadcn-ui -y
 npx skills@latest add google-labs-code/stitch-skills --skill remotion -y
 ```
 
+| Suite | Trigger | When to use |
+|-------|---------|-------------|
+| Google Stitch Skills | `/stitch-loop` | When turning text or sketches into high-fidelity UI and React/Tailwind code |
+
 ---
 
 ## Pencil -- Built-in, no install needed
@@ -118,6 +138,10 @@ Works with `.pen` design files directly in VS Code via the Pencil companion exte
 - `pencil:get_screenshot` -- capture current canvas state
 
 **VS Code setup:** Search "Pencil" in the Extension Marketplace.
+
+| Suite | Trigger | When to use |
+|-------|---------|-------------|
+| Pencil | `pencil:batch_design` | When designing or editing `.pen` design files directly in the Claude environment |
 
 ---
 
@@ -137,3 +161,7 @@ Works with `.pen` design files directly in VS Code via the Pencil companion exte
 ```
 
 See individual catalog files for specific skills from this collection.
+
+| Suite | Trigger | When to use |
+|-------|---------|-------------|
+| alirezarezvani/claude-skills | `/plugin install engineering-skills@claude-code-skills` | When installing production-ready skills across engineering, marketing, product, or compliance |
