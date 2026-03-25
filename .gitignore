@@ -7,8 +7,14 @@ skills-lock.json
 .power-engineer/
 
 # Runtime / local tooling (not part of the project)
-.claude-flow/
 .mcp.json
+
+# Blocked directories
+.claude-flow/
+.claude/agents/
+.claude/commands/
+.claude/helpers/
+ruflo.config.json
 
 # Test artifacts (runtime only, not the test scripts)
 test-projects/

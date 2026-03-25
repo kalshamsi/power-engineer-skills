@@ -80,26 +80,7 @@ cat ~/.claude/mcp.json 2>/dev/null
 
 Report new MCP servers configured since last run.
 
-### 7. Ruflo changes
-
-```bash
-# Check if Ruflo is installed
-cat ruflo.config.json 2>/dev/null
-
-# Check Ruflo's managed directories
-ls .claude/agents/ .claude/skills/ .claude/hooks/ 2>/dev/null
-
-# Check MCP registration
-claude mcp list 2>/dev/null | grep -i ruflo
-```
-
-Compare against `ruflo` section in state.json. Report:
-- Ruflo config changes (ruflo.config.json modified since last run)
-- New agents or skills added via Ruflo CLI
-- MCP registration status changes
-- Ruflo version changes (check `npx ruflo@latest --version`)
-
-### 8. Code growth & team changes
+### 7. Code growth & team changes
 
 ```bash
 git log --since="[last_updated date]" --format="%aN" | sort -u | wc -l

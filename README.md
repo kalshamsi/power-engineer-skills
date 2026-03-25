@@ -113,8 +113,7 @@ power-engineer/
     │   ├── skill-resolver.md              ← SkillPlan → deduplicated install commands
     │   ├── installer.md                   ← direct execution with progress tracking
     │   ├── configurator.md                ← CLAUDE.md, state dir, skill patching
-    │   ├── drift-detector.md              ← compare state vs current project
-    │   └── ruflo.md                       ← multi-agent orchestration evaluation
+    │   └── drift-detector.md              ← compare state vs current project
     ├── flows/                             ← route-specific module compositions
     │   ├── full-interview.md              ← Scanner → Questionnaire → Resolver → Installer → Configurator
     │   ├── quick.md                       ← Scanner → smart defaults → Resolver → Installer → Configurator
@@ -146,8 +145,6 @@ Every flow composes modules from this pipeline:
 
 ```
 Scanner → Questionnaire → Skill Resolver → Installer → Configurator
-                                                    ↗
-                                              Ruflo (optional)
 ```
 
 The **Drift Detector** runs independently on `status` and `update` commands.

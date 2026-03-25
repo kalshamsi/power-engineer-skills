@@ -37,7 +37,6 @@ Show the user the consolidated recommendation as plain text:
 - Recommended skills grouped by category
 - Skills that will be skipped (already installed)
 - Plugin-based installs (separate section)
-- Ruflo recommendation if warranted (see Step 7)
 
 Then use AskUserQuestion to confirm (the installer module handles this —
 see `references/modules/installer.md` Step 1).
@@ -47,19 +46,8 @@ see `references/modules/installer.md` Step 1).
 Read `references/modules/installer.md` and follow its instructions.
 Execute all confirmed skill installations directly.
 
-## Step 7 -- Ruflo evaluation
-
-Read `references/modules/ruflo.md` and follow its instructions.
-Check if the project warrants multi-agent orchestration. If recommended
-and user confirms, install Ruflo via `npx ruflo@latest init`.
-
-**Important:** Ruflo MUST run BEFORE the Configurator (Step 8) because
-Ruflo creates its own CLAUDE.md and .claude/ contents. The Configurator
-will then smart-merge power-engineer's section into Ruflo's CLAUDE.md.
-
-## Step 8 -- Configure
+## Step 7 -- Configure
 
 Read `references/modules/configurator.md` and follow its instructions.
 Generate/merge CLAUDE.md, create state directory, patch skills with
-project context. If Ruflo was installed in Step 7, the Configurator will
-merge into the CLAUDE.md that Ruflo created (not overwrite it).
+project context.

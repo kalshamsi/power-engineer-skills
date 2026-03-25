@@ -91,19 +91,7 @@ check "Detects structural changes" "grep -qi 'structural\|Dockerfile' power-engi
 check "Detects brand changes" "grep -qi 'brand\|tailwind' power-engineer/references/modules/drift-detector.md"
 check "Preserves CLAUDE.md edits" "grep -qi 'manual edit\|preserve' power-engineer/references/modules/drift-detector.md"
 check "Detects skill changes" "grep -qi 'skill.*removed\|manually' power-engineer/references/modules/drift-detector.md"
-check "Detects Ruflo agent changes" "grep -qi 'agent.*definition\|agents/' power-engineer/references/modules/drift-detector.md"
 check "Offers reconciliation" "grep -qi 'reconcil\|accept all\|selectively' power-engineer/references/modules/drift-detector.md"
-
-echo ""
-
-# --- Ruflo Tests ---
-echo "Ruflo Module:"
-check "Monorepo 3+ criterion" "grep -q 'package_count.*3\|3.*package' power-engineer/references/modules/ruflo.md"
-check "Team 3+ criterion" "grep -q 'team_size.*3\|3.*contributor' power-engineer/references/modules/ruflo.md"
-check "Excludes solo+small" "grep -qi 'solo\|small codebase' power-engineer/references/modules/ruflo.md"
-check "Excludes research" "grep -qi 'research.*prototyp' power-engineer/references/modules/ruflo.md"
-check "Requires user confirmation" "grep -qi 'confirm\|proceed' power-engineer/references/modules/ruflo.md"
-check "Generates agent definitions" "grep -q 'agents/' power-engineer/references/modules/ruflo.md"
 
 echo ""
 
