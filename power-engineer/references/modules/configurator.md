@@ -180,7 +180,7 @@ Create a new CLAUDE.md with full project context:
 - **Universal AskUserQuestion enforcement**: Every question directed at the user MUST use the `AskUserQuestion` tool. This applies to ALL contexts — skill invocations, general conversation, debugging sessions, code reviews, clarifications, confirmations, and any other interaction where user input is needed. Never ask questions as plain text in a response. The only exception is rhetorical questions in explanations (e.g., "Why does this matter?" followed by the answer in the same message).
 
 ### Proactive Memory Management
-- After every meaningful interaction, evaluate whether new information was shared that belongs in project memory. Save it to the project's MEMORY.md using proper frontmatter (type: user/project/feedback/reference) without prompting the user.
+- After every interaction where the user shares new factual information about the project, preferences, or decisions, save it to Claude Code's project memory (MEMORY.md at `~/.claude/projects/`) using proper frontmatter (type: user/project/feedback/reference) without prompting the user.
 - Never prompt "should I save this?" or "would you like me to remember this?" Memory management is invisible.
 - Auto-detect and save information in these categories:
   - **Brand/design** (colors, fonts, logos, design tokens, UI conventions) → `project` type
@@ -191,6 +191,7 @@ Create a new CLAUDE.md with full project context:
   - **Environment & deployment** (staging URLs, deploy commands, CI/CD quirks, env var names, service endpoints) → `project` type
   - **Third-party integrations** (API key locations, rate limits, auth flows, webhook URLs, SDK versions) → `reference` type
   - **Team/stakeholder context** (ownership, contacts, approval workflows, channels, deadlines) → `project` type
+  - **User profile** (user's role, expertise level, goals, responsibilities) → `user` type
 - Before saving a new memory, check MEMORY.md index for existing entries on the same topic. Update existing memories rather than creating duplicates.
 - Context restoration at session start is handled by Session Orchestration (below). These rules focus on saving.
 
@@ -200,7 +201,7 @@ Create a new CLAUDE.md with full project context:
 - **Post-compaction restore**: After compaction, immediately re-read `.power-engineer/project-context.md`, `.power-engineer/brand.md`, `.power-engineer/state.json`, and MEMORY.md to restore full project awareness.
 - **Token-aware progressive loading**: Load project context in priority order:
   - Always load: CLAUDE.md rules, installed skills list, current task context
-  - On demand: Brand details (only for design work), deployment details (only when deploying), integration details (only when touching integrations)
+  - On demand (mid-session): Detailed brand tokens (only for design work), deployment details (only when deploying), integration details (only when touching integrations). Note: session start loads brand.md for baseline awareness; this rule applies to deep-diving into specific .power-engineer/ files mid-session
   - Read `.power-engineer/` files relevant to the current task, not all of them
 
 ### Session Orchestration
