@@ -5,7 +5,7 @@
     Scan. Interview. Install. Configure. Done.
   </p>
   <p align="center">
-    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.0.1"><img src="https://img.shields.io/badge/version-1.0.1-blue" alt="Version 1.0.1"></a>
+    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.2.0"><img src="https://img.shields.io/badge/version-1.2.0-blue" alt="Version 1.2.0"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
     <img src="https://img.shields.io/badge/skills-238-orange" alt="238 Skills">
     <img src="https://img.shields.io/badge/tests-312%20passing-brightgreen" alt="312 Tests Passing">
@@ -53,6 +53,18 @@ Scan codebase → Adaptive interview → Resolve skills → Install → Configur
 3. **Installs skills directly** — real-time execution with progress tracking and failure handling
 4. **Configures your project** — generates CLAUDE.md, state directory, skill patching with project context
 5. **Tracks drift** — on re-run, detects changes to your stack and recommends new skills
+
+### Quality-of-Life features (v1.2.0)
+
+| Feature | What it does |
+|---------|-------------|
+| **Proactive memory management** | Auto-saves project knowledge across sessions — decisions, patterns, and context persist without manual effort |
+| **Context resilience** | Post-compaction hooks and 60% proactive compaction keep critical context alive through long sessions |
+| **Universal AskUserQuestion** | Enforced across all conversations, not just skills — Claude always confirms before destructive or ambiguous actions |
+| **Skill health checks** | On `update`, detects healthy / missing / broken / orphaned skills and recommends fixes |
+| **Cross-tool config sync** | Generates `.cursorrules`, `copilot-instructions.md`, and `.windsurfrules` from your CLAUDE.md so all AI tools share the same context |
+| **Session orchestration** | Start/end protocols, subagent awareness, and handoff protocol for multi-session workflows |
+| **Full output regeneration** | Re-runs regenerate all output files completely — no more silent failures from partial writes |
 
 ### What are Claude Code skills?
 
