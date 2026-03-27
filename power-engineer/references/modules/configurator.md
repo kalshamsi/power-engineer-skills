@@ -302,7 +302,36 @@ If the user selects "Yes", append to `.gitignore`:
 .power-engineer/
 ```
 
-## Step 5: Generate cheatsheet
+## Step 5: Inject post-compaction hook
+
+Inject a PostToolUse hook into `.claude/settings.json` that fires after `/compact` to restore project context. Use a **read-merge-write** strategy to preserve existing settings.
+
+### Process
+
+1. Read `.claude/settings.json` (if it exists). If it doesn't exist, start with `{}`
+2. Ensure the `hooks` key exists (create empty object if missing)
+3. Ensure `hooks.PostToolUse` exists (create empty array if missing)
+4. Search the `PostToolUse` array for an entry with `"matcher": "compact"`
+   - If found: update its `command` value to the latest version below
+   - If not found: append the new entry to the array
+5. Write back the full settings.json, preserving all existing keys (permissions, env, other hooks)
+
+**NEVER overwrite the entire settings.json.** Only touch the specific hook entry.
+
+### Hook entry
+
+```json
+{
+  "matcher": "compact",
+  "command": "echo '## Post-Compaction Context Restore\nRe-read the following files to restore project context:\n- .power-engineer/project-context.md\n- .power-engineer/brand.md\n- .power-engineer/state.json (installed skills)\n- Check MEMORY.md for recent project memories'"
+}
+```
+
+### On re-run
+
+Same process — the read-merge-write strategy is idempotent. If the hook already exists, its command is updated to the latest version.
+
+## Step 6: Generate cheatsheet
 
 Generate `.power-engineer/cheatsheet.md` as an offline reference for the
 user's installed skills.
@@ -338,7 +367,7 @@ Generated: [ISO date]
 - Only include skills from the `installed_skills` array in state.json
 - Omit any category section that has no installed skills
 
-## Step 6: Present configuration summary
+## Step 7: Present configuration summary
 
 ```
 Project configured!
@@ -348,6 +377,7 @@ Project configured!
   Skills patched:      [N] skills received project context
   Brand file:          [created | skipped (no brand info)]
   Cheatsheet:          .power-engineer/cheatsheet.md
+  Compaction hook:     .claude/settings.json (PostToolUse hook injected)
 
   State files:
     .power-engineer/state.json
