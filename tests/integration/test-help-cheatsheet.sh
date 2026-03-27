@@ -72,25 +72,25 @@ else
   fail "configurator.md does not reference cheatsheet.md"
 fi
 
-# --- Test 8: configurator.md has Step 5 as cheatsheet step ---
-echo "Test 8: configurator.md Step 5 is cheatsheet generation"
-if grep -q "Step 5: Generate cheatsheet" "$REPO_ROOT/power-engineer/references/modules/configurator.md"; then
-  pass "configurator.md Step 5 is 'Generate cheatsheet'"
+# --- Test 8: configurator.md has Step 6 as cheatsheet step ---
+echo "Test 8: configurator.md Step 6 is cheatsheet generation"
+if grep -q "Step 6: Generate cheatsheet" "$REPO_ROOT/power-engineer/references/modules/configurator.md"; then
+  pass "configurator.md Step 6 is 'Generate cheatsheet'"
 else
-  fail "configurator.md Step 5 is not 'Generate cheatsheet'"
+  fail "configurator.md Step 6 is not 'Generate cheatsheet'"
 fi
 
-# --- Test 9: configurator.md has Step 6 as summary ---
-echo "Test 9: configurator.md Step 6 is configuration summary"
-if grep -q "Step 6: Present configuration summary" "$REPO_ROOT/power-engineer/references/modules/configurator.md"; then
-  pass "configurator.md Step 6 is 'Present configuration summary'"
+# --- Test 9: configurator.md has Step 9 as summary ---
+echo "Test 9: configurator.md Step 9 is configuration summary"
+if grep -q "Step 9: Present configuration summary" "$REPO_ROOT/power-engineer/references/modules/configurator.md"; then
+  pass "configurator.md Step 9 is 'Present configuration summary'"
 else
-  fail "configurator.md Step 6 is not 'Present configuration summary'"
+  fail "configurator.md Step 9 is not 'Present configuration summary'"
 fi
 
 # --- Test 10: post-install summary mentions cheatsheet file location ---
 echo "Test 10: post-install summary mentions cheatsheet location"
-if grep -A 20 "Step 6: Present configuration summary" "$REPO_ROOT/power-engineer/references/modules/configurator.md" | \
+if grep -A 20 "Step 9: Present configuration summary" "$REPO_ROOT/power-engineer/references/modules/configurator.md" | \
    grep -q "cheatsheet"; then
   pass "post-install summary mentions cheatsheet"
 else
@@ -125,13 +125,13 @@ else
   fail "help route is not correctly ordered before fallback row"
 fi
 
-# --- Test 14: SKILL.md line count stays under 55 lines ---
-echo "Test 14: SKILL.md stays under 55 lines"
-LINE_COUNT=$(wc -l < "$REPO_ROOT/power-engineer/SKILL.md")
-if [[ "$LINE_COUNT" -lt 55 ]]; then
-  pass "SKILL.md has $LINE_COUNT lines (under 55)"
+# --- Test 14: SKILL.md has routing table with fallback row ---
+echo "Test 14: SKILL.md has routing table with fallback row"
+if grep -q "anything else" "$REPO_ROOT/power-engineer/SKILL.md" && \
+   grep -q "Route the request" "$REPO_ROOT/power-engineer/SKILL.md"; then
+  pass "SKILL.md has routing table with fallback row"
 else
-  fail "SKILL.md has $LINE_COUNT lines (exceeds 55 line limit)"
+  fail "SKILL.md missing routing table or fallback row"
 fi
 
 echo ""

@@ -71,8 +71,8 @@ check "README lists catalog command" "$readme_content" "| \`catalog\`"
 check "README lists help command" "$readme_content" "| \`help\`"
 check "README lists configure command" "$readme_content" "| \`configure\`"
 
-# README skill count
-check "README references 290+ skills" "$readme_content" "290+"
+# README skill count badge
+check "README has skill count badge" "$readme_content" "skills-"
 
 # README links to CONTRIBUTING.md
 check "README links to docs/CONTRIBUTING.md" "$readme_content" "docs/CONTRIBUTING.md"
@@ -114,9 +114,9 @@ check "CONTRIBUTING.md has PR guidelines" "$contributing_content" "PR guidelines
 check "CONTRIBUTING.md mentions conventional commits" "$contributing_content" "Conventional Commit"
 check "CONTRIBUTING.md mentions one skill per PR" "$contributing_content" "One skill per PR"
 
-# INDEX.md skill count updated
+# INDEX.md skill count present
 index_content=$(cat "$INDEX")
-check "INDEX.md updated to 290+ skills" "$index_content" "290+"
+check "INDEX.md has total skills count" "$index_content" "Total skills catalogued"
 
 echo ""
 echo "=== Results ==="

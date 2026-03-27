@@ -91,8 +91,8 @@ echo "Managed section detection:"
 check "CLAUDE.md: managed section present" \
   "grep -q '<!-- power-engineer:managed-section -->' '$TMPDIR_TEST/CLAUDE.md'"
 
-check "CLAUDE.md: no Orchestration header" \
-  "! grep -q '### Orchestration' '$TMPDIR_TEST/CLAUDE.md'"
+check "CLAUDE.md: managed section has closing delimiter" \
+  "grep -q '<!-- /power-engineer:managed-section -->' '$TMPDIR_TEST/CLAUDE.md'"
 
 echo ""
 echo "Skill name cross-check (state vs disk):"

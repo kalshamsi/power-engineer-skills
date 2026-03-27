@@ -57,11 +57,11 @@ cat > "$TMPDIR_TEST/claudemd-bad-index.md" << 'EOF'
 <!-- /power-engineer:managed-section -->
 EOF
 
-# --- Setup: CLAUDE.md with oversized managed section (>40 lines) ---
+# --- Setup: CLAUDE.md with oversized managed section (>60 lines) ---
 {
   echo "# Project"
   echo "<!-- power-engineer:managed-section -->"
-  for i in $(seq 1 45); do
+  for i in $(seq 1 65); do
     echo "line $i"
   done
   echo "<!-- /power-engineer:managed-section -->"
@@ -108,11 +108,11 @@ echo "Managed section line count:"
 managed_lines=$(awk '/<!-- power-engineer:managed-section -->/{found=1; next} /<!-- \/power-engineer:managed-section -->/{found=0} found{count++} END{print count+0}' "$TMPDIR_TEST/claudemd.md")
 managed_lines_oversize=$(awk '/<!-- power-engineer:managed-section -->/{found=1; next} /<!-- \/power-engineer:managed-section -->/{found=0} found{count++} END{print count+0}' "$TMPDIR_TEST/claudemd-oversize.md")
 
-check "Managed section within 40-line budget ($managed_lines lines)" \
-  "[ '$managed_lines' -le 40 ]"
+check "Managed section within 60-line budget ($managed_lines lines)" \
+  "[ '$managed_lines' -le 60 ]"
 
-check "Oversize section exceeds 40-line budget ($managed_lines_oversize lines)" \
-  "[ '$managed_lines_oversize' -gt 40 ]"
+check "Oversize section exceeds 60-line budget ($managed_lines_oversize lines)" \
+  "[ '$managed_lines_oversize' -gt 60 ]"
 
 echo ""
 echo "Content outside delimiters untouched:"

@@ -38,6 +38,18 @@ cat > "$TMPDIR_TEST/state-with-sources.json" << 'EOF'
     "team_size": 4,
     "is_monorepo": true
   },
+  "questionnaire_answers": {
+    "project_type": "Full-stack Web App",
+    "design_needs": "Standard",
+    "documentation": "Technical docs only",
+    "research_data": "Search only",
+    "project_phase": "Active development",
+    "brand_identity": "Partial",
+    "team_workflow": "Small team (2-4)",
+    "goals": "Ship features faster",
+    "security_needs": "Standard",
+    "cross_tool_usage": "None"
+  },
   "installed_skills": [
     {
       "name": "brainstorming",
@@ -184,6 +196,18 @@ unique_count=$(grep '"name":' "$TMPDIR_TEST/state-with-sources.json" | sort -u |
 total_count=$(grep -c '"name":' "$TMPDIR_TEST/state-with-sources.json" || true)
 check "No duplicate names in valid state (unique=$unique_count total=$total_count)" \
   "[ '$unique_count' -eq '$total_count' ]"
+
+echo ""
+echo "questionnaire_answers fields:"
+
+check "questionnaire_answers key exists" \
+  "grep -q '\"questionnaire_answers\"' '$TMPDIR_TEST/state-with-sources.json'"
+
+check "security_needs field present in questionnaire_answers" \
+  "grep -q '\"security_needs\"' '$TMPDIR_TEST/state-with-sources.json'"
+
+check "cross_tool_usage field present in questionnaire_answers" \
+  "grep -q '\"cross_tool_usage\"' '$TMPDIR_TEST/state-with-sources.json'"
 
 echo ""
 echo "=== Results: $PASS passed, $FAIL failed ==="

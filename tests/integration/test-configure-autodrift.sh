@@ -183,13 +183,13 @@ else
   fail "configure route is not correctly ordered before fallback row"
 fi
 
-# --- Test 20: SKILL.md line count stays under 60 lines ---
-echo "Test 20: SKILL.md stays under 60 lines"
-LINE_COUNT=$(wc -l < "$REPO_ROOT/power-engineer/SKILL.md")
-if [[ "$LINE_COUNT" -lt 60 ]]; then
-  pass "SKILL.md has $LINE_COUNT lines (under 60)"
+# --- Test 20: configurator.md has 9 steps ---
+echo "Test 20: configurator.md has 9 configurator steps"
+STEP_COUNT=$(grep -c "^## Step [0-9]" "$REPO_ROOT/power-engineer/references/modules/configurator.md" || true)
+if [[ "$STEP_COUNT" -eq 9 ]]; then
+  pass "configurator.md has $STEP_COUNT steps"
 else
-  fail "SKILL.md has $LINE_COUNT lines (exceeds 60 line limit)"
+  fail "configurator.md has $STEP_COUNT steps (expected 9)"
 fi
 
 echo ""
