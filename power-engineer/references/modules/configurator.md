@@ -177,7 +177,37 @@ Create a new CLAUDE.md with full project context:
 <!-- power-engineer:managed-section -->
 
 ### Behavioral Rules
-- All user-facing questions across ALL installed skills MUST use the `AskUserQuestion` tool. Never ask questions as plain text. This applies to confirmations, choices, interviews, and any point where user input is needed — regardless of which skill is active.
+- **Universal AskUserQuestion enforcement**: Every question directed at the user MUST use the `AskUserQuestion` tool. This applies to ALL contexts — skill invocations, general conversation, debugging sessions, code reviews, clarifications, confirmations, and any other interaction where user input is needed. Never ask questions as plain text in a response. The only exception is rhetorical questions in explanations (e.g., "Why does this matter?" followed by the answer in the same message).
+
+### Proactive Memory Management
+- After every meaningful interaction, evaluate whether new information was shared that belongs in project memory. Save it to the project's MEMORY.md using proper frontmatter (type: user/project/feedback/reference) without prompting the user.
+- Never prompt "should I save this?" or "would you like me to remember this?" Memory management is invisible.
+- Auto-detect and save information in these categories:
+  - **Brand/design** (colors, fonts, logos, design tokens, UI conventions) → `project` type
+  - **Architecture decisions** (tech stack choices, patterns, libraries, conventions) → `project` type
+  - **User preferences** (code format, communication style, things to avoid) → `feedback` type
+  - **External references** (URLs, API docs, Slack channels, Linear projects) → `reference` type
+  - **Bug patterns & debugging** (root causes found, fix patterns, gotchas) → `project` type
+  - **Environment & deployment** (staging URLs, deploy commands, CI/CD quirks, env var names, service endpoints) → `project` type
+  - **Third-party integrations** (API key locations, rate limits, auth flows, webhook URLs, SDK versions) → `reference` type
+  - **Team/stakeholder context** (ownership, contacts, approval workflows, channels, deadlines) → `project` type
+- Before saving a new memory, check MEMORY.md index for existing entries on the same topic. Update existing memories rather than creating duplicates.
+- Context restoration at session start is handled by Session Orchestration (below). These rules focus on saving.
+
+### Context Management
+- **Proactive compaction**: Monitor conversation length. When context usage reaches approximately 60%, proactively save working state to memory and run `/compact`. Do not wait for the system to auto-compact. This is a best-effort heuristic — Claude Code does not expose a precise token counter.
+- **Pre-compaction save**: Before compacting, save to memory: what you're working on, decisions made so far, files modified, next steps planned.
+- **Post-compaction restore**: After compaction, immediately re-read `.power-engineer/project-context.md`, `.power-engineer/brand.md`, `.power-engineer/state.json`, and MEMORY.md to restore full project awareness.
+- **Token-aware progressive loading**: Load project context in priority order:
+  - Always load: CLAUDE.md rules, installed skills list, current task context
+  - On demand: Brand details (only for design work), deployment details (only when deploying), integration details (only when touching integrations)
+  - Read `.power-engineer/` files relevant to the current task, not all of them
+
+### Session Orchestration
+- **Session start protocol**: At the beginning of every session, read: MEMORY.md index, `.power-engineer/project-context.md`, `.power-engineer/brand.md`, installed skills list from state.json. Establish baseline awareness before any work begins.
+- **Session end protocol**: Before ending a session (when the user wraps up or explicitly ends), save to memory: what was accomplished, decisions made, unfinished work, and next steps. Use the `project` memory type with a descriptive name like `session_handoff_YYYY-MM-DD`. Follow the handoff template structure from `.power-engineer/handoff-template.md`.
+- **Subagent context passing**: When spawning subagents (via Agent tool or dispatching-parallel-agents), include in the prompt: relevant project context from `.power-engineer/project-context.md`, brand details if the task involves design, and relevant MEMORY.md entries. Subagents must also follow AskUserQuestion enforcement.
+- **Subagent result capture**: When a subagent completes, evaluate its results for memory-worthy information and save to MEMORY.md if applicable.
 
 ### Installed Skills
 [List of installed skills with brief descriptions]
