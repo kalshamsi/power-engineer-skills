@@ -56,7 +56,7 @@ The following rules are added as a `### Proactive Memory Management` subsection 
 
 4. **Deduplication**: Before saving a new memory, check the MEMORY.md index for existing entries on the same topic. Update existing memories rather than creating duplicates.
 
-5. **Context restoration at session start**: At the beginning of every session, read MEMORY.md index and `.power-engineer/project-context.md` and `.power-engineer/brand.md` to restore project awareness before doing any work.
+5. **Deduplication applies to session start too**: Context restoration at session start is handled by the Session Orchestration subsection (Feature 5A). The memory management rules focus on *saving* -- the orchestration rules handle *loading*.
 
 ### Files Modified
 
@@ -74,7 +74,7 @@ Dual approach: CLAUDE.md behavioral rules + settings.json post-compaction hook.
 
 Added as a `### Context Management` subsection:
 
-1. **Proactive compaction at ~60%**: Monitor conversation length. When context usage reaches approximately 60%, proactively save working state to memory and run `/compact`. Do not wait for the system to auto-compact at capacity. Compact early and often to maintain performance.
+1. **Proactive compaction at ~60% (heuristic)**: Monitor conversation length. When context usage reaches approximately 60%, proactively save working state to memory and run `/compact`. Do not wait for the system to auto-compact at capacity. Compact early and often to maintain performance. *Note: Claude Code does not expose a precise token counter to the model. This rule relies on Claude's estimation of conversation length -- it is best-effort guidance, not a precise threshold. The post-compaction hook (Feature 2B) provides the guaranteed safety net.*
 
 2. **Pre-compaction save**: Before compacting, save current working state to memory: what you're working on, decisions made so far, files modified, next steps planned.
 
@@ -87,18 +87,24 @@ Added as a `### Context Management` subsection:
 
 ### B. Post-Compaction Hook
 
-The configurator injects a hook into the project's `.claude/settings.json`:
+The configurator injects a hook into the project's `.claude/settings.json` using a **read-merge-write** strategy:
+
+1. Read existing `.claude/settings.json` (or initialize empty object if it doesn't exist)
+2. Ensure `hooks` key exists (create if missing)
+3. Ensure `hooks.PostToolUse` array exists (create if missing)
+4. Check if a hook entry with `"matcher": "compact"` already exists in the array
+   - If yes: update its `command` to the latest version (idempotent)
+   - If no: append the new entry to the array
+5. Write back the full settings.json, preserving all existing keys (permissions, env, other hooks, etc.)
+
+**Never overwrite the entire settings.json.** Only touch the specific hook entry.
+
+Hook entry to inject:
 
 ```json
 {
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "compact",
-        "command": "echo '## Post-Compaction Context Restore\nRe-read the following files to restore project context:\n- .power-engineer/project-context.md\n- .power-engineer/brand.md\n- .power-engineer/state.json (installed skills)\n- Check MEMORY.md for recent project memories'"
-      }
-    ]
-  }
+  "matcher": "compact",
+  "command": "echo '## Post-Compaction Context Restore\nRe-read the following files to restore project context:\n- .power-engineer/project-context.md\n- .power-engineer/brand.md\n- .power-engineer/state.json (installed skills)\n- Check MEMORY.md for recent project memories'"
 }
 ```
 
@@ -150,7 +156,8 @@ When power-engineer detects an existing project (state.json present), the config
 | cheatsheet.md | Regenerate from current installed_skills in state.json. If a skill can't be found in the catalog, log a warning in the cheatsheet instead of silently skipping. |
 | project-context.md | Refresh from current scan + stored questionnaire answers |
 | brand.md | Refresh from current codebase scan |
-| state.json | Update scan_snapshot and updated timestamp. Preserve questionnaire_answers, preferences, installed_skills, drift-history. |
+| state.json | Update scan_snapshot and updated timestamp. Preserve questionnaire_answers, preferences, installed_skills. |
+| drift-history.json | Do not modify. This is a separate file -- only append to it when recording a new run (handled by existing drift-detector logic). |
 | install-log.sh | Append new run entries. Preserve history. |
 
 **Error handling for cheatsheet**: If a skill in state.json can't be found in any catalog file, the cheatsheet entry shows:
@@ -190,6 +197,7 @@ Added to `questionnaire.md` after Q12 (security needs):
 > "Do you use other AI coding tools alongside Claude Code?"
 > Options: Cursor, GitHub Copilot, Windsurf, None
 > Multi-select. Auto-skip if none detected in project (no .cursorrules, no copilot config, no .windsurfrules).
+> Batch placement: batch 6 (new batch, after Q12's batch 5).
 
 If any tools selected, the configurator generates corresponding config files:
 
