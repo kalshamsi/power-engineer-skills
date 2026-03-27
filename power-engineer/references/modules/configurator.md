@@ -331,7 +331,7 @@ Inject a PostToolUse hook into `.claude/settings.json` that fires after `/compac
 2. Ensure the `hooks` key exists (create empty object if missing)
 3. Ensure `hooks.PostToolUse` exists (create empty array if missing)
 4. Search the `PostToolUse` array for an entry with `"matcher": "compact"`
-   - If found: update its `command` value to the latest version below
+   - If found: update its `hooks` array to the latest version below
    - If not found: append the new entry to the array
 5. Write back the full settings.json, preserving all existing keys (permissions, env, other hooks)
 
@@ -339,10 +339,17 @@ Inject a PostToolUse hook into `.claude/settings.json` that fires after `/compac
 
 ### Hook entry
 
+Each entry in the `PostToolUse` array requires a `matcher` string and a `hooks` array of `{type, command}` objects. This is the Claude Code hooks schema — do NOT put `command` directly on the matcher object.
+
 ```json
 {
   "matcher": "compact",
-  "command": "echo '## Post-Compaction Context Restore\nRe-read the following files to restore project context:\n- .power-engineer/project-context.md\n- .power-engineer/brand.md\n- .power-engineer/state.json (installed skills)\n- Check MEMORY.md for recent project memories'"
+  "hooks": [
+    {
+      "type": "command",
+      "command": "echo '## Post-Compaction Context Restore\nRe-read the following files to restore project context:\n- .power-engineer/project-context.md\n- .power-engineer/brand.md\n- .power-engineer/state.json (installed skills)\n- Check MEMORY.md for recent project memories'"
+    }
+  ]
 }
 ```
 
