@@ -396,7 +396,43 @@ row in the cheatsheet:
 
 This ensures the user sees all installed skills, even if metadata is unavailable.
 
-## Step 7: Present configuration summary
+## Step 7: Cross-tool config generation (conditional)
+
+If the user answered Q13 with any AI coding tools other than "None", generate
+corresponding config files that mirror the CLAUDE.md behavioral rules.
+
+Only generate files for tools the user selected. Skip this step entirely if
+Q13 was "None" or was auto-skipped.
+
+| Q13 answer | File to generate | Format |
+|------------|-----------------|--------|
+| Cursor | `.cursorrules` | Cursor rules format — one rule per line, no markdown headers |
+| GitHub Copilot | `.github/copilot-instructions.md` | Markdown — same structure as CLAUDE.md behavioral sections |
+| Windsurf | `.windsurfrules` | Windsurf rules format — one rule per line, no markdown headers |
+
+### Content to mirror
+
+Include these behavioral rules from the CLAUDE.md managed section:
+- Behavioral Rules (all project-specific rules)
+- Proactive Memory Management (adapted: reference MEMORY.md equivalent if tool supports it, otherwise omit)
+- Context Management (adapted: omit Claude-specific compaction rules)
+- Universal AskUserQuestion enforcement (omit — tool-specific, not portable)
+- Session Orchestration (omit — Claude-specific)
+
+### On re-run
+
+If the user's Q13 answer changes (e.g., they remove Cursor), do NOT delete
+the old config file. Leave it in place — the user may have customized it.
+Only regenerate files for currently-selected tools.
+
+### If `.cursorrules` or `.windsurfrules` already exists
+
+Use the same delimiter strategy as CLAUDE.md:
+- Search for `<!-- power-engineer:managed-section -->`
+- If found: replace content between delimiters
+- If not found: append the managed section at the end
+
+## Step 8: Present configuration summary
 
 ```
 Project configured!
@@ -407,6 +443,7 @@ Project configured!
   Brand file:          [created | skipped (no brand info)]
   Cheatsheet:          .power-engineer/cheatsheet.md
   Compaction hook:     .claude/settings.json (PostToolUse hook injected)
+  Cross-tool configs:  [list of generated files, or "skipped (no cross-tool usage)"]
 
   State files:
     .power-engineer/state.json
