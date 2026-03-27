@@ -432,7 +432,33 @@ Use the same delimiter strategy as CLAUDE.md:
 - If found: replace content between delimiters
 - If not found: append the managed section at the end
 
-## Step 8: Present configuration summary
+## Step 8: Generate handoff template
+
+Write `.power-engineer/handoff-template.md`:
+
+```markdown
+# Session Handoff Template
+
+Use this structure when saving session handoff memories to MEMORY.md.
+Save as a `project` type memory with name `session_handoff_YYYY-MM-DD`.
+
+## Fields
+
+- **Date**: [ISO date of session end]
+- **What was accomplished**: [Summary of work completed this session]
+- **Decisions made**: [Key decisions with brief reasoning]
+- **Unfinished work**: [Items with enough context to resume — what was in progress, what approach was being taken, what's left]
+- **Next steps**: [Prioritized list of what to do next]
+- **Files modified**: [Paths with brief description of changes]
+- **Blockers/open questions**: [Anything that needs resolution before continuing]
+```
+
+### On re-run
+
+Overwrite the existing handoff-template.md with the latest version.
+This file is a reference template, not user-editable content.
+
+## Step 9: Present configuration summary
 
 ```
 Project configured!
@@ -444,6 +470,7 @@ Project configured!
   Cheatsheet:          .power-engineer/cheatsheet.md
   Compaction hook:     .claude/settings.json (PostToolUse hook injected)
   Cross-tool configs:  [list of generated files, or "skipped (no cross-tool usage)"]
+  Handoff template:    .power-engineer/handoff-template.md
 
   State files:
     .power-engineer/state.json
@@ -452,4 +479,5 @@ Project configured!
     .power-engineer/install-log.sh
     .power-engineer/drift-history.json
     .power-engineer/agent-performance.json
+    .power-engineer/handoff-template.md
 ```
