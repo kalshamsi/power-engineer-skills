@@ -1,33 +1,38 @@
+# ── System ───────────────────────────────────────────────────
 .DS_Store
+
+# ── Claude Code / skills runtime ─────────────────────────────
 CLAUDE.md
 skills-lock.json
 .claude/
+skills/
 
-# Power Engineer state (generated per-project, not committed)
+# ── Power Engineer state (generated per-project) ────────────
 .power-engineer/
 
-# Runtime / local tooling (not part of the project)
-.mcp.json
+# ── Internal docs (research, plans, prompts, scripts) ───────
+# All internal working docs live in docs/internal/ — never committed
+docs/internal/
 
-# Blocked directories
-.claude-flow/
-.claude/agents/
-.claude/commands/
-.claude/helpers/
-ruflo.config.json
+# ── Local working directories ────────────────────────────────
+plans/
+scripts/
 
-# Test artifacts (runtime only, not the test scripts)
+# ── Test artifacts (runtime output, not the test scripts) ────
 test-projects/
 
-# Planning docs
+# ── Planning / PRD files in root ─────────────────────────────
 PRD.md
-docs/*.md
-!docs/CONTRIBUTING.md
 
-# Other agent/IDE tool directories
+# ── Runtime / local tooling ──────────────────────────────────
+.mcp.json
+ruflo.config.json
+
+# ── Other agent / IDE tool directories ───────────────────────
 .adal/
 .agents/
 .augment/
+.claude-flow/
 .codebuddy/
 .commandcode/
 .continue/
@@ -53,4 +58,3 @@ docs/*.md
 .vibe/
 .windsurf/
 .zencoder/
-skills/
