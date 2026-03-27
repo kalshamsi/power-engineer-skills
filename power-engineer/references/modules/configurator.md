@@ -3,6 +3,23 @@
 Post-installation project configuration. Creates state directory, generates
 or merges CLAUDE.md, and patches installed skills with project context.
 
+## Regeneration Policy
+
+On every run (initial or re-run), the configurator regenerates ALL outputs:
+- CLAUDE.md managed section (between delimiters, preserving content outside)
+- `.power-engineer/cheatsheet.md`
+- `.power-engineer/project-context.md`
+- `.power-engineer/brand.md` (if brand info exists)
+- `.power-engineer/state.json` (update scan_snapshot + updated timestamp; preserve questionnaire_answers, preferences, installed_skills)
+- `.power-engineer/handoff-template.md`
+
+Files NOT modified by the configurator (handled by other modules):
+- `.power-engineer/drift-history.json` (drift-detector appends)
+- `.power-engineer/install-log.sh` (installer appends)
+
+This ensures re-runs always produce complete, current output — no file is
+silently skipped or left stale.
+
 ## Step 1: Create .power-engineer/ state directory
 
 ```bash
@@ -366,6 +383,18 @@ Generated: [ISO date]
 - Only include skills, not MCP servers
 - Only include skills from the `installed_skills` array in state.json
 - Omit any category section that has no installed skills
+
+### Error handling
+
+If a skill in `state.json` cannot be found in any catalog file under
+`references/catalog/`, do NOT silently skip it. Instead, include a warning
+row in the cheatsheet:
+
+```
+| /skill-name | ⚠ Not found in catalog — may be manually installed or from a plugin |
+```
+
+This ensures the user sees all installed skills, even if metadata is unavailable.
 
 ## Step 7: Present configuration summary
 
