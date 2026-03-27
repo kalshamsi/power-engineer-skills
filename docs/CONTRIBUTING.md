@@ -85,10 +85,10 @@ The tool is composed of independent modules in `power-engineer/references/module
 | Module | File | Responsibility |
 |--------|------|---------------|
 | **Scanner** | `scanner.md` | Analyzes the codebase and produces a `ProjectProfile` |
-| **Questionnaire** | `questionnaire.md` | Runs the adaptive interview and produces a `SkillPlan` |
+| **Questionnaire** | `questionnaire.md` | Runs the adaptive interview (13 questions, 6 batches) and produces a `SkillPlan` |
 | **Skill Resolver** | `skill-resolver.md` | Converts a `SkillPlan` into a deduplicated list of install commands |
 | **Installer** | `installer.md` | Executes installs directly with progress tracking and failure handling |
-| **Configurator** | `configurator.md` | Writes/merges CLAUDE.md, creates `.power-engineer/` state directory, patches skills with project context |
+| **Configurator** | `configurator.md` | 9-step post-install configuration: state dir, CLAUDE.md (with memory/context/orchestration rules), skill patching, gitignore, hook injection, cheatsheet, cross-tool config, handoff template, summary |
 | **Drift Detector** | `drift-detector.md` | Compares `.power-engineer/state.json` against the current project to surface new skill recommendations |
 
 Keep modules focused on a single responsibility. Do not add routing logic to a module; that belongs in a flow.
@@ -101,7 +101,7 @@ Flows live in `power-engineer/references/flows/`. A flow composes modules from t
 Scanner → Questionnaire → Skill Resolver → Installer → Configurator
 ```
 
-The Drift Detector runs independently on `status` and `update` commands only.
+The update flow runs 7 steps: state check, skill health check, drift detection, skill resolution, user confirmation, installation, and full configuration regeneration. The Drift Detector runs within the update flow and independently on the `status` command.
 
 When adding a new command route:
 1. Create a new flow file in `flows/`
