@@ -50,7 +50,6 @@ npx skills@latest add getsentry/skills --skill security-review -y
 npx skills@latest add agamm/claude-code-owasp -y
 npx skills@latest add majiayu000/claude-skill-registry --skill secrets-guardian -y
 npx skills@latest add github/awesome-copilot --skill git-commit -y
-npx skills@latest add supercent-io/skills-template --skill task-planning -y
 ```
 
 ---
@@ -64,19 +63,7 @@ npx skills@latest add mattpocock/skills --skill setup-pre-commit -y
 npx skills@latest add mattpocock/skills --skill git-guardrails-claude-code -y
 npx skills@latest add obra/superpowers --skill executing-plans -y
 npx skills@latest add github/awesome-copilot --skill prd -y
-npx skills@latest add supercent-io/skills-template --skill git-workflow -y
-npx skills@latest add supercent-io/skills-template --skill changelog-maintenance -y
 npx skills@latest add wshobson/agents --skill api-design-principles -y
-npx skills@latest add supercent-io/skills-template --skill database-schema-design -y
-npx skills@latest add supercent-io/skills-template --skill authentication-setup -y
-npx skills@latest add supercent-io/skills-template --skill monitoring-observability -y
-npx skills@latest add supercent-io/skills-template --skill deployment-automation -y
-npx skills@latest add supercent-io/skills-template --skill performance-optimization -y
-npx skills@latest add supercent-io/skills-template --skill backend-testing -y
-npx skills@latest add supercent-io/skills-template --skill testing-strategies -y
-npx skills@latest add supercent-io/skills-template --skill log-analysis -y
-npx skills@latest add supercent-io/skills-template --skill codebase-search -y
-npx skills@latest add supercent-io/skills-template --skill debugging -y
 # Plugin-based (alirezarezvani/claude-skills) -- requires marketplace added
 # /plugin install engineering-skills@claude-code-skills (docker, migration, incident, secrets, tech-debt, stripe)
 ```
@@ -103,10 +90,8 @@ npx skills@latest add aliksir/claude-code-skill-security-check -y
 
 **If R&D / Research:**
 ```bash
-npx skills@latest add supercent-io/skills-template --skill technical-writing -y
 npx skills@latest add tavily-ai/skills --skill search -y
 npx skills@latest add anthropics/skills --skill mcp-builder -y
-npx skills@latest add supercent-io/skills-template --skill data-analysis -y
 npx skills@latest add firecrawl/cli --skill firecrawl -y
 npx skills@latest add inferen-sh/skills --skill python-executor -y
 npx skills@latest add inferen-sh/skills --skill web-search -y
@@ -166,15 +151,12 @@ npx skills@latest add antfu/skills --skill vite -y
 **Express / Fastify / Hono:**
 ```bash
 npx skills@latest add wshobson/agents --skill nodejs-backend-patterns -y
-npx skills@latest add supercent-io/skills-template --skill backend-testing -y
-npx skills@latest add supercent-io/skills-template --skill api-design -y
 # Plugin-based: /plugin install engineering-skills@claude-code-skills (docker, helm, terraform)
 ```
 
 **FastAPI / Flask / Django:**
 ```bash
 npx skills@latest add wshobson/agents --skill python-performance-optimization -y
-npx skills@latest add supercent-io/skills-template --skill backend-testing -y
 # Plugin-based: /plugin install engineering-skills@claude-code-skills (docker, helm, terraform)
 ```
 
@@ -233,9 +215,6 @@ npx skills@latest add wshobson/agents --skill tailwind-design-system -y
 npx skills@latest add shadcn/ui --skill shadcn -y
 npx skills@latest add ehmo/platform-design-skills --skill platform-design-skills -y
 npx skills@latest add better-auth/skills --skill better-auth-best-practices -y
-npx skills@latest add supercent-io/skills-template --skill ui-component-patterns -y
-npx skills@latest add supercent-io/skills-template --skill responsive-design -y
-npx skills@latest add supercent-io/skills-template --skill web-accessibility -y
 npx skills@latest add mattpocock/skills --skill design-an-interface -y
 # Google Stitch (requires Stitch MCP server configured)
 npx skills@latest add google-labs-code/stitch-skills --skill stitch-loop -y
@@ -252,9 +231,6 @@ Also add to PLUGIN section: UI/UX Pro Max, Designer Skills Collection.
 npx skills@latest add anthropics/skills --skill frontend-design -y
 npx skills@latest add wshobson/agents --skill tailwind-design-system -y
 npx skills@latest add shadcn/ui --skill shadcn -y
-npx skills@latest add supercent-io/skills-template --skill responsive-design -y
-npx skills@latest add supercent-io/skills-template --skill web-accessibility -y
-npx skills@latest add supercent-io/skills-template --skill ui-component-patterns -y
 npx skills@latest add vercel-labs/agent-skills --skill web-design-guidelines -y
 ```
 
@@ -274,15 +250,10 @@ npx skills@latest add anthropics/skills --skill pptx -y
 npx skills@latest add anthropics/skills --skill xlsx -y
 npx skills@latest add anthropics/skills --skill pdf -y
 npx skills@latest add anthropics/skills --skill internal-comms -y
-npx skills@latest add supercent-io/skills-template --skill technical-writing -y
-npx skills@latest add supercent-io/skills-template --skill user-guide-writing -y
-npx skills@latest add supercent-io/skills-template --skill api-documentation -y
 ```
 
 **Technical docs only:**
 ```bash
-npx skills@latest add supercent-io/skills-template --skill technical-writing -y
-npx skills@latest add supercent-io/skills-template --skill api-documentation -y
 npx skills@latest add anthropics/skills --skill pdf -y
 ```
 
@@ -296,7 +267,6 @@ npx skills@latest add firecrawl/cli --skill firecrawl -y
 npx skills@latest add tavily-ai/skills --skill search -y
 npx skills@latest add vercel-labs/agent-browser --skill agent-browser -y
 npx skills@latest add inferen-sh/skills --skill agent-browser -y
-npx skills@latest add supercent-io/skills-template --skill data-analysis -y
 npx skills@latest add inferen-sh/skills --skill python-executor -y
 npx skills@latest add inferen-sh/skills --skill web-search -y
 ```
@@ -309,7 +279,6 @@ npx skills@latest add inferen-sh/skills --skill web-search -y
 
 **Data analysis / Python:**
 ```bash
-npx skills@latest add supercent-io/skills-template --skill data-analysis -y
 npx skills@latest add inferen-sh/skills --skill python-executor -y
 npx skills@latest add wshobson/agents --skill python-performance-optimization -y
 ```
@@ -343,28 +312,19 @@ npx skills@latest add neondatabase/agent-skills --skill neon-postgres -y
 
 ## Project phase (from Q8 answer)
 
-**Greenfield:**
-```bash
-npx skills@latest add supercent-io/skills-template --skill file-organization -y
-```
-Also recommend plugins: GSD, Superpowers by obra.
+**Greenfield:** Also recommend plugins: GSD, Superpowers by obra.
 
 **Active feature development:** No additional skills.
 
 **Refactoring:**
 ```bash
 npx skills@latest add mattpocock/skills --skill request-refactor-plan -y
-npx skills@latest add supercent-io/skills-template --skill code-refactoring -y
-npx skills@latest add supercent-io/skills-template --skill codebase-search -y
-npx skills@latest add supercent-io/skills-template --skill changelog-maintenance -y
-npx skills@latest add supercent-io/skills-template --skill debugging -y
 # Plugin-based
 # /plugin install engineering-advanced-skills@claude-code-skills (tech-debt-tracker, codebase-onboarding, migration-architect)
 ```
 
 **Research / prototyping:**
 ```bash
-npx skills@latest add supercent-io/skills-template --skill data-analysis -y
 npx skills@latest add firecrawl/cli --skill firecrawl -y
 npx skills@latest add tavily-ai/skills --skill search -y
 npx skills@latest add mattpocock/skills --skill design-an-interface -y

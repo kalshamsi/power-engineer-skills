@@ -29,9 +29,6 @@ npx skills@latest add google-labs-code/stitch-skills --all -y
 | tailwind-design-system | wshobson | `npx skills@latest add wshobson/agents --skill tailwind-design-system -y` | Tailwind design system: tokens, variants, responsive utilities, component APIs. | `/tailwind-design-system` | When building a Tailwind design token system and component API |
 | shadcn | shadcn/ui | `npx skills@latest add shadcn/ui --skill shadcn -y` | Official shadcn/ui: component discovery, installation, customisation, composition. | `/shadcn` | When adding, customising, or composing shadcn/ui components |
 | platform-design-skills | ehmo | `npx skills@latest add ehmo/platform-design-skills --skill platform-design-skills -y` | 300+ design rules from Apple HIG, Material Design 3, and WCAG 2.2. | `/platform-design-skills` | When designing UIs to Apple HIG, Material Design 3, or WCAG standards |
-| ui-component-patterns | supercent-io | `npx skills@latest add supercent-io/skills-template --skill ui-component-patterns -y` | Component composition patterns, compound components, headless UI strategies. | `/ui-component-patterns` | When designing compound components or headless UI abstractions |
-| responsive-design | supercent-io | `npx skills@latest add supercent-io/skills-template --skill responsive-design -y` | Mobile-first responsive layouts, breakpoint strategy, fluid typography. | `/responsive-design` | When implementing mobile-first responsive layouts and fluid typography |
-| web-accessibility | supercent-io | `npx skills@latest add supercent-io/skills-template --skill web-accessibility -y` | WCAG 2.2 compliance, ARIA, keyboard navigation, screen reader testing. | `/web-accessibility` | When auditing or improving WCAG 2.2 accessibility compliance |
 
 ---
 

@@ -37,5 +37,5 @@ Each file is self-contained with skill tables, install commands, and scope.
 
 ---
 
-*Total skills catalogued: 290+*
+*Total skills catalogued: 260+*
 *Last updated: March 2026*

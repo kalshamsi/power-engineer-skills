@@ -25,14 +25,6 @@
 
 ---
 
-## Data Analysis — supercent-io/skills-template
-
-| Skill | Install | Description | Trigger | When to use |
-|-------|---------|-------------|---------|-------------|
-| data-analysis | `npx skills@latest add supercent-io/skills-template --skill data-analysis -y` | Data exploration, statistical analysis, and visualisation patterns in Python/R. | `/data-analysis` | When exploring datasets, running statistical analysis, or building charts |
-
----
-
 ## Data & Research Tools
 
 | Skill | Source | Install | Description | Trigger | When to use |

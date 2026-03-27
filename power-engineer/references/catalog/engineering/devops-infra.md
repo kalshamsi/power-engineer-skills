@@ -24,10 +24,3 @@
 | migration-architect | `local` | `/plugin install engineering-advanced-skills@claude-code-skills` | Zero-downtime migration planning, compatibility validation, rollback strategy generation for systems, databases, and infrastructure. | `/migration-architect` | When planning a zero-downtime system, database, or infra migration |
 | runbook-generator | `local` | `/plugin install engineering-advanced-skills@claude-code-skills` | Generates operational runbooks for SRE/DevOps incident response and routine operations. | `/runbook-generator` | When creating SRE runbooks for incident response or operations |
 
----
-
-## CI/CD & Deployment — supercent-io/skills-template
-
-| Skill | Scope | Install | Description | Trigger | When to use |
-|-------|-------|---------|-------------|---------|-------------|
-| deployment-automation | `local` | `npx skills@latest add supercent-io/skills-template --skill deployment-automation -y` | CI/CD pipeline design, automated deployment, rollback strategies. | `/deployment-automation` | When designing automated deployment pipelines with rollback support |
