@@ -37,8 +37,9 @@ Check the user's message and follow the matching route:
 
 | User says (examples)                     | What to do                                                |
 | ---------------------------------------- | --------------------------------------------------------- |
-| "power engineer status"                  | Read `references/modules/drift-detector.md` (read-only)   |
+| "power engineer status"                  | Read `references/flows/status.md`                         |
 | "power engineer update"                  | Read `references/flows/update.md`                         |
+| "power engineer drift"                   | Read `references/flows/update.md`                         |
 | "power engineer catalog"                 | Read `references/flows/catalog-browse.md`                 |
 | "power engineer help"                   | Read `references/flows/help.md`                           |
 | "power engineer configure"             | Read `references/flows/configure.md`                      |
