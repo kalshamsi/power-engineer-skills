@@ -221,6 +221,98 @@ See [**CONTRIBUTING.md**](docs/CONTRIBUTING.md) for the full guide — adding sk
 
 ---
 
+## Credits & Attribution
+
+Power Engineer does not author skills — it curates and installs them. Every skill in the catalog was built by open-source contributors. This project exists because of their work.
+
+### Official sources
+
+| Source | Maintainer | Contributions |
+|--------|-----------|---------------|
+| [anthropics/skills](https://github.com/anthropics/skills) | Anthropic | 12 official skills — document generation, design, skill creation |
+| [anthropics/claude-cookbooks](https://github.com/anthropics/claude-cookbooks) | Anthropic | Cookbook audit for secrets detection |
+| [github/awesome-copilot](https://github.com/github/awesome-copilot) | GitHub | Git commit, GitHub CLI, PRD, CodeQL |
+| [microsoft/github-copilot-for-azure](https://github.com/microsoft/github-copilot-for-azure) | Microsoft | 6 Azure AI/cloud skills |
+| [microsoft/azure-skills](https://github.com/microsoft/azure-skills) | Microsoft | Azure Foundry, quotas, upgrade, observability |
+| [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills) | Google | Stitch design-to-code pipeline (6 skills) |
+
+### Core methodology
+
+| Source | Maintainer | Contributions |
+|--------|-----------|---------------|
+| [obra/superpowers](https://github.com/obra/superpowers) | Jesse Vincent ([@obra](https://github.com/obra)) | 14 development methodology skills — TDD, planning, debugging, code review, worktrees |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock ([@mattpocock](https://github.com/mattpocock)) | 12 planning & product skills — PRDs, grilling, refactoring, interface design |
+
+### Major contributors
+
+| Source | Contributions |
+|--------|---------------|
+| [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) | 20+ skills across DevOps, data, ML, testing, agentic AI, payments (plugin marketplace) |
+| [trailofbits/skills](https://github.com/trailofbits/skills) | 14+ security skills — SAST, SCA, smart contracts, binary analysis |
+| [inferen-sh/skills](https://github.com/inferen-sh/skills) | 12 AI SDK skills — Python/JS SDKs, chat UI, browser, code execution |
+| [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | 13 design refinement skills — polish, critique, animate, distill |
+| [expo/skills](https://github.com/expo/skills) | 8 mobile skills — React Native, Expo workflows |
+| [majiayu000/claude-skill-registry](https://github.com/majiayu000/claude-skill-registry) | 7 security skills — DAST, secrets detection, container scanning |
+| [kalshamsi/claude-security-skills](https://github.com/kalshamsi/claude-security-skills) | 10 security skills — SAST, SCA, API testing, DevSecOps |
+| [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | 5 React/Vercel skills |
+| [wshobson/agents](https://github.com/wshobson/agents) | 5 backend skills — API design, TypeScript, Node.js, Python, Tailwind |
+| [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) | 5 skills — security review, framework-specific security |
+
+### Individual skill authors
+
+| Source | Contributions |
+|--------|---------------|
+| [getsentry/skills](https://github.com/getsentry/skills) | Security review |
+| [agamm/claude-code-owasp](https://github.com/agamm/claude-code-owasp) | OWASP Top 10 + Agentic AI security |
+| [shadcn/ui](https://github.com/shadcn/ui) | shadcn/ui component skill |
+| [vercel/ai](https://github.com/vercel/ai) | Vercel AI SDK |
+| [vercel/turborepo](https://github.com/vercel/turborepo) | Turborepo |
+| [vercel-labs/next-skills](https://github.com/vercel-labs/next-skills) | Next.js best practices and caching |
+| [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | Browser automation |
+| [antfu/skills](https://github.com/antfu/skills) | Vue and Vite skills |
+| [hyf0/vue-skills](https://github.com/hyf0/vue-skills) | Vue 3 best practices |
+| [firecrawl/cli](https://github.com/firecrawl/cli) | Web crawling and scraping |
+| [tavily-ai/skills](https://github.com/tavily-ai/skills) | Real-time web search |
+| [browser-use/browser-use](https://github.com/browser-use/browser-use) | Browser automation |
+| [neondatabase/agent-skills](https://github.com/neondatabase/agent-skills) | Neon Postgres |
+| [supabase/agent-skills](https://github.com/supabase/agent-skills) | Supabase Postgres |
+| [better-auth/skills](https://github.com/better-auth/skills) | Better Auth |
+| [ehmo/platform-design-skills](https://github.com/ehmo/platform-design-skills) | Apple HIG, Material Design 3, WCAG 2.2 |
+| [avdlee/swiftui-agent-skill](https://github.com/avdlee/swiftui-agent-skill) | SwiftUI/iOS |
+| [currents-dev/playwright-best-practices-skill](https://github.com/currents-dev/playwright-best-practices-skill) | Playwright testing |
+| [charon-fan/agent-playbook](https://github.com/charon-fan/agent-playbook) | Self-improving agent patterns |
+| [ctsstc/get-shit-done-skills](https://github.com/ctsstc/get-shit-done-skills) | GSD context engineering |
+| [garrytan/gstack](https://github.com/garrytan/gstack) | CSO security |
+| [MCKRUZ/security-review-skill](https://github.com/MCKRUZ/security-review-skill) | Security review |
+| [fr33d3m0n/threat-modeling](https://github.com/fr33d3m0n/threat-modeling) | STRIDE/DREAD/MITRE threat modeling |
+| [Tencent/AI-Infra-Guard](https://github.com/Tencent/AI-Infra-Guard) | OWASP ASI |
+| [Sushegaad/Claude-Skills-Governance-Risk-and-Compliance](https://github.com/Sushegaad/Claude-Skills-Governance-Risk-and-Compliance) | GRC compliance |
+| [Eyadkelleh/awesome-claude-skills-security](https://github.com/Eyadkelleh/awesome-claude-skills-security) | Security skills collection |
+| [WolzenGeorgi/claude-skills-pentest](https://github.com/WolzenGeorgi/claude-skills-pentest) | Penetration testing |
+| [jthack/ffuf_claude_skill](https://github.com/jthack/ffuf_claude_skill) | Fuzzing (ffuf) |
+| [mukul975/Anthropic-Cybersecurity-Skills](https://github.com/mukul975/Anthropic-Cybersecurity-Skills) | Cybersecurity skills |
+| [tsale/awesome-dfir-skills](https://github.com/tsale/awesome-dfir-skills) | DFIR incident response |
+| [TheSethRose/Clawdbot-Security-Check](https://github.com/TheSethRose/Clawdbot-Security-Check) | Security checks |
+| [aliksir/claude-code-skill-security-check](https://github.com/aliksir/claude-code-skill-security-check) | Skill security auditing |
+| [larrygmaguire-hash/mcp-security-audit](https://github.com/larrygmaguire-hash/mcp-security-audit) | MCP security audit |
+| [alissonlinneker/shield-claude-skill](https://github.com/alissonlinneker/shield-claude-skill) | Shield security |
+| [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) | Multi-tool security review |
+| [sickn33/antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills) | SAST configuration, security |
+| [AgentSecOps/SecOpsAgentKit](https://github.com/AgentSecOps/SecOpsAgentKit) | Container and IaC security |
+| [TerminalSkills/skills](https://github.com/TerminalSkills/skills) | Nuclei, Grype, Checkov |
+
+### Plugin suites
+
+| Source | Suite |
+|--------|-------|
+| [obra/superpowers-marketplace](https://github.com/obra/superpowers-marketplace) | Superpowers plugin marketplace |
+| [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | UI/UX Pro Max (50+ styles, 97 palettes) |
+| [Owl-Listener/designer-skills](https://github.com/Owl-Listener/designer-skills) | Designer Skills Collection (63 skills, 27 commands) |
+
+Each skill's license is governed by its source repository. Power Engineer's catalog and tooling are [MIT](LICENSE)-licensed.
+
+---
+
 ## License
 
 [MIT](LICENSE)
