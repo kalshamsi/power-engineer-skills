@@ -52,7 +52,9 @@ Write `.power-engineer/state.json`:
     "project_phase": "[Q8]",
     "brand_identity": "[Q9]",
     "team_workflow": "[Q10]",
-    "goals": "[Q11]"
+    "goals": "[Q11]",
+    "security_needs": "[Q12]",
+    "cross_tool_usage": "[Q13]"
   },
   "installed_skills": [
     {
