@@ -30,6 +30,7 @@ confident answer, SKIP the question and show the user what was detected instead.
 | Q10 Team workflow | `has_ci_cd` is true AND `team_size` is known (show detected) |
 | Q11 Goals | NEVER skip |
 | Q12 Security needs | NEVER skip -- always ask (subjective preference) |
+| Q13 Cross-tool usage | `.cursorrules` exists OR `copilot-instructions.md` exists OR `.windsurfrules` exists (show detected, ask to confirm/add) |
 
 ## Presenting skipped questions
 
@@ -71,6 +72,7 @@ call. The tool supports up to 4 questions per call.
 | 3 | Q7, Q8 | Infrastructure and project phase |
 | 4 | Q9, Q10, Q11 | Brand, team, goals |
 | 5 | Q12 | Security |
+| 6 | Q13 | Cross-tool usage |
 
 Rules:
 - If all questions in a batch are skipped, move to the next batch.
@@ -298,6 +300,28 @@ is included by default in the core methodology for every project. Selecting
 specialized security tooling. Selecting "None" removes the default security
 skills from the install plan.
 
+### Q13 -- Cross-tool usage
+
+```
+question: "Do you use other AI coding tools alongside Claude Code?"
+header: "Tools"
+multiSelect: true
+options:
+  - label: "Cursor"
+    description: "Generate .cursorrules with project behavioral rules"
+  - label: "GitHub Copilot"
+    description: "Generate .github/copilot-instructions.md with project behavioral rules"
+  - label: "Windsurf"
+    description: "Generate .windsurfrules with project behavioral rules"
+  - label: "None"
+    description: "Only using Claude Code — skip cross-tool config generation"
+```
+
+Note: If cross-tool config files are detected on disk during the scan, present
+detections before asking. If the user selects "None", no config files are
+generated. The answer is stored in `state.json` under
+`questionnaire_answers.cross_tool_usage`.
+
 ---
 
 ## Output: SkillPlan
@@ -328,6 +352,7 @@ SkillPlan:
   team_workflow: [Q10 answer]
   goals: [Q11 answers]
   security_needs: [Q12 answers]
+  cross_tool_usage: [Q13 answers]
 ```
 
 Pass this SkillPlan to the Skill Resolver module.
