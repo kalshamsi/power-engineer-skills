@@ -7,7 +7,7 @@
   <p align="center">
     <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.0.1"><img src="https://img.shields.io/badge/version-1.0.1-blue" alt="Version 1.0.1"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
-    <img src="https://img.shields.io/badge/skills-260%2B-orange" alt="260+ Skills">
+    <img src="https://img.shields.io/badge/skills-238-orange" alt="238 Skills">
     <img src="https://img.shields.io/badge/tests-312%20passing-brightgreen" alt="312 Tests Passing">
   </p>
 </p>
@@ -58,7 +58,7 @@ Scan codebase → Adaptive interview → Resolve skills → Install → Configur
 
 Skills are reusable instruction sets that extend what Claude can do inside your project. A `test-driven-development` skill teaches Claude TDD. A `systematic-debugging` skill gives it structured root-cause analysis. Skills activate by name (`/skill-name`) or automatically when Claude detects the right context.
 
-**Power Engineer curates 260+ of them** across 16 catalog files and installs exactly the ones your project needs.
+**Power Engineer curates 238 of them** across 16 catalog files and installs exactly the ones your project needs.
 
 ---
 
@@ -87,7 +87,7 @@ All commands are prefixed with `power engineer` in chat (e.g., `power engineer f
 
 ## Catalog
 
-260+ skills across 16 catalog files. Browse at [`power-engineer/references/catalog/`](./power-engineer/references/catalog/) or start with [`INDEX.md`](./power-engineer/references/catalog/INDEX.md).
+238 skills across 16 catalog files. Browse at [`power-engineer/references/catalog/`](./power-engineer/references/catalog/) or start with [`INDEX.md`](./power-engineer/references/catalog/INDEX.md).
 
 | Category | What's included |
 |----------|----------------|
@@ -98,7 +98,7 @@ All commands are prefixed with `power engineer` in chat (e.g., `power engineer f
 | **Data & ML** | Data engineering, data science, ML/MLOps, computer vision |
 | **Testing & Quality** | Playwright, TDD, tech debt tracking, code review, onboarding |
 | **Agentic AI** | AI/LLM SDKs, MCP builders, agent patterns, Vercel AI SDK |
-| **Security & AppSec** | 80+ skills — SAST, DAST, SCA, secrets, containers, IaC, threat modeling, compliance, pentest, DFIR |
+| **Security & AppSec** | 57 skills + 16 MCP servers — SAST, DAST, SCA, secrets, containers, IaC, threat modeling, compliance, pentest, DFIR |
 | **Frontend** | React/Next.js, Vue/Vite, design systems, shadcn/ui, Stitch |
 | **Mobile** | Expo, React Native, SwiftUI/iOS |
 | **Cloud & Databases** | Microsoft Azure, Neon, Supabase, Better Auth |
@@ -121,7 +121,7 @@ Every project gets baseline security by default — no extra steps:
 
 Additional specialized options: Deep SAST/DAST (Semgrep, CodeQL, Nuclei), Container & IaC (Trivy, Grype, Checkov), Penetration testing (SecLists, Burp Suite), Threat modeling (STRIDE, MITRE ATT&CK). Framework-specific security (Django, Laravel, Spring Boot) is auto-added when detected.
 
-Full security catalog: **80+ skills, 60+ MCP servers** — browse via `power engineer catalog`.
+Full security catalog: **57 skills, 16 MCP servers** — browse via `power engineer catalog`.
 
 ---
 
