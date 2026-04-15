@@ -6,10 +6,11 @@
 # Honors GITHUB_TOKEN env var (5000 req/hr vs 60).
 #
 # Per Phase 1 remediation (Decision B): the extractor is parameterizable via
-# CATALOG_FILTER -- a colon-separated list of file-glob patterns relative to
-# the repository root. If unset, the full catalog is scanned. Example:
-#   CATALOG_FILTER="power-engineer/references/catalog/engineering/*.md"
-# This lets CI (Phase 6) scope URL validation to files actually changed in a PR.
+# CATALOG_FILTER -- a newline-separated list of file paths relative to the
+# repository root. If unset, the full catalog is scanned. Example:
+#   CATALOG_FILTER="power-engineer/references/catalog/engineering/foo.md"
+# This lets CI (Phase 6) scope URL validation to files actually changed in a PR
+# by passing the output of `git diff --name-only origin/main...HEAD` directly.
 set -uo pipefail
 
 CATALOG_DEFAULT="power-engineer/references/catalog"
@@ -19,18 +20,13 @@ FAIL=0
 fail() { echo "  FAIL: $*"; FAIL=$((FAIL + 1)); }
 
 # ── Resolve which files to scan ─────────────────────────────────
-# bash 3.2-compatible: read file list into array.
+# If CATALOG_FILTER is set (newline-separated list of paths), only validate those.
 FILES=()
 if [ -n "${CATALOG_FILTER:-}" ]; then
-  # Colon-delimited glob list. Expand each glob against the filesystem.
-  IFS=':' read -r -a GLOBS <<< "$CATALOG_FILTER"
-  shopt -s nullglob
-  for glob in "${GLOBS[@]}"; do
-    for match in $glob; do
-      [ -f "$match" ] && FILES+=("$match")
-    done
-  done
-  shopt -u nullglob
+  # Newline-delimited path list (as produced by git diff --name-only).
+  while IFS= read -r f; do
+    [ -n "$f" ] && [ -f "$f" ] && FILES+=("$f")
+  done <<< "$CATALOG_FILTER"
 else
   while IFS= read -r f; do
     FILES+=("$f")
@@ -73,13 +69,18 @@ done < <(
   } | sort -u
 )
 
+if [ "${#URLS[@]}" -eq 0 ]; then
+  echo "  ✓ all 0 GitHub targets reachable (no URLs found in scanned files)"
+  exit 0
+fi
+
 touch "$CACHE"
 
 AUTH=()
 [ -n "${GITHUB_TOKEN:-}" ] && AUTH=(-H "Authorization: token $GITHUB_TOKEN")
 
 RATE_LIMITED=0
-for url in "${URLS[@]}"; do
+for url in "${URLS[@]+"${URLS[@]}"}"; do
   # Session cache
   if grep -q "^$url " "$CACHE"; then
     continue
