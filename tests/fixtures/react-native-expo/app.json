@@ -1,0 +1,8 @@
+{
+  "expo": {
+    "name": "fixture-expo",
+    "slug": "fixture-expo",
+    "scheme": "fixture",
+    "platforms": ["ios", "android"]
+  }
+}
