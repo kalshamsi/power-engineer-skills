@@ -468,8 +468,10 @@ for module_file in power-engineer/references/modules/*.md; do
     "! grep -qiE '$PLATFORM_PATTERNS' '$module_file' 2>/dev/null || grep -iE '$PLATFORM_PATTERNS' '$module_file' 2>/dev/null | grep -qvE 'cross.platform|both.*macOS|both.*linux|macOS and Linux|Linux and macOS|supported on|platform support'"
 done
 
-# Each lint script uses portable shebang
-for script in tests/lint/*.sh; do
+# Each lint script + the canonical runner uses portable shebang.
+# Glob stays narrow: tests/run-all.sh + tests/lint/*.sh only. Fixtures
+# and any future tests/integration/ are intentionally excluded.
+for script in tests/run-all.sh tests/lint/*.sh; do
   [ -f "$script" ] || continue
   sname=$(basename "$script")
   check "[from test-platform-parity.sh] $sname uses portable shebang (#!/usr/bin/env bash)" \
