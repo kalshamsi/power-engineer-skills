@@ -323,14 +323,16 @@ If the user selects "Yes", append to `.gitignore`:
 
 ## Step 5: Inject post-compaction hook
 
-Inject a PostToolUse hook into `.claude/settings.json` that fires after `/compact` to restore project context. Use a **read-merge-write** strategy to preserve existing settings.
+Inject a `SessionStart` hook into `.claude/settings.json` that fires after `/compact` completes to restore project context. Use a **read-merge-write** strategy to preserve existing settings.
+
+**Why `SessionStart`, not `PostToolUse`:** `PostToolUse` matchers filter by tool name (Bash, Edit, Write, etc.) — `"compact"` is not a tool and would never match. Compaction restarts the session, so `SessionStart` with matcher `"compact"` (one of the valid `source` values: `startup`, `resume`, `clear`, `compact`) is the correct event.
 
 ### Process
 
 1. Read `.claude/settings.json` (if it exists). If it doesn't exist, start with `{}`
 2. Ensure the `hooks` key exists (create empty object if missing)
-3. Ensure `hooks.PostToolUse` exists (create empty array if missing)
-4. Search the `PostToolUse` array for an entry with `"matcher": "compact"`
+3. Ensure `hooks.SessionStart` exists (create empty array if missing)
+4. Search the `SessionStart` array for an entry with `"matcher": "compact"`
    - If found: update its `hooks` array to the latest version below
    - If not found: append the new entry to the array
 5. Write back the full settings.json, preserving all existing keys (permissions, env, other hooks)
@@ -339,7 +341,7 @@ Inject a PostToolUse hook into `.claude/settings.json` that fires after `/compac
 
 ### Hook entry
 
-Each entry in the `PostToolUse` array requires a `matcher` string and a `hooks` array of `{type, command}` objects. This is the Claude Code hooks schema — do NOT put `command` directly on the matcher object.
+Each entry in the `SessionStart` array requires a `matcher` string (matching the session source) and a `hooks` array of `{type, command}` objects. This is the Claude Code hooks schema — do NOT put `command` directly on the matcher object.
 
 ```json
 {
@@ -477,7 +479,7 @@ Project configured!
   Skills patched:      [N] skills received project context
   Brand file:          [created | skipped (no brand info)]
   Cheatsheet:          .power-engineer/cheatsheet.md
-  Compaction hook:     .claude/settings.json (PostToolUse hook injected)
+  Compaction hook:     .claude/settings.json (SessionStart hook injected)
   Cross-tool configs:  [list of generated files, or "skipped (no cross-tool usage)"]
   Handoff template:    .power-engineer/handoff-template.md
 
