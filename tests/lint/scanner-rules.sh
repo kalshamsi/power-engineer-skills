@@ -9,13 +9,14 @@
 # Each line in expected.md of the form `- **DETECT**: <item>` must appear in
 # that array, else the fixture fails.
 #
-# Detected-item formats (must match what expected.md writes):
+# Detected-item formats (must match what expected.md writes).
+# Canonical form: every entry is "key: value".
 #   language:  "language: <name>"        e.g. language: typescript
 #   framework: "framework: <name>"       e.g. framework: next.js
 #   sdk:       "sdk: <name>"             e.g. sdk: anthropic-ts
 #   cloud_db:  "cloud_db: <name>"        e.g. cloud_db: supabase
-#   infra:     "<flag_name>"             e.g. has_docker  (flags, no prefix)
-#   monorepo:  "is_monorepo"             (single flag)
+#   infra:     "<flag_name>: true"       e.g. has_docker: true
+#   monorepo:  "monorepo: true"          (single flag)
 #
 # Exit codes:
 #   0  all fixtures passed, OR no fixtures exist yet (Phase 5 hasn't built them)
@@ -97,6 +98,10 @@ evaluate_when() {
   local dir="$1" rule_path="$2"
   local has_any=false has_all=false
   local result=true
+  local key val  # Bash dynamic scoping: without these, the inner read loops
+                 # would clobber the caller's `key` (used by run_fixture's
+                 # infra loop) — declare locally so emission sees the
+                 # caller's key, not the last TSV entry read here.
 
   # when_any: any must pass
   if yq -e "$rule_path.when_any" "$RULES" > /dev/null 2>&1; then
@@ -184,17 +189,17 @@ run_fixture() {
     fi
   done
 
-  # --- Infra flags (object keyed by flag name; no category prefix) ---
+  # --- Infra flags (object keyed by flag name; emitted as "<flag>: true") ---
   while IFS= read -r key; do
     [ -n "$key" ] || continue
     if evaluate_when "$dir" ".infra.$key"; then
-      detected+=("$key")
+      detected+=("$key: true")
     fi
   done < <(yq -r '.infra | keys[]' "$RULES")
 
-  # --- Monorepo (single object) ---
+  # --- Monorepo (single object; emitted as "monorepo: true") ---
   if evaluate_when "$dir" ".monorepo"; then
-    detected+=("is_monorepo")
+    detected+=("monorepo: true")
   fi
 
   # --- Verify each expected line is in detected ---
