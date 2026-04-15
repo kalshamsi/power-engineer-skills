@@ -111,7 +111,7 @@ INPUT=$(cat)
 # Input shape: {"tool_name":"Bash","tool_input":{"command":"..."}}
 COMMAND=$(echo "$INPUT" | sed -n 's/.*"command"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)
 
-if echo "$COMMAND" | grep -qE '^npx skills@latest '; then
+if echo "$COMMAND" | grep -qE '^npx skills(@[a-zA-Z0-9._-]+)? '; then
   echo '{"decision":"allow"}'
 elif echo "$COMMAND" | grep -q '^mkdir -p \.power-engineer'; then
   echo '{"decision":"allow"}'
