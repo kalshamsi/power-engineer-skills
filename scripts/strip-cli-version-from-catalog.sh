@@ -43,7 +43,8 @@ fi
 
 # Count BEFORE state using the broader @ pattern (catches any future variants
 # like @1.x or @beta alongside @latest).
-BEFORE=$(grep -rcE 'npx skills@[a-zA-Z0-9._-]+ add' "$CATALOG" | awk -F: '{s+=$2} END {print s+0}')
+# `|| true` tolerates grep's exit 1 on zero matches (idempotent re-runs).
+BEFORE=$({ grep -rcE 'npx skills@[a-zA-Z0-9._-]+ add' "$CATALOG" || true; } | awk -F: '{s+=$2} END {print s+0}')
 
 CHANGED_FILES=0
 TOTAL_STRIPPED=0
@@ -65,7 +66,8 @@ while IFS= read -r f; do
 done < <(find "$CATALOG" -name '*.md' -not -name 'INDEX.md' | sort)
 
 # Count AFTER state to confirm 100% coverage.
-AFTER=$(grep -rcE 'npx skills@[a-zA-Z0-9._-]+ add' "$CATALOG" | awk -F: '{s+=$2} END {print s+0}')
+# `|| true` tolerates grep's exit 1 on zero matches (the success path!).
+AFTER=$({ grep -rcE 'npx skills@[a-zA-Z0-9._-]+ add' "$CATALOG" || true; } | awk -F: '{s+=$2} END {print s+0}')
 
 echo ""
 echo "BEFORE: $BEFORE occurrences | STRIPPED: $TOTAL_STRIPPED | AFTER: $AFTER | FILES: $CHANGED_FILES"
