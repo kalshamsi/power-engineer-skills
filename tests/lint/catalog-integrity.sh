@@ -122,6 +122,20 @@ for f in "${ON_DISK[@]}"; do
   fi
 done
 
+# Check 4b: no empty cells in catalog data rows (ported from
+# test-catalog-trigger-maps.sh, audit row 45). An empty cell appears as
+# `| |` (pipe-space-pipe) inside a table data row. We only look at rows that
+# start with `|`, skip the separator row (all dashes), and then flag any
+# `| |` occurrence. Headers are skipped because headers always end with the
+# last column name before `|`, never with `| |`.
+for f in "${ON_DISK[@]}"; do
+  path="$CATALOG/$f"
+  empty_count=$(grep -E '^\|' "$path" | grep -v '^\|[-| ]*\|$' | grep -c '| |' || true)
+  if [ "$empty_count" -gt 0 ]; then
+    fail "$f has $empty_count data row(s) with empty Trigger/When-to-use/other cells (|  |)"
+  fi
+done
+
 # Check 5: duplicate skill names reported as a WARNING only.
 # Catalog intentionally cross-lists some skills under multiple category lenses
 # (e.g. firecrawl lives in both data-ml.md and docs-research.md). The de-dup
