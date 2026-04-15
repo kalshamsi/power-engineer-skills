@@ -5,8 +5,8 @@
 | Skill | Source | Scope | Install | Description | Trigger | When to use |
 |-------|--------|-------|---------|-------------|---------|-------------|
 | playwright-pro | alirezarezvani/claude-skills | `local` | `/plugin install playwright-pro@claude-code-skills` | Production Playwright testing: 55 templates, 3 agents, CI/CD integration, TestRail sync, BrowserStack, migration from Cypress/Selenium. | `/playwright-pro` | When building production-grade Playwright test suites |
-| playwright-best-practices | currents-dev | `local` | `npx skills@latest add currents-dev/playwright-best-practices-skill --skill playwright-best-practices -y` | Playwright patterns: page objects, fixtures, parallel execution, visual regression, CI. | `/playwright-best-practices` | When applying Playwright patterns for page objects and visual regression |
-| webapp-testing | anthropics/skills | `local` | `npx skills@latest add anthropics/skills --skill webapp-testing -y` | E2E web app testing strategies with browser automation and assertion patterns. | `/webapp-testing` | When designing E2E test strategies for a web application |
+| playwright-best-practices | currents-dev | `local` | `npx skills add currents-dev/playwright-best-practices-skill --skill playwright-best-practices -y` | Playwright patterns: page objects, fixtures, parallel execution, visual regression, CI. | `/playwright-best-practices` | When applying Playwright patterns for page objects and visual regression |
+| webapp-testing | anthropics/skills | `local` | `npx skills add anthropics/skills --skill webapp-testing -y` | E2E web app testing strategies with browser automation and assertion patterns. | `/webapp-testing` | When designing E2E test strategies for a web application |
 | api-test-suite-builder | alirezarezvani/claude-skills | `local` | `/plugin install engineering-advanced-skills@claude-code-skills` | Automated API test generation: endpoint discovery, edge case coverage, contract testing. | `/api-test-suite-builder` | When generating comprehensive API tests with contract coverage |
 
 ---
