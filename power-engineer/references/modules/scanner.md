@@ -4,11 +4,24 @@ Analyzes the target project's codebase to produce a ProjectProfile. This module
 runs FIRST in every flow. Its output drives the Adaptive Questionnaire (which
 questions to skip) and the Skill Resolver (which skills to recommend).
 
+## Detection Rules (source of truth)
+
+Language, framework, SDK, infra, and cloud/DB detection rules live in
+[`detection-rules.yaml`](./detection-rules.yaml). That file is the single
+source of truth, consumed by both Claude (via this module) and
+`tests/lint/scanner-rules.sh` (for CI verification).
+
+When scanning, apply each rule from `detection-rules.yaml` in order.
+This document describes the surrounding workflow; the rules themselves
+are in the YAML.
+
 ## How to scan
 
 Run the following checks in order. Record all findings as the ProjectProfile.
 
 ### 1. Package manager & language detection
+
+> Rules: see `detection-rules.yaml` → `language:`
 
 ```bash
 # Check for Node.js/TypeScript
@@ -26,6 +39,8 @@ cat setup.py 2>/dev/null
 - `package_manager`: "npm", "yarn", "pnpm", "pip", "poetry", or "unknown"
 
 ### 2. Framework detection
+
+> Rules: see `detection-rules.yaml` → `framework:`
 
 | Check for file/dependency | Framework detected |
 |--------------------------|-------------------|
@@ -51,6 +66,8 @@ ls Package.swift 2>/dev/null
 
 ### 3. SDK detection
 
+> Rules: see `detection-rules.yaml` → `sdk:`
+
 Check package.json dependencies and pyproject.toml for:
 - `@anthropic-ai/sdk` -> Anthropic JS/TS SDK
 - `ai` (from vercel) -> Vercel AI SDK
@@ -59,6 +76,8 @@ Check package.json dependencies and pyproject.toml for:
 **Record:** `sdks`: list of detected SDKs
 
 ### 4. Infrastructure detection
+
+> Rules: see `detection-rules.yaml` → `infra:`
 
 ```bash
 # Docker
@@ -81,6 +100,8 @@ ls .github/workflows/*.yml .github/workflows/*.yaml 2>/dev/null | wc -l
 
 ### 5. Cloud / database detection
 
+> Rules: see `detection-rules.yaml` → `cloud_db:`
+
 Check package.json / pyproject.toml for:
 - `@supabase/supabase-js` or `supabase` -> Supabase
 - `@neondatabase/serverless` or `neon` -> Neon
@@ -89,6 +110,8 @@ Check package.json / pyproject.toml for:
 **Record:** `cloud_database`: list of detected providers
 
 ### 6. Brand & design detection
+
+> Rules: see `detection-rules.yaml` → `infra:` (for `has_tailwind`; brand/design assets are narrative-only)
 
 ```bash
 # Tailwind config
@@ -132,6 +155,8 @@ cat skills-lock.json 2>/dev/null
 - `is_rerun`: true if `.power-engineer/state.json` exists
 
 ### 8. Project maturity & team size
+
+> Rules: see `detection-rules.yaml` → `monorepo:` (for `is_monorepo`; team/age/size are narrative-only)
 
 ```bash
 # Team size from git log (unique authors in last 6 months)
