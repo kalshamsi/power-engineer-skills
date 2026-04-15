@@ -5,22 +5,22 @@
 Always recommended. These skills form a complete agentic development workflow
 that auto-activates at each stage without manual invocation.
 
-| Skill | Description | Trigger | When to use |
-|-------|-------------|---------|-------------|
-| brainstorming | Refines rough ideas through structured Q&A, explores alternatives, presents design in sections for validation. | `/brainstorming` | Before starting any new feature or design decision |
-| writing-plans | Breaks approved designs into 2-5 minute tasks with exact file paths, complete code, and verification steps. | `/writing-plans` | After brainstorming, before writing any code |
-| test-driven-development | Enforces RED-GREEN-REFACTOR. Write failing test, watch it fail, write minimal code, commit. | `auto` on new code | When implementing any testable feature or function |
-| systematic-debugging | Hypothesis-driven root cause analysis. Auto-triggers when errors are encountered. | `auto` on errors | When an error or unexpected behaviour is encountered |
-| verification-before-completion | Auto-triggers before Claude marks work done. Runs a verification checklist. | `auto` before done | Before marking any task complete |
-| requesting-code-review | Organises changes, writes clear PR descriptions, anticipates reviewer questions. | `/requesting-code-review` | When preparing a PR or seeking peer review |
-| receiving-code-review | Handles incoming review feedback constructively and systematically. | `/receiving-code-review` | When processing reviewer comments on your PR |
-| subagent-driven-development | Dispatches a fresh sub-agent per task with two-stage review: spec compliance then code quality. | `/subagent-driven-development` | When running complex multi-step tasks with quality gates |
-| dispatching-parallel-agents | Runs independent tasks in parallel across sub-agents for maximum throughput. | `/dispatching-parallel-agents` | When multiple independent tasks can run concurrently |
-| using-git-worktrees | Creates isolated Git workspaces per branch, enabling parallel feature development. | `/using-git-worktrees` | When working on multiple features simultaneously |
-| finishing-a-development-branch | End-of-branch workflow: final verification, PR preparation, merge-back steps. | `/finishing-a-development-branch` | When a feature branch is ready to ship |
-| executing-plans | Executes implementation plans in batches with human checkpoints between phases. | `/executing-plans` | When running a multi-phase implementation plan |
-| writing-skills | General technical writing quality skill. Auto-triggers when producing reports, specs, or docs. | `auto` on docs | When producing reports, specifications, or documentation |
-| using-superpowers | Bootstraps the full Superpowers methodology. Teaches Claude the brainstorm-plan-implement loop. | `/using-superpowers` | When onboarding to the Superpowers workflow for the first time |
+| Skill | Install | Description | Trigger | When to use |
+|-------|---------|-------------|---------|-------------|
+| brainstorming | `npx skills@latest add obra/superpowers --skill brainstorming -y` | Refines rough ideas through structured Q&A, explores alternatives, presents design in sections for validation. | `/brainstorming` | Before starting any new feature or design decision |
+| writing-plans | `npx skills@latest add obra/superpowers --skill writing-plans -y` | Breaks approved designs into 2-5 minute tasks with exact file paths, complete code, and verification steps. | `/writing-plans` | After brainstorming, before writing any code |
+| test-driven-development | `npx skills@latest add obra/superpowers --skill test-driven-development -y` | Enforces RED-GREEN-REFACTOR. Write failing test, watch it fail, write minimal code, commit. | `auto` on new code | When implementing any testable feature or function |
+| systematic-debugging | `npx skills@latest add obra/superpowers --skill systematic-debugging -y` | Hypothesis-driven root cause analysis. Auto-triggers when errors are encountered. | `auto` on errors | When an error or unexpected behaviour is encountered |
+| verification-before-completion | `npx skills@latest add obra/superpowers --skill verification-before-completion -y` | Auto-triggers before Claude marks work done. Runs a verification checklist. | `auto` before done | Before marking any task complete |
+| requesting-code-review | `npx skills@latest add obra/superpowers --skill requesting-code-review -y` | Organises changes, writes clear PR descriptions, anticipates reviewer questions. | `/requesting-code-review` | When preparing a PR or seeking peer review |
+| receiving-code-review | `npx skills@latest add obra/superpowers --skill receiving-code-review -y` | Handles incoming review feedback constructively and systematically. | `/receiving-code-review` | When processing reviewer comments on your PR |
+| subagent-driven-development | `npx skills@latest add obra/superpowers --skill subagent-driven-development -y` | Dispatches a fresh sub-agent per task with two-stage review: spec compliance then code quality. | `/subagent-driven-development` | When running complex multi-step tasks with quality gates |
+| dispatching-parallel-agents | `npx skills@latest add obra/superpowers --skill dispatching-parallel-agents -y` | Runs independent tasks in parallel across sub-agents for maximum throughput. | `/dispatching-parallel-agents` | When multiple independent tasks can run concurrently |
+| using-git-worktrees | `npx skills@latest add obra/superpowers --skill using-git-worktrees -y` | Creates isolated Git workspaces per branch, enabling parallel feature development. | `/using-git-worktrees` | When working on multiple features simultaneously |
+| finishing-a-development-branch | `npx skills@latest add obra/superpowers --skill finishing-a-development-branch -y` | End-of-branch workflow: final verification, PR preparation, merge-back steps. | `/finishing-a-development-branch` | When a feature branch is ready to ship |
+| executing-plans | `npx skills@latest add obra/superpowers --skill executing-plans -y` | Executes implementation plans in batches with human checkpoints between phases. | `/executing-plans` | When running a multi-phase implementation plan |
+| writing-skills | `npx skills@latest add obra/superpowers --skill writing-skills -y` | General technical writing quality skill. Auto-triggers when producing reports, specs, or docs. | `auto` on docs | When producing reports, specifications, or documentation |
+| using-superpowers | `npx skills@latest add obra/superpowers --skill using-superpowers -y` | Bootstraps the full Superpowers methodology. Teaches Claude the brainstorm-plan-implement loop. | `/using-superpowers` | When onboarding to the Superpowers workflow for the first time |
 
 **Install all at once (via plugin):**
 ```
