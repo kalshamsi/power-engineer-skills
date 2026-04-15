@@ -142,6 +142,80 @@ evaluate_when() {
   [ "$result" = true ]
 }
 
+# Append "$item" to the caller's `detected` array iff not already present.
+# Callers must declare `detected` as a local array in their scope — this
+# function mutates it via bash dynamic scoping.
+#
+# Used both for the root evaluation pass (no-ops as dedup since each rule
+# fires once) and for workspace subdir passes in monorepos (where the same
+# language/framework/etc. can be detected multiple times across workspaces).
+add_if_new() {
+  local item="$1" existing
+  # ${arr[@]+"${arr[@]}"} guards against "unbound variable" under set -u
+  # when the array is empty (bash 3.2 behavior on macOS).
+  for existing in ${detected[@]+"${detected[@]}"}; do
+    [ "$existing" = "$item" ] && return 0
+  done
+  detected+=("$item")
+}
+
+# Evaluate the 5 "stack" categories (language, framework, sdk, cloud_db,
+# infra) against a single directory and append any detections to the
+# caller's `detected` array (via add_if_new for dedup safety).
+#
+# Excludes `monorepo` — that's a root-level concept evaluated separately
+# in run_fixture and never re-evaluated per-workspace.
+#
+# $1: directory to evaluate
+evaluate_stack_rules() {
+  local scan_dir="$1"
+  local count i name key
+
+  # --- Languages (array of named entries) ---
+  count=$(yq -r '.language | length' "$RULES")
+  for i in $(seq 0 $((count - 1))); do
+    name=$(yq -r ".language[$i].name" "$RULES")
+    if evaluate_when "$scan_dir" ".language[$i]"; then
+      add_if_new "language: $name"
+    fi
+  done
+
+  # --- Frameworks (array of named entries) ---
+  count=$(yq -r '.framework | length' "$RULES")
+  for i in $(seq 0 $((count - 1))); do
+    name=$(yq -r ".framework[$i].name" "$RULES")
+    if evaluate_when "$scan_dir" ".framework[$i]"; then
+      add_if_new "framework: $name"
+    fi
+  done
+
+  # --- SDKs (array of named entries) ---
+  count=$(yq -r '.sdk | length' "$RULES")
+  for i in $(seq 0 $((count - 1))); do
+    name=$(yq -r ".sdk[$i].name" "$RULES")
+    if evaluate_when "$scan_dir" ".sdk[$i]"; then
+      add_if_new "sdk: $name"
+    fi
+  done
+
+  # --- Cloud/DB (array of named entries) ---
+  count=$(yq -r '.cloud_db | length' "$RULES")
+  for i in $(seq 0 $((count - 1))); do
+    name=$(yq -r ".cloud_db[$i].name" "$RULES")
+    if evaluate_when "$scan_dir" ".cloud_db[$i]"; then
+      add_if_new "cloud_db: $name"
+    fi
+  done
+
+  # --- Infra flags (object keyed by flag name; emitted as "<flag>: true") ---
+  while IFS= read -r key; do
+    [ -n "$key" ] || continue
+    if evaluate_when "$scan_dir" ".infra.$key"; then
+      add_if_new "$key: true"
+    fi
+  done < <(yq -r '.infra | keys[]' "$RULES")
+}
+
 # Run against one fixture
 run_fixture() {
   local fixture="$1"
@@ -151,62 +225,38 @@ run_fixture() {
 
   echo "→ $fixture"
   local detected=()
-  local count i name key
 
-  # --- Languages (array of named entries) ---
-  count=$(yq -r '.language | length' "$RULES")
-  for i in $(seq 0 $((count - 1))); do
-    name=$(yq -r ".language[$i].name" "$RULES")
-    if evaluate_when "$dir" ".language[$i]"; then
-      detected+=("language: $name")
-    fi
-  done
+  # --- Root pass: evaluate stack rules (language/framework/sdk/cloud_db/infra) ---
+  evaluate_stack_rules "$dir"
 
-  # --- Frameworks (array of named entries) ---
-  count=$(yq -r '.framework | length' "$RULES")
-  for i in $(seq 0 $((count - 1))); do
-    name=$(yq -r ".framework[$i].name" "$RULES")
-    if evaluate_when "$dir" ".framework[$i]"; then
-      detected+=("framework: $name")
-    fi
-  done
-
-  # --- SDKs (array of named entries) ---
-  count=$(yq -r '.sdk | length' "$RULES")
-  for i in $(seq 0 $((count - 1))); do
-    name=$(yq -r ".sdk[$i].name" "$RULES")
-    if evaluate_when "$dir" ".sdk[$i]"; then
-      detected+=("sdk: $name")
-    fi
-  done
-
-  # --- Cloud/DB (array of named entries) ---
-  count=$(yq -r '.cloud_db | length' "$RULES")
-  for i in $(seq 0 $((count - 1))); do
-    name=$(yq -r ".cloud_db[$i].name" "$RULES")
-    if evaluate_when "$dir" ".cloud_db[$i]"; then
-      detected+=("cloud_db: $name")
-    fi
-  done
-
-  # --- Infra flags (object keyed by flag name; emitted as "<flag>: true") ---
-  while IFS= read -r key; do
-    [ -n "$key" ] || continue
-    if evaluate_when "$dir" ".infra.$key"; then
-      detected+=("$key: true")
-    fi
-  done < <(yq -r '.infra | keys[]' "$RULES")
-
-  # --- Monorepo (single object; emitted as "monorepo: true") ---
+  # --- Monorepo (single object; root-only — emitted as "monorepo: true") ---
   if evaluate_when "$dir" ".monorepo"; then
     detected+=("monorepo: true")
+
+    # Workspace recursion: when monorepo detected, re-evaluate the 5
+    # stack categories against each workspace subdir. This resolves the
+    # Phase 5 architecture gap where langs/frameworks/infra live in
+    # apps/*/, services/*/, packages/*/ rather than the root.
+    # nullglob ensures an empty workspace dir doesn't iterate literal "apps/*/".
+    local prev_nullglob
+    prev_nullglob=$(shopt -p nullglob)
+    shopt -s nullglob
+    local ws_dirs=( "$dir"/apps/*/ "$dir"/services/*/ "$dir"/packages/*/ )
+    eval "$prev_nullglob"
+
+    # ${arr[@]+"${arr[@]}"} guards empty-array expansion under set -u on bash 3.2.
+    local ws
+    for ws in ${ws_dirs[@]+"${ws_dirs[@]}"}; do
+      # Strip trailing slash for consistency in evaluate_condition checks
+      evaluate_stack_rules "${ws%/}"
+    done
   fi
 
   # --- Verify each expected line is in detected ---
   while IFS= read -r line; do
     [[ "$line" =~ ^-[[:space:]]+\*\*DETECT\*\*:[[:space:]]+(.+)$ ]] || continue
     expected_item="${BASH_REMATCH[1]}"
-    if ! printf '%s\n' "${detected[@]}" | grep -qxF "$expected_item"; then
+    if ! printf '%s\n' ${detected[@]+"${detected[@]}"} | grep -qxF "$expected_item"; then
       fail "$fixture: expected '$expected_item' but not detected"
     fi
   done < "$expected"
