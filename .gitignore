@@ -16,7 +16,10 @@ docs/internal/
 
 # ── Local working directories ────────────────────────────────
 plans/
-scripts/
+# Ignore ad-hoc scripts by default, but allow committed utility scripts
+# to be explicitly re-included below.
+scripts/*
+!scripts/strip-cli-version-from-catalog.sh
 
 # ── Test artifacts (runtime output, not the test scripts) ────
 test-projects/
