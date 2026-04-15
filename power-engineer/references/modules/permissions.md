@@ -136,7 +136,12 @@ Merge into the existing settings.json a `hooks` entry:
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [".claude/hooks/allow-skills-install.sh"]
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/allow-skills-install.sh"
+          }
+        ]
       }
     ]
   }
@@ -144,7 +149,8 @@ Merge into the existing settings.json a `hooks` entry:
 ```
 
 If a `hooks.PreToolUse` array already exists, append the entry. If a Bash
-matcher already exists, append the hook path to its `hooks` array.
+matcher already exists, append a `{type, command}` object (not a bare
+string path) to its `hooks` array.
 
 ---
 
