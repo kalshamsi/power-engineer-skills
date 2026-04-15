@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # Validates install commands across catalog files.
 # Accepts three forms:
-#   1. npx skills add <owner>/<repo> --skill <name> -y     (bare — pinned at runtime)
+#   1a. npx skills add <owner>/<repo> --skill <name> -y   (single skill — pinned at runtime)
+#   1b. npx skills add <owner>/<repo> --all -y            (bulk install all skills in repo)
 #   2. /plugin install <name>@<marketplace>
 #   3. /plugin marketplace add <owner>/<repo>
+# --skill and --all are mutually exclusive by CLI design.
 # Rejects:
 #   - npx skills@<anything> add ...        (version must NOT be hardcoded in catalog)
 #   - npx skills add ... --global          (global installs forbidden)
-#   - missing -y or --skill flags on npx form
+#   - missing -y / --yes flag on npx form
+#   - --all combined with --skill          (mutually exclusive flags)
 set -uo pipefail
 
 CATALOG="power-engineer/references/catalog"
@@ -41,9 +44,16 @@ while IFS= read -r raw_line; do
     fail "$loc: --global is forbidden — all installs must be local"
   fi
 
-  # Rule C: npx form must have --skill and -y
+  # Rule C: npx form must have -y, and must have either --skill <name>
+  # (install one skill) or --all (install every skill in the repo).
+  # --skill and --all are mutually exclusive by CLI design.
   if echo "$cmd" | grep -qE '^npx skills add'; then
-    echo "$cmd" | grep -q -- '--skill' || fail "$loc: missing --skill flag"
+    if echo "$cmd" | grep -q -- '--all'; then
+      echo "$cmd" | grep -q -- '--skill' \
+        && fail "$loc: --all and --skill are mutually exclusive"
+    else
+      echo "$cmd" | grep -q -- '--skill' || fail "$loc: missing --skill or --all flag"
+    fi
     echo "$cmd" | grep -qE '(-y|--yes)\b' || fail "$loc: missing -y / --yes flag"
   fi
 
