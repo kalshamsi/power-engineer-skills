@@ -1,0 +1,110 @@
+# Power Engineer Scanner — detection rules
+# Source of truth for language/framework/SDK/infra detection.
+# Consumed by: scanner.md (via reference) AND tests/lint/scanner-rules.sh
+#
+# Schema:
+#   language:    file-markers + package-dependency checks → language
+#   framework:   package-dependency / config-file checks → framework
+#   sdk:         package-dependency checks → SDK list
+#   infra:       file-marker checks → infra flags
+#   cloud_db:    package-dependency checks → cloud/database list
+#   monorepo:    file-marker checks → bool
+
+language:
+  - name: typescript
+    when_any:
+      - file_exists: tsconfig.json
+      - package_json_has_dep: typescript
+  - name: python
+    when_any:
+      - file_exists: pyproject.toml
+      - file_exists: requirements.txt
+      - file_exists: setup.py
+
+framework:
+  - name: next.js
+    when_any:
+      - file_glob: next.config.*
+      - package_json_has_dep: next
+  - name: nuxt
+    when_any:
+      - file_glob: nuxt.config.*
+      - package_json_has_dep: nuxt
+  - name: vue
+    when_all:
+      - package_json_has_dep: vue
+    unless_any:
+      - package_json_has_dep: nuxt
+  - name: react
+    when_all:
+      - package_json_has_dep: react
+    unless_any:
+      - package_json_has_dep: next
+      - package_json_has_dep: expo
+  - name: expo
+    when_any:
+      - file_exists: app.json
+      - package_json_has_dep: expo
+  - name: fastapi
+    when_any:
+      - python_dep: fastapi
+  - name: flask
+    when_any:
+      - python_dep: flask
+  - name: django
+    when_any:
+      - python_dep: django
+  - name: swiftui
+    when_any:
+      - file_glob: "*.xcodeproj"
+      - file_exists: Package.swift
+
+sdk:
+  - name: anthropic-ts
+    when_any:
+      - package_json_has_dep: "@anthropic-ai/sdk"
+  - name: vercel-ai
+    when_any:
+      - package_json_has_dep: ai
+  - name: anthropic-python
+    when_any:
+      - python_dep: anthropic
+
+infra:
+  has_docker:
+    when_any:
+      - file_exists: Dockerfile
+      - file_exists: docker-compose.yml
+      - file_exists: docker-compose.yaml
+  has_terraform:
+    when_any:
+      - file_glob: "*.tf"
+      - dir_exists: terraform
+  has_ci_cd:
+    when_any:
+      - dir_exists: .github/workflows
+  has_tailwind:
+    when_any:
+      - file_glob: tailwind.config.*
+      - package_json_has_dep: tailwindcss
+
+cloud_db:
+  - name: supabase
+    when_any:
+      - package_json_has_dep: "@supabase/supabase-js"
+      - package_json_has_dep: "@supabase/ssr"
+  - name: neon
+    when_any:
+      - package_json_has_dep: "@neondatabase/serverless"
+  - name: azure
+    when_any:
+      - package_json_has_dep_prefix: "@azure/"
+
+monorepo:
+  when_any:
+    - dir_exists: apps
+    - dir_exists: packages
+    - dir_exists: services
+    - file_exists: pnpm-workspace.yaml
+    - file_exists: turbo.json
+    - file_exists: lerna.json
