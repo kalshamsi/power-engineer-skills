@@ -71,7 +71,8 @@ Write `.power-engineer/state.json`:
   },
   "preferences": {
     "security_level": "standard",
-    "auto_update": true
+    "auto_update": true,
+    "skills_cli_version": "1.2.3"
   }
 
 }
