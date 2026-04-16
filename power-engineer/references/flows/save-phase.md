@@ -1,6 +1,6 @@
 # Save-Phase Flow
 
-Record an explicit phase-level memory checkpoint for the current project. This is Tier 3 of the Power Engineer 3-tier memory architecture — the deliberate, user-driven ceremony that sits alongside the automatic `SessionEnd` hook (Tier 1) and `PreCompact` hook (Tier 2). Use it at meaningful milestones: end of an implementation phase, a user-approved checkpoint, before a long pause, or after a risky task completes.
+Record an explicit phase-level memory checkpoint for the current project. This is Tier 3 (explicit) of the Power Engineer 3-tier memory architecture — the deliberate, user-driven ceremony that sits alongside CLAUDE.md proactive memory rules (Tier 1: reliability), the automatic `SessionEnd` hook (Tier 2: automation), and the `PreCompact` hook (Tier 3 supplement: context-crunch safety net). Use it at meaningful milestones: end of an implementation phase, a user-approved checkpoint, before a long pause, or after a risky task completes.
 
 ## When to use
 
@@ -257,11 +257,12 @@ No step blocks on a failure other than a user-requested "Cancel" or "Abort" — 
 
 ## Relationship to other tiers
 
-Save-phase (Tier 3) is the deliberate counterpart to the two automatic tiers registered in `.claude/settings.json` via the configurator:
+Save-phase (Tier 3: explicit) is the deliberate, user-initiated ceremony that complements the always-on reliability tier and the two automatic hook tiers registered in `.claude/settings.json` via the configurator:
 
-- **Tier 1 — `SessionEnd` hook.** `scripts/hooks/session-end-handoff.sh` fires automatically at session end and writes a raw handoff file (todos, recent commits, modified files). That file is unstructured and NOT indexed in MEMORY.md.
-- **Tier 2 — `PreCompact` hook.** `scripts/hooks/pre-compact-snapshot.sh` fires automatically before Claude Code compacts context and writes a pre-compaction snapshot. Also unstructured, not indexed.
-- **Tier 3 — `/power-engineer save-phase`.** This flow. Structured, curated, indexed. User decides when it runs. Produces the phase-memory files that future sessions consult as authoritative.
+- **Tier 1 (reliability) — CLAUDE.md proactive memory rules.** Always runs in Claude's context; no hook dependency. This is the primary reliability guarantee — if every hook and ceremony fails, Tier 1 still captures memory-worthy information via Claude's own writes to `MEMORY.md`.
+- **Tier 2 (automation) — `SessionEnd` hook.** `scripts/hooks/session-end-handoff.sh` fires automatically at session end and writes a raw handoff file (todos, recent commits, modified files). That file is unstructured and NOT indexed in MEMORY.md. Best-effort — does not fire on `/exit` or `/clear`.
+- **Tier 3 (explicit) — `/power-engineer save-phase`.** This flow. Structured, curated, indexed. User decides when it runs. Produces the phase-memory files that future sessions consult as authoritative.
+- **Tier 3 supplement — `PreCompact` hook.** `scripts/hooks/pre-compact-snapshot.sh` fires automatically before Claude Code compacts context and writes a pre-compaction snapshot. Also unstructured, not indexed. Context-crunch safety net; never blocks compaction.
 
 For the full architecture, see `power-engineer/references/modules/configurator.md` (Memory fallback contracts section) and the per-hook research doc at `docs/superpowers/plans/v1.4.0-hooks-research.md`.
 
