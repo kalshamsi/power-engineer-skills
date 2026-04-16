@@ -111,7 +111,7 @@ INPUT=$(cat)
 # Input shape: {"tool_name":"Bash","tool_input":{"command":"..."}}
 COMMAND=$(echo "$INPUT" | sed -n 's/.*"command"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)
 
-if echo "$COMMAND" | grep -qE '^npx skills@latest '; then
+if echo "$COMMAND" | grep -qE '^npx skills(@[a-zA-Z0-9._-]+)? '; then
   echo '{"decision":"allow"}'
 elif echo "$COMMAND" | grep -q '^mkdir -p \.power-engineer'; then
   echo '{"decision":"allow"}'
@@ -136,7 +136,12 @@ Merge into the existing settings.json a `hooks` entry:
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [".claude/hooks/allow-skills-install.sh"]
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/allow-skills-install.sh"
+          }
+        ]
       }
     ]
   }
@@ -144,7 +149,8 @@ Merge into the existing settings.json a `hooks` entry:
 ```
 
 If a `hooks.PreToolUse` array already exists, append the entry. If a Bash
-matcher already exists, append the hook path to its `hooks` array.
+matcher already exists, append a `{type, command}` object (not a bare
+string path) to its `hooks` array.
 
 ---
 

@@ -5,10 +5,12 @@
     Scan. Interview. Install. Configure. Done.
   </p>
   <p align="center">
-    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.2.0"><img src="https://img.shields.io/badge/version-1.2.0-blue" alt="Version 1.2.0"></a>
+    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.3.0"><img src="https://img.shields.io/badge/version-1.3.0-blue" alt="Version 1.3.0"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
-    <img src="https://img.shields.io/badge/skills-238-orange" alt="238 Skills">
+    <img src="https://img.shields.io/badge/skills-224-orange" alt="224 Skills">
     <img src="https://img.shields.io/badge/tests-312%20passing-brightgreen" alt="312 Tests Passing">
+    <img src="https://github.com/kalshamsi/power-engineer-skills/actions/workflows/ci.yml/badge.svg" alt="CI">
+    <img src="https://img.shields.io/badge/fixtures-5%20scanner--verified-blue" alt="Fixtures">
   </p>
 </p>
 
@@ -54,7 +56,7 @@ Scan codebase → Adaptive interview → Resolve skills → Install → Configur
 4. **Configures your project** — generates CLAUDE.md, state directory, skill patching with project context
 5. **Tracks drift** — on re-run, detects changes to your stack and recommends new skills
 
-### Quality-of-Life features (v1.2.0)
+### Quality-of-Life features (v1.3.0)
 
 | Feature | What it does |
 |---------|-------------|
@@ -70,7 +72,7 @@ Scan codebase → Adaptive interview → Resolve skills → Install → Configur
 
 Skills are reusable instruction sets that extend what Claude can do inside your project. A `test-driven-development` skill teaches Claude TDD. A `systematic-debugging` skill gives it structured root-cause analysis. Skills activate by name (`/skill-name`) or automatically when Claude detects the right context.
 
-**Power Engineer curates 238 of them** across 16 catalog files and installs exactly the ones your project needs.
+**Power Engineer curates 224 of them** across 16 catalog files and installs exactly the ones your project needs.
 
 ---
 
@@ -99,7 +101,7 @@ All commands are prefixed with `power engineer` in chat (e.g., `power engineer f
 
 ## Catalog
 
-238 skills across 16 catalog files. Browse at [`power-engineer/references/catalog/`](./power-engineer/references/catalog/) or start with [`INDEX.md`](./power-engineer/references/catalog/INDEX.md).
+224 skills across 16 catalog files. Browse at [`power-engineer/references/catalog/`](./power-engineer/references/catalog/) or start with [`INDEX.md`](./power-engineer/references/catalog/INDEX.md).
 
 | Category | What's included |
 |----------|----------------|
@@ -217,6 +219,28 @@ Curated skill collections that install via specialized methods. Power Engineer p
 | **Designer Skills** | `/plugin marketplace add Owl-Listener/designer-skills` | 63 skills + 27 commands across 8 design disciplines |
 | **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all` | Text/sketch → high-fidelity UI → React/Tailwind code |
 | **Pencil** | Built-in (VS Code extension) | Native `.pen` design file editor |
+
+---
+
+## Testing
+
+Power Engineer has a two-layer testing story:
+
+1. **Lint (CI, every PR)**: `tests/lint/` — catalog integrity, install
+   syntax, doc structure, URL validation, scanner-rules verification.
+   Runs on every pull request.
+2. **Fixtures (CI + manual)**: `tests/fixtures/` — five project archetypes
+   (Next.js+Supabase, Python+FastAPI, monorepo, blank, React Native+Expo).
+   Scanner rules run automatically against each fixture in CI.
+
+Questionnaire + resolver behavior is tested manually — see
+`tests/README.md#known-coverage-gaps`.
+
+Run the full lint suite locally:
+
+```bash
+bash tests/run-all.sh
+```
 
 ---
 

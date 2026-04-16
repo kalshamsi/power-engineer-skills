@@ -8,7 +8,28 @@ skills are installed immediately via `npx skills@latest add`.
 1. **Never use `--global`** -- all skills are installed locally to the project
 2. **Always use `--skill` flag** -- never slash syntax for skill names
 3. **Always use `-y` flag** -- non-interactive installation
-4. **Continue on failure** -- if one skill fails, log it and continue with the rest
+4. **Always inject the `.skills-cli-version` pin at runtime** -- see Version Pin below
+5. **Continue on failure** -- if one skill fails, log it and continue with the rest
+
+## Version Pin
+
+Power Engineer pins the `skills` CLI version for reproducibility. Before
+running ANY install command:
+
+1. Read `power-engineer/.skills-cli-version` (single line, e.g. `1.2.3`)
+2. For every catalog command `npx skills add ...`, substitute
+   `npx skills add` → `npx skills@<version> add` using the pin value
+3. If the pin file is missing, fall back to `npx skills@latest add` and
+   warn the user via AskUserQuestion to regenerate state
+
+**Example:**
+
+| Catalog command (stored bare) | Runtime command (injected) |
+|-------------------------------|----------------------------|
+| `npx skills add obra/superpowers --skill brainstorming -y` | `npx skills@1.2.3 add obra/superpowers --skill brainstorming -y` |
+
+Rationale: a single `.skills-cli-version` file is the source of truth.
+Bumping the CLI is one edit, not 238 catalog rewrites.
 
 ## Installation process
 
