@@ -260,9 +260,9 @@ No step blocks on a failure other than a user-requested "Cancel" or "Abort" — 
 Save-phase (Tier 3: explicit) is the deliberate, user-initiated ceremony that complements the always-on reliability tier and the two automatic hook tiers registered in `.claude/settings.json` via the configurator:
 
 - **Tier 1 (reliability) — CLAUDE.md proactive memory rules.** Always runs in Claude's context; no hook dependency. This is the primary reliability guarantee — if every hook and ceremony fails, Tier 1 still captures memory-worthy information via Claude's own writes to `MEMORY.md`.
-- **Tier 2 (automation) — `SessionEnd` hook.** `scripts/hooks/session-end-handoff.sh` fires automatically at session end and writes a raw handoff file (todos, recent commits, modified files). That file is unstructured and NOT indexed in MEMORY.md. Best-effort — does not fire on `/exit` or `/clear`.
+- **Tier 2 (automation) — `SessionEnd` hook.** `power-engineer/scripts/hooks/session-end-handoff.sh` fires automatically at session end and writes a raw handoff file (todos, recent commits, modified files). That file is unstructured and NOT indexed in MEMORY.md. Best-effort — does not fire on `/exit` or `/clear`.
 - **Tier 3 (explicit) — `/power-engineer save-phase`.** This flow. Structured, curated, indexed. User decides when it runs. Produces the phase-memory files that future sessions consult as authoritative.
-- **Tier 3 supplement — `PreCompact` hook.** `scripts/hooks/pre-compact-snapshot.sh` fires automatically before Claude Code compacts context and writes a pre-compaction snapshot. Also unstructured, not indexed. Context-crunch safety net; never blocks compaction.
+- **Tier 3 supplement — `PreCompact` hook.** `power-engineer/scripts/hooks/pre-compact-snapshot.sh` fires automatically before Claude Code compacts context and writes a pre-compaction snapshot. Also unstructured, not indexed. Context-crunch safety net; never blocks compaction.
 
 For the full architecture, see `power-engineer/references/modules/configurator.md` (Memory fallback contracts section) and the per-hook research doc at `docs/superpowers/plans/v1.4.0-hooks-research.md`.
 
