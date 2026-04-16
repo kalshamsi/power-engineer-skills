@@ -10,7 +10,8 @@
 # ── Claude Code / skills runtime ─────────────────────────────
 CLAUDE.md
 skills-lock.json
-.claude/
+.claude/*
+!.claude/settings.json
 skills/
 
 # ── Power Engineer state (generated per-project) ────────────
