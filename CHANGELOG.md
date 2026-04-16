@@ -4,6 +4,11 @@ All notable changes to Power Engineer are documented in this file.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.3.1] — 2026-04-16
+
+### Fixed
+- Removed stale `tests-312 passing` badge from README header. v1.3.0's CHANGELOG "Removed" section claimed this was dropped, but Task 9.3 only added new badges without removing the old one. The CI status badge (auto-updated from GitHub Actions) shows live test state; the static count badge was misleading.
+
 ## [1.3.0] — 2026-04-16
 
 ### Added
