@@ -22,6 +22,8 @@ docs/internal/
 
 # ── Local working directories ────────────────────────────────
 plans/
+docs/superpowers/prompts/
+docs/superpowers/specs/
 # Ignore ad-hoc scripts by default, but allow committed utility scripts
 # to be explicitly re-included below.
 scripts/*
