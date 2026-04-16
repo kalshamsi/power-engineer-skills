@@ -1,6 +1,12 @@
 # ── System ───────────────────────────────────────────────────
 .DS_Store
 
+# ── Secrets (NEVER commit) ───────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.sample
+
 # ── Claude Code / skills runtime ─────────────────────────────
 CLAUDE.md
 skills-lock.json
