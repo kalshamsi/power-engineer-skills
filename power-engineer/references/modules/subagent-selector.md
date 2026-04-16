@@ -55,3 +55,16 @@ The following degradation rules apply when this module or `state.json` is unavai
 - **Auditing a hook-surface task (audit, high-risk, single)** → Opus
 - **Fan-out of 5 parallel catalog-row adds (mechanical, low-risk, parallel)** → Sonnet ×5 parallel
 - **Remediating a dual-auditor ISSUES FOUND (remediation, high-risk, single)** → Opus
+
+## How the orchestrator reads this
+
+Before dispatching ANY subagent, the orchestrator:
+
+1. Reads `.power-engineer/state.json` to get `preferences.subagent_model_mode`.
+2. Branches on the value:
+   - `"selector"` → consults the decision table above with the task's (profile, risk, parallelism) tuple
+   - `"force-opus"` | `"force-sonnet"` | `"force-haiku"` → uses that model for every dispatch; ignores the table
+   - `"none"` → no guidance; orchestrator defaults to Opus for safety
+3. Records the chosen model + rationale in the subagent dispatch prompt so downstream review can audit model-selection decisions.
+
+If `state.json` is unreadable or missing the field, defaults to `"selector"`. If this module file is unreadable, defaults to Opus (safest).
