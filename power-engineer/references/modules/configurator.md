@@ -330,9 +330,33 @@ If the user selects "Yes", append to `.gitignore`:
 .power-engineer/
 ```
 
-## Step 5: Inject post-compaction hook
+## Step 5: Inject lifecycle hooks
 
-Inject a `SessionStart` hook into `.claude/settings.json` that fires after `/compact` completes to restore project context. Use a **read-merge-write** strategy to preserve existing settings.
+Inject Claude Code lifecycle hooks into `.claude/settings.json` using a **read-merge-write** strategy so existing settings are preserved. The configurator registers two hook events:
+
+1. **`SessionStart`** with matcher `"compact"` — restores project context after `/compact` completes.
+2. **`SessionEnd`** (no matcher) — automatically captures a session handoff summary as part of Power Engineer v1.4.0's 3-tier memory architecture (Tier 2: automation).
+
+Every registration follows the nested schema quoted below from the current official docs (see `docs/superpowers/plans/v1.4.0-hooks-research.md` for the verified shape and source URLs):
+
+```json
+{
+  "hooks": {
+    "EventName": [
+      {
+        "matcher": "string|pattern|* (optional)",
+        "hooks": [
+          { "type": "command", "command": "path/to/script.sh" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The outer `hooks` map keys event names to arrays of **matcher-group objects**. Each matcher-group has a `matcher` string (optional — omit or use `""`/`"*"` to match all) and a `hooks` array of handler objects with `type` + `command`. Flat shapes (`{type, command}` directly in the event array) are not documented and were the source of the v1.3.0 regression.
+
+### SessionStart hook — post-compaction context restore
 
 **Why `SessionStart`, not `PostToolUse`:** `PostToolUse` matchers filter by tool name (Bash, Edit, Write, etc.) — `"compact"` is not a tool and would never match. Compaction restarts the session, so `SessionStart` with matcher `"compact"` (one of the valid `source` values: `startup`, `resume`, `clear`, `compact`) is the correct event.
 
@@ -367,6 +391,48 @@ Each entry in the `SessionStart` array requires a `matcher` string (matching the
 ### On re-run
 
 Same process — the read-merge-write strategy is idempotent. If the hook already exists, its command is updated to the latest version.
+
+### SessionEnd hook — automatic session handoff
+
+Register a `SessionEnd` hook that invokes `scripts/hooks/session-end-handoff.sh` to automatically capture a session handoff summary (git branch, last 5 commits, modified files, placeholder for next steps) to `.power-engineer/session-handoff-<UTC-timestamp>.md`. This is **Tier 2** of Power Engineer v1.4.0's 3-tier memory architecture:
+
+- **Tier 1** (reliability): CLAUDE.md proactive memory rules — always runs, does not depend on hooks.
+- **Tier 2** (automation): this SessionEnd hook — best-effort, fires when Claude Code's SessionEnd event triggers.
+- **Tier 3** (explicit): `/power-engineer save-phase` flow — user-initiated checkpoint.
+
+**Best-effort semantics (per `docs/superpowers/plans/v1.4.0-hooks-research.md`):** SessionEnd was introduced in Claude Code v1.0.85 but is known to **not fire on `/exit`** (GitHub issue [#17885](https://github.com/anthropics/claude-code/issues/17885), closed as "not planned") and **not fire on `/clear`** (issue [#6428](https://github.com/anthropics/claude-code/issues/6428), open with repro) despite the docs listing `"clear"` as a valid reason value. Treat SessionEnd as advisory; Tier 1 remains the primary reliability guarantee.
+
+**Script location:** The hook script ships as a standalone file at `scripts/hooks/session-end-handoff.sh` in the `power-engineer-skills` repo (rather than as a heredoc inside this configurator module). Standalone scripts enable ShellCheck coverage (wired into CI in Phase 7 Task 7.3) and unit-testability. At install time, the configurator copies the script into the user's project at `.claude/hooks/session-end-handoff.sh` and ensures `chmod +x`; the registration `command` field points at the installed path. For the repo's own dogfood config (Phase 2 Task 2.7), the command may reference the in-repo path directly.
+
+**Matcher choice:** The `matcher` field is **omitted** so the hook fires on every SessionEnd reason (`"clear"`, `"resume"`, `"logout"`, `"prompt_input_exit"`, `"bypass_permissions_disabled"`, `"other"`). The handoff script's job is to checkpoint the session regardless of exit path — filtering by reason would defeat the purpose. Research doc: "Omit the `matcher` field to catch all SessionEnd reasons."
+
+**Registration shape** (nested `{matcher, hooks:[{type, command}]}` schema confirmed by research against `code.claude.com/docs/en/hooks`):
+
+```json
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/scripts/hooks/session-end-handoff.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Using `$CLAUDE_PROJECT_DIR` (populated by Claude Code at hook invocation) makes the path portable. The 60-second timeout is well under the 600s default and ample for a handoff write.
+
+**Fallback contract:** If the hook errors on invocation (non-zero exit from `mkdir -p`, write failure, missing permissions), the script routes diagnostics to `.power-engineer/memory-errors.log` with an ISO-8601 UTC timestamp, **then exits 0 anyway**. The SessionEnd event must never block session termination. Memory writes continue via the CLAUDE.md auto-memory rules (Tier 1) without interruption, and the user can still run `/power-engineer save-phase` (Tier 3) to capture a handoff explicitly.
+
+### On re-run (SessionEnd)
+
+Same read-merge-write pattern — if a `SessionEnd` entry already exists, update its inner `hooks` array to the latest version; otherwise append. Never replace the whole `settings.json`.
 
 ## Step 6: Generate cheatsheet
 
@@ -488,7 +554,7 @@ Project configured!
   Skills patched:      [N] skills received project context
   Brand file:          [created | skipped (no brand info)]
   Cheatsheet:          .power-engineer/cheatsheet.md
-  Compaction hook:     .claude/settings.json (SessionStart hook injected)
+  Lifecycle hooks:     .claude/settings.json (SessionStart + SessionEnd hooks injected)
   Cross-tool configs:  [list of generated files, or "skipped (no cross-tool usage)"]
   Handoff template:    .power-engineer/handoff-template.md
 
