@@ -72,7 +72,8 @@ Write `.power-engineer/state.json`:
   "preferences": {
     "security_level": "standard",
     "auto_update": true,
-    "skills_cli_version": "1.2.3"
+    "skills_cli_version": "1.2.3",
+    "subagent_model_mode": "selector"
   }
 
 }
@@ -91,6 +92,13 @@ Map the Q12 security needs answer to a security level preference:
 | Custom selection | `"custom"` |
 
 If Q12 was not asked (skipped), default to `"standard"`.
+
+**`subagent_model_mode`** — Policy governing how the orchestrator selects models when dispatching subagents.
+
+- Allowed values: `"selector"` (default) · `"force-opus"` · `"force-sonnet"` · `"force-haiku"` · `"none"`
+- Set at project instantiation via Q14 (see `questionnaire.md`).
+- Editable via `/power-engineer configure`.
+- Consumed by `subagent-selector.md` fallback contract: missing or unreadable → orchestrator defaults to Opus (safe).
 
 ### brand.md
 
