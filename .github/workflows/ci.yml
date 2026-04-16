@@ -52,3 +52,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash tests/lint/url-validation.sh
+
+  badge-sync:
+    name: Badge sync check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify skill count is in sync
+        run: |
+          bash scripts/update-skill-count.sh
+          git diff --exit-code README.md power-engineer/references/catalog/INDEX.md \
+            || { echo "✗ README badge / INDEX total out of sync with catalog"; exit 1; }
