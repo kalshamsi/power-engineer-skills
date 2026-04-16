@@ -332,10 +332,11 @@ If the user selects "Yes", append to `.gitignore`:
 
 ## Step 5: Inject lifecycle hooks
 
-Inject Claude Code lifecycle hooks into `.claude/settings.json` using a **read-merge-write** strategy so existing settings are preserved. The configurator registers two hook events:
+Inject Claude Code lifecycle hooks into `.claude/settings.json` using a **read-merge-write** strategy so existing settings are preserved. The configurator registers three hook events:
 
 1. **`SessionStart`** with matcher `"compact"` — restores project context after `/compact` completes.
 2. **`SessionEnd`** (no matcher) — automatically captures a session handoff summary as part of Power Engineer v1.4.0's 3-tier memory architecture (Tier 2: automation).
+3. **`PreCompact`** (no matcher) — captures a pre-compact snapshot of session state immediately before compaction runs (Tier 3 supplement — context-crunch safety net).
 
 Every registration follows the nested schema quoted below from the current official docs (see `docs/superpowers/plans/v1.4.0-hooks-research.md` for the verified shape and source URLs):
 
@@ -433,6 +434,51 @@ Using `$CLAUDE_PROJECT_DIR` (populated by Claude Code at hook invocation) makes 
 ### On re-run (SessionEnd)
 
 Same read-merge-write pattern — if a `SessionEnd` entry already exists, update its inner `hooks` array to the latest version; otherwise append. Never replace the whole `settings.json`.
+
+### PreCompact hook — pre-compaction state snapshot
+
+Register a `PreCompact` hook that invokes `scripts/hooks/pre-compact-snapshot.sh` to capture a pre-compact snapshot of session state — timestamp (ISO-8601 UTC), current branch, last 10 commits, first 30 modified files from `git status --porcelain`, and an empty "Post-compact Notes" section for the user to fill in manually — written to `.power-engineer/pre-compact-<UTC-timestamp>.md`. The snapshot gives the user a reliable reference to pre-compact project state so they can restore context on post-compact resume.
+
+**Relationship to the 3-tier memory architecture:** PreCompact is a **Tier 3 SUPPLEMENT**, not a replacement for SessionEnd (Tier 2) or the `/power-engineer save-phase` ceremony (Tier 3). It is the context-crunch safety net that fires *just before* compaction summarizes the conversation — complementing (not superseding) the other tiers with a cheap, always-on snapshot:
+
+- **Tier 1** (reliability): CLAUDE.md proactive memory rules — always runs, does not depend on hooks.
+- **Tier 2** (automation): SessionEnd hook — session-handoff on exit.
+- **Tier 3** (explicit): `/power-engineer save-phase` flow — user-initiated checkpoint.
+- **Tier 3 supplement**: this PreCompact hook — pre-compaction snapshot on compact.
+
+**Research doc citation:** See `docs/superpowers/plans/v1.4.0-hooks-research.md` (PreCompact subsection) for the verified schema + firing semantics, sourced from `code.claude.com/docs/en/hooks` (2026-04-16). The research doc documents that **PreCompact hooks can BLOCK compaction by exiting with code 2** (CHANGELOG v2.1.105) or returning `{"decision": "block"}`. Our hook is **advisory only** — we NEVER want to block compaction. The script therefore exits 0 on every path (including ERR-trap and EXIT-trap branches). Blocking auto-compaction in a long session could cause context overflow errors, so we deliberately avoid that capability.
+
+**Matcher choice:** The `matcher` field is **omitted** so the hook fires on both documented `trigger` values — `"manual"` (user explicitly ran `/compact`) and `"auto"` (automatic compaction from the context limit). The snapshot is useful in both cases; filtering would defeat the purpose.
+
+**Registration shape** (nested `{matcher?, hooks:[{type, command, timeout}]}` schema confirmed by research against `code.claude.com/docs/en/hooks`):
+
+```json
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/scripts/hooks/pre-compact-snapshot.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Using `$CLAUDE_PROJECT_DIR` (populated by Claude Code at hook invocation) makes the path portable. The 60-second timeout is well under the 600s default and ample for a snapshot write.
+
+**Script location:** The hook script ships as a standalone file at `scripts/hooks/pre-compact-snapshot.sh` in the `power-engineer-skills` repo (same pattern as the SessionEnd handoff script — heredocs in this module are avoided for ShellCheck coverage + unit-testability). At install time, the configurator copies the script into the user's project at `.claude/hooks/pre-compact-snapshot.sh` and ensures `chmod +x`; the registration `command` field points at the installed path. For the repo's own dogfood config (Phase 2 Task 2.7), the command may reference the in-repo path directly.
+
+**Fallback contract:** If the hook errors on invocation, output is redirected to `.power-engineer/memory-errors.log` with an ISO-8601 UTC timestamp. **The script always exits 0 to ensure compaction is never blocked** — exit code 2 would block per CHANGELOG v2.1.105, and a blocked auto-compact in a long session could overflow context. On snapshot failure, context restoration remains possible via CLAUDE.md auto-memory (Tier 1) and `/power-engineer save-phase` (Tier 3).
+
+### On re-run (PreCompact)
+
+Same read-merge-write pattern — if a `PreCompact` entry already exists, update its inner `hooks` array to the latest version; otherwise append. Never replace the whole `settings.json`.
 
 ## Step 6: Generate cheatsheet
 
@@ -554,7 +600,7 @@ Project configured!
   Skills patched:      [N] skills received project context
   Brand file:          [created | skipped (no brand info)]
   Cheatsheet:          .power-engineer/cheatsheet.md
-  Lifecycle hooks:     .claude/settings.json (SessionStart + SessionEnd hooks injected)
+  Lifecycle hooks:     .claude/settings.json (SessionStart + SessionEnd + PreCompact hooks injected)
   Cross-tool configs:  [list of generated files, or "skipped (no cross-tool usage)"]
   Handoff template:    .power-engineer/handoff-template.md
 
