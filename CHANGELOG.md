@@ -4,11 +4,6 @@ All notable changes to Power Engineer are documented in this file.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [1.3.1] — 2026-04-16
-
-### Fixed
-- Removed stale `tests-312 passing` badge from README header. v1.3.0's CHANGELOG "Removed" section claimed this was dropped, but Task 9.3 only added new badges without removing the old one. The CI status badge (auto-updated from GitHub Actions) shows live test state; the static count badge was misleading.
-
 ## [1.3.0] — 2026-04-16
 
 ### Added
@@ -18,6 +13,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Auto-synced badge**: `scripts/update-skill-count.sh` keeps README + INDEX skill count honest; CI `badge-sync` job enforces it
 - **GitHub Actions CI**: lint on every PR, daily URL check, on-PR targeted URL check for touched catalog files
 - **MIGRATION.md**: upgrade path for v1.2.0 users (see docs/MIGRATION.md)
+- Behavioral validation of scanner module via `claude --bare -p`; manual reproduction via `scripts/run-behavioral-fixtures.sh`; methodology + result in `docs/superpowers/plans/v1.3.0-behavioral-validation.md`
+- `.env` / `.env.*` gitignore patterns to prevent accidental secret commits
 
 ### Changed
 - Catalog install commands: stripped `@latest` from 220 rows across 11 catalog files; version now injected at runtime by installer module (catalog totals 224 rows post-cleanup)
@@ -30,6 +27,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `tests/integration/` (14 scripts) — invariants migrated to `tests/lint/`
 - `tests/run-tests.sh` — replaced by `tests/run-all.sh`
 - Hardcoded `tests-312 passing` badge — superseded by CI status badge
+- Stale `tests-312 passing` badge from README header (superseded by live CI status badge)
 
 ### Migration
 - Existing v1.2.0 users: see `docs/MIGRATION.md`. Your installed skills continue to work. First v1.3.0 run prompts for version-pin acknowledgment.
