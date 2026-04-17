@@ -13,6 +13,7 @@ high-fidelity UI to production React/Tailwind code via Gemini 2.5 Pro.
 | design-md | `npx skills add google-labs-code/stitch-skills --skill design-md -y` | Analyses Stitch projects and generates DESIGN.md files in semantic language. | `/design-md` | When documenting a Stitch project's design system in DESIGN.md |
 | shadcn-ui (stitch) | `npx skills add google-labs-code/stitch-skills --skill shadcn-ui -y` | Stitch-aligned shadcn/ui integration for React applications. | `/shadcn-ui` | When integrating shadcn/ui components into a Stitch-based React app |
 | remotion | `npx skills add google-labs-code/stitch-skills --skill remotion -y` | Generates walkthrough videos from Stitch projects via Remotion. | `/remotion` | When generating video walkthroughs of a Stitch project via Remotion |
+| stitch-design | `npx skills add google-labs-code/stitch-skills --skill stitch-design -y` | Unified entry point for Stitch design work: prompt enhancement, design system synthesis, and high-fidelity screen generation via Stitch MCP. | `/stitch-design` | When the user wants UI design work via Google's Stitch design tooling |
 
 **Install all Stitch skills at once:**
 ```bash
