@@ -11,10 +11,18 @@
 ### What users must do
 <required actions, or "nothing">
 
-### Optional: <upgrade path>
-<optional actions>
+### Optional
+Optional steps users may run to take advantage of new features. If this
+release adds a new hook, slash command, or preference, document the
+command to enable it here. Omit the section body and write "None." if the
+release has no optional follow-ups.
 
-### Rollback to v<OLD.VER>
+### Rollback
+Commands to revert to the previous version. Typically `git revert
+<release-commit>`, `git checkout v<OLD.VER> -- <paths>`, or a per-file
+selective revert. Name the previous version explicitly in this body so
+users grepping for "v<OLD.VER>" find the rollback path.
+
 ```bash
 git revert <release-commit>
 # or
