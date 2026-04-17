@@ -30,4 +30,4 @@
 | Skill | Source | Install | Description | Trigger | When to use |
 |-------|--------|---------|-------------|---------|-------------|
 | firecrawl | firecrawl/cli | `npx skills add firecrawl/cli --skill firecrawl -y` | Web crawl and structure data from any URL for research pipelines and RAG. | `/firecrawl` | When crawling websites to extract structured data for research or RAG |
-| search | tavily-ai/skills | `npx skills add tavily-ai/skills --skill search -y` | Tavily real-time search with structured result extraction for AI-grounded research. | `/search` | When grounding AI responses with real-time web search results |
+| tavily-search | tavily-ai/skills | `npx skills add tavily-ai/skills --skill tavily-search -y` | Search the web with LLM-optimized results for AI-grounded research. | `/tavily-search` | When grounding AI responses with real-time web search results |
