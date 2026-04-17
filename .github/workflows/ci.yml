@@ -63,3 +63,25 @@ jobs:
           bash scripts/update-skill-count.sh
           git diff --exit-code README.md power-engineer/references/catalog/INDEX.md \
             || { echo "✗ README badge / INDEX total out of sync with catalog"; exit 1; }
+
+  catalog-version-sync:
+    name: Catalog version bump check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check .catalog-version bumps when catalog changes
+        run: |
+          CATALOG_CHANGED=$(git diff --name-only origin/main...HEAD -- 'power-engineer/references/catalog/**/*.md' | wc -l | tr -d ' ')
+          VERSION_CHANGED=$(git diff --name-only origin/main...HEAD -- 'power-engineer/.catalog-version' | wc -l | tr -d ' ')
+
+          if [ "$CATALOG_CHANGED" -gt 0 ] && [ "$VERSION_CHANGED" -eq 0 ]; then
+            echo "✗ Catalog files changed but .catalog-version was not bumped."
+            echo "Files changed:"
+            git diff --name-only origin/main...HEAD -- 'power-engineer/references/catalog/**/*.md'
+            exit 1
+          fi
+          echo "✓ catalog-version sync OK"
