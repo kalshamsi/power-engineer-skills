@@ -373,6 +373,8 @@ The outer `hooks` map keys event names to arrays of **matcher-group objects**. E
 
 **NEVER overwrite the entire settings.json.** Only touch the specific hook entry.
 
+**NEVER touch `.claude/settings.local.json`.** That file is user-owned, gitignored, and reserved for personal/per-machine overrides — the configurator must never read, modify, or overwrite it. Only operate on `.claude/settings.json` (the project-tracked, shared config).
+
 ### Hook entry
 
 Each entry in the `SessionStart` array requires a `matcher` string (matching the session source) and a `hooks` array of `{type, command}` objects. This is the Claude Code hooks schema — do NOT put `command` directly on the matcher object.
