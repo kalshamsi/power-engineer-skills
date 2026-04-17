@@ -89,8 +89,10 @@ if ! {
     printf -- '- **Branch:** %s\n' "$branch_name"
     printf -- '- **Project directory:** %s\n\n' "$project_dir"
     printf '## Recent commits (last 5)\n\n'
+    # shellcheck disable=SC2016  # backticks are literal markdown code-fence markers, not command substitution
     printf '```\n%s\n```\n\n' "$recent_commits"
     printf '## Modified files (first 20 from git status)\n\n'
+    # shellcheck disable=SC2016  # backticks are literal markdown code-fence markers, not command substitution
     printf '```\n%s\n```\n\n' "$modified_files"
     printf '## Next steps\n\n'
     printf '<!-- Fill in when reviewing this handoff. What was in progress?\n'
