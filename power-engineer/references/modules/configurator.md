@@ -417,7 +417,7 @@ Register a `SessionEnd` hook that invokes `power-engineer/scripts/hooks/session-
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/power-engineer/scripts/hooks/session-end-handoff.sh",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-end-handoff.sh",
             "timeout": 60
           }
         ]
@@ -426,6 +426,8 @@ Register a `SessionEnd` hook that invokes `power-engineer/scripts/hooks/session-
   }
 }
 ```
+
+**Dogfood variant (this repo only):** The power-engineer-skills repo's own `.claude/settings.json` uses the PRE-COPY path `$CLAUDE_PROJECT_DIR/power-engineer/scripts/hooks/session-end-handoff.sh` (and likewise for PreCompact) because we ARE in the skill's source tree. End-user configure NEVER emits this variant. See this repo's `.claude/settings.json` for the dogfood shape.
 
 Using `$CLAUDE_PROJECT_DIR` (populated by Claude Code at hook invocation) makes the path portable. The 60-second timeout is well under the 600s default and ample for a handoff write.
 
@@ -460,7 +462,7 @@ Register a `PreCompact` hook that invokes `power-engineer/scripts/hooks/pre-comp
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/power-engineer/scripts/hooks/pre-compact-snapshot.sh",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pre-compact-snapshot.sh",
             "timeout": 60
           }
         ]
@@ -469,6 +471,8 @@ Register a `PreCompact` hook that invokes `power-engineer/scripts/hooks/pre-comp
   }
 }
 ```
+
+**Dogfood variant (this repo only):** The power-engineer-skills repo's own `.claude/settings.json` uses the PRE-COPY path `$CLAUDE_PROJECT_DIR/power-engineer/scripts/hooks/pre-compact-snapshot.sh` (and likewise for SessionEnd) because we ARE in the skill's source tree. End-user configure NEVER emits this variant. See this repo's `.claude/settings.json` for the dogfood shape.
 
 Using `$CLAUDE_PROJECT_DIR` (populated by Claude Code at hook invocation) makes the path portable. The 60-second timeout is well under the 600s default and ample for a snapshot write.
 
