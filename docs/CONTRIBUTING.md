@@ -189,6 +189,17 @@ test: add integration test for drift-detector
 - Install command must be verified and include `-y`
 - Update the skill count in `power-engineer/references/catalog/INDEX.md`
 
+### Bumping the catalog version
+
+When a PR changes any `power-engineer/references/catalog/**/*.md` file, it MUST also bump `power-engineer/.catalog-version` (semver). The CI `catalog-version-sync` job enforces this.
+
+Bump rules:
+- **Patch bump (X.Y.Z → X.Y.Z+1)** — adding/removing/renaming skills
+- **Minor bump (X.Y.Z → X.Y+1.0)** — adding new catalog categories (new subdirectory or top-level section)
+- **Major bump (X.Y.Z → X+1.0.0)** — structural schema changes (new required column, changed separator convention)
+
+Document the bump in the CHANGELOG entry under `### Catalog` (see below).
+
 ### Module/flow changes
 
 - Describe what the module does, why the change is needed, and any downstream impact on flows
