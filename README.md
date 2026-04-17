@@ -5,9 +5,9 @@
     Scan. Interview. Install. Configure. Done.
   </p>
   <p align="center">
-    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.3.0"><img src="https://img.shields.io/badge/version-1.3.0-blue" alt="Version 1.3.0"></a>
+    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.4.0"><img src="https://img.shields.io/badge/version-1.4.0-blue" alt="Version 1.4.0"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
-    <img src="https://img.shields.io/badge/skills-224-orange" alt="224 Skills">
+    <img src="https://img.shields.io/badge/skills-231-orange" alt="231 Skills">
     <img src="https://github.com/kalshamsi/power-engineer-skills/actions/workflows/ci.yml/badge.svg" alt="CI">
     <img src="https://img.shields.io/badge/fixtures-5%20scanner--verified-blue" alt="Fixtures">
   </p>
@@ -218,6 +218,42 @@ Curated skill collections that install via specialized methods. Power Engineer p
 | **Designer Skills** | `/plugin marketplace add Owl-Listener/designer-skills` | 63 skills + 27 commands across 8 design disciplines |
 | **Google Stitch** | `npx skills add google-labs-code/stitch-skills --all` | Text/sketch → high-fidelity UI → React/Tailwind code |
 | **Pencil** | Built-in (VS Code extension) | Native `.pen` design file editor |
+
+---
+
+## What's New in v1.4.0
+
+### Catalog versioning
+
+Every catalog change now bumps `power-engineer/.catalog-version` (semver). CI enforces that any PR touching `power-engineer/references/catalog/**` includes a version bump. See [catalog version conventions](docs/CONTRIBUTING.md#bumping-the-catalog-version) for bump rules (patch / minor / major).
+
+Every release entry in `CHANGELOG.md` now includes a `### Catalog` subhead documenting the catalog version, skills added/removed/renamed, and structural changes. See [CHANGELOG `### Catalog` convention](docs/CONTRIBUTING.md#changelog--catalog-subhead) for the required schema.
+
+### Memory architecture (3-tier hooks)
+
+v1.4.0 adds a three-tier memory system so critical context survives across session boundaries and compaction events:
+
+| Hook / Command | When it fires | What it saves |
+|----------------|---------------|---------------|
+| **SessionEnd hook** | Claude Code session ends | Accomplishments, decisions, open tasks, next steps |
+| **PreCompact hook** | Context approaches compaction threshold | Working state snapshot before context is trimmed |
+| `/power-engineer save-phase` | Manual mid-session checkpoint | Current phase progress, files modified, decisions made |
+
+Fallback contracts ensure graceful degradation when hooks are unavailable.
+
+### Subagent selector
+
+A new `subagent-selector` module gives Power Engineer fine-grained control over which model tier is used for each task. Five modes:
+
+| Mode | Behavior |
+|------|----------|
+| `selector` (default) | Auto-selects model tier based on task complexity |
+| `force-opus` | Always use Opus for all subagent dispatches |
+| `force-sonnet` | Always use Sonnet for all subagent dispatches |
+| `force-haiku` | Always use Haiku for all subagent dispatches |
+| `none` | Disable model-tier selection; use Claude Code defaults |
+
+Configure via `power engineer configure` → subagent model mode.
 
 ---
 

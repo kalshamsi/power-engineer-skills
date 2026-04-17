@@ -26,6 +26,8 @@ echo "Catalog skill count: $COUNT"
 # Update README badge
 sed -i.bak -E "s|skills-[0-9]+|skills-${COUNT}|g" README.md
 rm README.md.bak
+sed -i.bak -E "s|alt=\"[0-9]+ Skills\"|alt=\"${COUNT} Skills\"|g" README.md
+rm README.md.bak
 
 # Update INDEX.md total line
 sed -i.bak -E "s|Total skills catalogued: [0-9]+|Total skills catalogued: ${COUNT}|" "$CATALOG/INDEX.md"

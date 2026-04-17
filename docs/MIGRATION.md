@@ -1,5 +1,36 @@
 # Migration Guide
 
+## v1.3.0 → v1.4.0
+
+**TL;DR:** All additive. Your existing skills + state continue to work. Re-run `/power-engineer configure` to enable new hooks and set your subagent-model preference.
+
+### What changed
+1. **Subagent-selector module.** New module under `power-engineer/references/modules/subagent-selector.md` with 3-axis decision table for model selection. Controlled via new `state.json.preferences.subagent_model_mode` (default: `selector`).
+2. **3-tier memory architecture.** New SessionEnd + PreCompact hooks auto-save context at session-end and pre-compaction. New `/power-engineer save-phase` slash command for explicit phase ceremony. All three tiers degrade gracefully on failure.
+3. **`.catalog-version` mechanism.** New file at `power-engineer/.catalog-version`. CI enforces bump when catalog changes.
+4. **CHANGELOG `### Catalog` convention.** Starting from v1.3.0 retroactively, every release entry documents catalog deltas in a structured subhead. External curation workflows consume this as a stable API.
+5. **Release-process framework.** Maintainer-only templates under `docs/superpowers/release-process/`. Not installed with the skill.
+6. **7 new catalog rows + 1 rename.** 6 new `tavily-*` sub-skills + `stitch-design` now individually catalogued; the legacy `search` row (in docs-research.md + data-ml.md) is renamed to `tavily-search` with a corrected install command.
+
+### What users must do
+Nothing required. All changes additive.
+
+### Optional
+Re-run `/power-engineer configure` to register the new SessionEnd + PreCompact hooks + set your `subagent_model_mode` preference:
+
+```bash
+/power-engineer configure
+```
+
+### Rollback
+To roll back to v1.3.0:
+
+```bash
+git revert <v1.4.0-release-commit>
+# or
+git checkout v1.3.0 -- power-engineer/ tests/ docs/CONTRIBUTING.md CHANGELOG.md
+```
+
 ## v1.2.0 → v1.3.0
 
 **TL;DR:** Your installed skills continue to work. First v1.3.0 run shows

@@ -322,6 +322,27 @@ detections before asking. If the user selects "None", no config files are
 generated. The answer is stored in `state.json` under
 `questionnaire_answers.cross_tool_usage`.
 
+### Q14 -- Subagent model mode
+
+```
+question: "When power-engineer dispatches subagents, which model-selection policy should apply by default?"
+header: "Model mode"
+multiSelect: false
+options:
+  - label: "Use selector (Recommended)"
+    description: "Consult the 3-axis decision table (task profile × risk × parallelism) to pick the right model per dispatch. Balances cost and correctness."
+  - label: "Force Opus for all subagents"
+    description: "Maximum reasoning; highest cost. Choose when correctness is paramount and budget isn't a concern."
+  - label: "Force Sonnet for all subagents"
+    description: "Fast and accurate for mechanical work. Choose for cost-efficient tier-2 tasks."
+  - label: "Force Haiku for all subagents"
+    description: "Cheapest tier. Only use if tasks are simple enough for Haiku to handle reliably."
+  - label: "None — orchestrator picks ad-hoc"
+    description: "No guidance consulted. Orchestrator defaults to Opus for safety but may override per-dispatch."
+```
+
+Always ask; this question is a user preference, not inferred from scan. Maps to `state.json.preferences.subagent_model_mode` enum: `selector` / `force-opus` / `force-sonnet` / `force-haiku` / `none`. Default when skipped: `selector`.
+
 ---
 
 ## Output: SkillPlan

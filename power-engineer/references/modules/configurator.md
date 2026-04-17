@@ -72,7 +72,8 @@ Write `.power-engineer/state.json`:
   "preferences": {
     "security_level": "standard",
     "auto_update": true,
-    "skills_cli_version": "1.2.3"
+    "skills_cli_version": "1.2.3",
+    "subagent_model_mode": "selector"
   }
 
 }
@@ -91,6 +92,13 @@ Map the Q12 security needs answer to a security level preference:
 | Custom selection | `"custom"` |
 
 If Q12 was not asked (skipped), default to `"standard"`.
+
+**`subagent_model_mode`** — Policy governing how the orchestrator selects models when dispatching subagents.
+
+- Allowed values: `"selector"` (default) · `"force-opus"` · `"force-sonnet"` · `"force-haiku"` · `"none"`
+- Set at project instantiation via Q14 (see `questionnaire.md`).
+- Editable via `/power-engineer configure`.
+- Consumed by `subagent-selector.md` fallback contract: missing or unreadable → orchestrator defaults to Opus (safe).
 
 ### brand.md
 
@@ -322,9 +330,34 @@ If the user selects "Yes", append to `.gitignore`:
 .power-engineer/
 ```
 
-## Step 5: Inject post-compaction hook
+## Step 5: Inject lifecycle hooks
 
-Inject a `SessionStart` hook into `.claude/settings.json` that fires after `/compact` completes to restore project context. Use a **read-merge-write** strategy to preserve existing settings.
+Inject Claude Code lifecycle hooks into `.claude/settings.json` using a **read-merge-write** strategy so existing settings are preserved. The configurator registers three hook events:
+
+1. **`SessionStart`** with matcher `"compact"` — restores project context after `/compact` completes.
+2. **`SessionEnd`** (no matcher) — automatically captures a session handoff summary as part of Power Engineer v1.4.0's 3-tier memory architecture (Tier 2: automation).
+3. **`PreCompact`** (no matcher) — captures a pre-compact snapshot of session state immediately before compaction runs (Tier 3 supplement — context-crunch safety net).
+
+Every registration follows the nested schema quoted below from the current official docs (see `docs/superpowers/plans/v1.4.0-hooks-research.md` for the verified shape and source URLs):
+
+```json
+{
+  "hooks": {
+    "EventName": [
+      {
+        "matcher": "string|pattern|* (optional)",
+        "hooks": [
+          { "type": "command", "command": "path/to/script.sh" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The outer `hooks` map keys event names to arrays of **matcher-group objects**. Each matcher-group has a `matcher` string (optional — omit or use `""`/`"*"` to match all) and a `hooks` array of handler objects with `type` + `command`. Flat shapes (`{type, command}` directly in the event array) are not documented and were the source of the v1.3.0 regression.
+
+### SessionStart hook — post-compaction context restore
 
 **Why `SessionStart`, not `PostToolUse`:** `PostToolUse` matchers filter by tool name (Bash, Edit, Write, etc.) — `"compact"` is not a tool and would never match. Compaction restarts the session, so `SessionStart` with matcher `"compact"` (one of the valid `source` values: `startup`, `resume`, `clear`, `compact`) is the correct event.
 
@@ -339,6 +372,8 @@ Inject a `SessionStart` hook into `.claude/settings.json` that fires after `/com
 5. Write back the full settings.json, preserving all existing keys (permissions, env, other hooks)
 
 **NEVER overwrite the entire settings.json.** Only touch the specific hook entry.
+
+**NEVER touch `.claude/settings.local.json`.** That file is user-owned, gitignored, and reserved for personal/per-machine overrides — the configurator must never read, modify, or overwrite it. Only operate on `.claude/settings.json` (the project-tracked, shared config).
 
 ### Hook entry
 
@@ -359,6 +394,97 @@ Each entry in the `SessionStart` array requires a `matcher` string (matching the
 ### On re-run
 
 Same process — the read-merge-write strategy is idempotent. If the hook already exists, its command is updated to the latest version.
+
+### SessionEnd hook — automatic session handoff
+
+Register a `SessionEnd` hook that invokes `power-engineer/scripts/hooks/session-end-handoff.sh` to automatically capture a session handoff summary (git branch, last 5 commits, modified files, placeholder for next steps) to `.power-engineer/session-handoff-<UTC-timestamp>.md`. This is **Tier 2** of Power Engineer v1.4.0's 3-tier memory architecture:
+
+- **Tier 1** (reliability): CLAUDE.md proactive memory rules — always runs, does not depend on hooks.
+- **Tier 2** (automation): this SessionEnd hook — best-effort, fires when Claude Code's SessionEnd event triggers.
+- **Tier 3** (explicit): `/power-engineer save-phase` flow — user-initiated checkpoint.
+
+**Best-effort semantics (per `docs/superpowers/plans/v1.4.0-hooks-research.md`):** SessionEnd was introduced in Claude Code v1.0.85 but is known to **not fire on `/exit`** (GitHub issue [#17885](https://github.com/anthropics/claude-code/issues/17885), closed as "not planned") and **not fire on `/clear`** (issue [#6428](https://github.com/anthropics/claude-code/issues/6428), open with repro) despite the docs listing `"clear"` as a valid reason value. Treat SessionEnd as advisory; Tier 1 remains the primary reliability guarantee.
+
+**Script location:** The hook script ships as a standalone file at `power-engineer/scripts/hooks/session-end-handoff.sh` inside the installed skill directory (rather than as a heredoc inside this configurator module). This placement ensures the script is packaged when users install via `npx skills add` (which copies only the `power-engineer/` tree). Standalone scripts enable ShellCheck coverage (wired into CI in Phase 7 Task 7.3) and unit-testability. At install time, the configurator copies the script into the user's project at `.claude/hooks/session-end-handoff.sh` and ensures `chmod +x`; the registration `command` field points at the installed path. For the repo's own dogfood config (Phase 2 Task 2.7), the command may reference the in-repo path directly.
+
+**Matcher choice:** The `matcher` field is **omitted** so the hook fires on every SessionEnd reason (`"clear"`, `"resume"`, `"logout"`, `"prompt_input_exit"`, `"bypass_permissions_disabled"`, `"other"`). The handoff script's job is to checkpoint the session regardless of exit path — filtering by reason would defeat the purpose. Research doc: "Omit the `matcher` field to catch all SessionEnd reasons."
+
+**Registration shape** (nested `{matcher, hooks:[{type, command}]}` schema confirmed by research against `code.claude.com/docs/en/hooks`):
+
+```json
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-end-handoff.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Dogfood variant (this repo only):** The power-engineer-skills repo's own `.claude/settings.json` uses the PRE-COPY path `$CLAUDE_PROJECT_DIR/power-engineer/scripts/hooks/session-end-handoff.sh` (and likewise for PreCompact) because we ARE in the skill's source tree. End-user configure NEVER emits this variant. See this repo's `.claude/settings.json` for the dogfood shape.
+
+Using `$CLAUDE_PROJECT_DIR` (populated by Claude Code at hook invocation) makes the path portable. The 60-second timeout is well under the 600s default and ample for a handoff write.
+
+**Fallback contract:** If the hook errors on invocation (non-zero exit from `mkdir -p`, write failure, missing permissions), the script routes diagnostics to `.power-engineer/memory-errors.log` with an ISO-8601 UTC timestamp, **then exits 0 anyway**. The SessionEnd event must never block session termination. Memory writes continue via the CLAUDE.md auto-memory rules (Tier 1) without interruption, and the user can still run `/power-engineer save-phase` (Tier 3) to capture a handoff explicitly.
+
+### On re-run (SessionEnd)
+
+Same read-merge-write pattern — if a `SessionEnd` entry already exists, update its inner `hooks` array to the latest version; otherwise append. Never replace the whole `settings.json`.
+
+### PreCompact hook — pre-compaction state snapshot
+
+Register a `PreCompact` hook that invokes `power-engineer/scripts/hooks/pre-compact-snapshot.sh` to capture a pre-compact snapshot of session state — timestamp (ISO-8601 UTC), current branch, last 10 commits, first 30 modified files from `git status --porcelain`, and an empty "Post-compact Notes" section for the user to fill in manually — written to `.power-engineer/pre-compact-<UTC-timestamp>.md`. The snapshot gives the user a reliable reference to pre-compact project state so they can restore context on post-compact resume.
+
+**Relationship to the 3-tier memory architecture:** PreCompact is a **Tier 3 SUPPLEMENT**, not a replacement for SessionEnd (Tier 2) or the `/power-engineer save-phase` ceremony (Tier 3). It is the context-crunch safety net that fires *just before* compaction summarizes the conversation — complementing (not superseding) the other tiers with a cheap, always-on snapshot:
+
+- **Tier 1** (reliability): CLAUDE.md proactive memory rules — always runs, does not depend on hooks.
+- **Tier 2** (automation): SessionEnd hook — session-handoff on exit.
+- **Tier 3** (explicit): `/power-engineer save-phase` flow — user-initiated checkpoint.
+- **Tier 3 supplement**: this PreCompact hook — pre-compaction snapshot on compact.
+
+**Research doc citation:** See `docs/superpowers/plans/v1.4.0-hooks-research.md` (PreCompact subsection) for the verified schema + firing semantics, sourced from `code.claude.com/docs/en/hooks` (2026-04-16). The research doc documents that **PreCompact hooks can BLOCK compaction by exiting with code 2** (CHANGELOG v2.1.105) or returning `{"decision": "block"}`. Our hook is **advisory only** — we NEVER want to block compaction. The script therefore exits 0 on every path (including ERR-trap and EXIT-trap branches). Blocking auto-compaction in a long session could cause context overflow errors, so we deliberately avoid that capability.
+
+**Matcher choice:** The `matcher` field is **omitted** so the hook fires on both documented `trigger` values — `"manual"` (user explicitly ran `/compact`) and `"auto"` (automatic compaction from the context limit). The snapshot is useful in both cases; filtering would defeat the purpose.
+
+**Registration shape** (nested `{matcher?, hooks:[{type, command, timeout}]}` schema confirmed by research against `code.claude.com/docs/en/hooks`):
+
+```json
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/pre-compact-snapshot.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Dogfood variant (this repo only):** The power-engineer-skills repo's own `.claude/settings.json` uses the PRE-COPY path `$CLAUDE_PROJECT_DIR/power-engineer/scripts/hooks/pre-compact-snapshot.sh` (and likewise for SessionEnd) because we ARE in the skill's source tree. End-user configure NEVER emits this variant. See this repo's `.claude/settings.json` for the dogfood shape.
+
+Using `$CLAUDE_PROJECT_DIR` (populated by Claude Code at hook invocation) makes the path portable. The 60-second timeout is well under the 600s default and ample for a snapshot write.
+
+**Script location:** The hook script ships as a standalone file at `power-engineer/scripts/hooks/pre-compact-snapshot.sh` inside the installed skill directory (same pattern as the SessionEnd handoff script — heredocs in this module are avoided for ShellCheck coverage + unit-testability). This placement ensures the script is packaged when users install via `npx skills add` (which copies only the `power-engineer/` tree). At install time, the configurator copies the script into the user's project at `.claude/hooks/pre-compact-snapshot.sh` and ensures `chmod +x`; the registration `command` field points at the installed path. For the repo's own dogfood config (Phase 2 Task 2.7), the command may reference the in-repo path directly.
+
+**Fallback contract:** If the hook errors on invocation, output is redirected to `.power-engineer/memory-errors.log` with an ISO-8601 UTC timestamp. **The script always exits 0 to ensure compaction is never blocked** — exit code 2 would block per CHANGELOG v2.1.105, and a blocked auto-compact in a long session could overflow context. On snapshot failure, context restoration remains possible via CLAUDE.md auto-memory (Tier 1) and `/power-engineer save-phase` (Tier 3).
+
+### On re-run (PreCompact)
+
+Same read-merge-write pattern — if a `PreCompact` entry already exists, update its inner `hooks` array to the latest version; otherwise append. Never replace the whole `settings.json`.
 
 ## Step 6: Generate cheatsheet
 
@@ -480,7 +606,7 @@ Project configured!
   Skills patched:      [N] skills received project context
   Brand file:          [created | skipped (no brand info)]
   Cheatsheet:          .power-engineer/cheatsheet.md
-  Compaction hook:     .claude/settings.json (SessionStart hook injected)
+  Lifecycle hooks:     .claude/settings.json (SessionStart + SessionEnd + PreCompact hooks injected)
   Cross-tool configs:  [list of generated files, or "skipped (no cross-tool usage)"]
   Handoff template:    .power-engineer/handoff-template.md
 
@@ -493,3 +619,89 @@ Project configured!
     .power-engineer/agent-performance.json
     .power-engineer/handoff-template.md
 ```
+
+## Memory fallback contracts
+
+Power Engineer v1.4.0 ships a **3-tier memory architecture** spanning Claude's own behavior (CLAUDE.md rules), Claude Code's lifecycle hooks (SessionEnd + PreCompact), and an explicit user ceremony (`/power-engineer save-phase`). No single tier is sufficient on its own: hooks are best-effort (known gaps on `/exit` and `/clear` — see Step 5's SessionEnd subsection for GitHub issue references), explicit ceremonies require user action, and Claude-side rules execute only while a session is alive. This section is the **orchestrator's single-source-of-truth** for what the architecture guarantees, what it gives up on failure, and how to debug when a tier misbehaves. It mirrors the structural pattern established in Phase 1's `subagent-selector.md` Fallback Contract — every failure mode names a concrete degraded-mode behavior and a diagnostic path.
+
+### The three tiers
+
+| Tier | Kind | Mechanism | Writes to | Reliability |
+|------|------|-----------|-----------|-------------|
+| Tier 1 | Reliability | CLAUDE.md proactive memory rules | `~/.claude/projects/<proj-slug>/memory/` via Claude | Runs unconditionally in Claude context; no hook dependency |
+| Tier 2 | Automation | `SessionEnd` hook → `power-engineer/scripts/hooks/session-end-handoff.sh` | `.power-engineer/session-handoff-<UTC-timestamp>.md` | Best-effort — does not fire on `/exit` or `/clear` |
+| Tier 3 | Explicit | `/power-engineer save-phase` flow | `~/.claude/projects/<proj-slug>/memory/project_v<X>_phase<N>.md` + MEMORY.md index | User-initiated; deterministic when invoked |
+| Tier 3 supplement | Automation | `PreCompact` hook → `power-engineer/scripts/hooks/pre-compact-snapshot.sh` | `.power-engineer/pre-compact-<UTC-timestamp>.md` | Best-effort — context-crunch safety net; never blocks compaction |
+
+Tier 1 is the **primary reliability guarantee**. Tiers 2 and 3 (plus the PreCompact supplement) are strictly additive — if every hook and ceremony fails, Tier 1's CLAUDE.md rules still capture memory-worthy information via Claude's own writes to `MEMORY.md`. The configurator NEVER assumes hooks succeed.
+
+### Fallback by failure mode
+
+- **SessionEnd hook fails** (non-zero exit from `mkdir -p`, write failure, script not executable, missing permissions, etc.): the script routes diagnostics to `.power-engineer/memory-errors.log` with an ISO-8601 UTC timestamp, **then exits 0 anyway**. Session termination is NEVER blocked. Tier 1 (CLAUDE.md rules) continues to handle memory writes without interruption, and the user can still invoke `/power-engineer save-phase` (Tier 3) later to capture a handoff explicitly. See Step 5's "SessionEnd hook — automatic session handoff" for the per-hook detail.
+- **PreCompact hook fails**: same log-and-continue pattern. The script **always exits 0** so compaction is never blocked — exit code 2 would block compaction per Claude Code CHANGELOG v2.1.105, and a blocked auto-compact in a long session could overflow context. On snapshot failure, context restoration remains possible via CLAUDE.md auto-memory (Tier 1) and `/power-engineer save-phase` (Tier 3). See Step 5's "PreCompact hook — pre-compaction state snapshot" for the per-hook detail.
+- **`save-phase` flow fails**:
+  - **Memory directory is not writable** → the flow appends the would-have-been-written memory body to `.power-engineer/memory-errors.log` (creating it if needed) and uses `AskUserQuestion` to offer Retry / Save-to-clipboard / Abort. No silent data loss.
+  - **MEMORY.md index is at/over the 200-line cap** → `AskUserQuestion` prompts the user to Prune / Skip index update / Accept. The memory file body is written regardless.
+  - **Detached HEAD, no commits yet, or `git` unavailable** → the flow still writes the memory file and index entry with a note in the body. The checkpoint-commit step is skipped silently.
+  - **`AskUserQuestion` unavailable** (degraded harness) → flow writes the file with minimal inferred content, populates the body with a "needs user review" marker, and reports degraded-mode completion.
+- **All tiers fail simultaneously** (edge case — e.g., hooks unexecutable, save-phase never invoked, memory dir permissions broken): Claude continues operating per raw CLAUDE.md rules; no structured hand-off is produced. The user should inspect `.power-engineer/memory-errors.log` for diagnostics and re-run the configurator to repair hook registration and directory permissions.
+
+### The `.power-engineer/memory-errors.log` file
+
+- **Purpose**: append-only diagnostic log for all memory-tier failures — SessionEnd hook errors, PreCompact hook errors, and `save-phase` write failures all funnel into this single file so the user has one place to look.
+- **Format**: one entry per failure, prefixed by an ISO-8601 UTC timestamp and the offending script or flow name:
+  ```
+  [2026-04-16T18:42:07Z] session-end-handoff.sh: mkdir -p .power-engineer failed (EACCES)
+  [2026-04-16T18:43:12Z] pre-compact-snapshot.sh: git status failed (exit 128)
+  [2026-04-16T18:45:01Z] save-phase: memory directory ~/.claude/projects/<slug>/memory not writable; body appended below
+  ```
+- **Location**: always `$CLAUDE_PROJECT_DIR/.power-engineer/memory-errors.log`. The `$CLAUDE_PROJECT_DIR` variable is populated by Claude Code at hook invocation; flows running in-session resolve it from the project root.
+- **Rotation**: NOT automatic in v1.4.0 — the file is unbounded and append-only. Users can `rm` or truncate it at any time without breaking the system (the log is diagnostic, not a source of truth). A size-based rotation policy is out of scope for v1.4.0.
+- **Tail in real time** while debugging a hook or flow:
+  ```bash
+  tail -f .power-engineer/memory-errors.log
+  ```
+
+### Debugging checklist
+
+When any memory tier misbehaves, walk this checklist in order:
+
+1. **Confirm hooks are registered.** Inspect `.claude/settings.json`:
+   ```bash
+   cat .claude/settings.json | jq '.hooks'   # if jq is available
+   /usr/bin/grep -E 'SessionEnd|PreCompact' .claude/settings.json
+   ```
+   Both `SessionEnd` and `PreCompact` should appear with the nested `{matcher?, hooks:[{type, command, timeout}]}` schema documented in Step 5.
+2. **Confirm hook scripts exist and are executable.** The configurator installs them into `.claude/hooks/` at install time; the in-skill originals live under `power-engineer/scripts/hooks/`:
+   ```bash
+   ls -la .claude/hooks/ power-engineer/scripts/hooks/
+   test -x power-engineer/scripts/hooks/session-end-handoff.sh && echo "SessionEnd OK"
+   test -x power-engineer/scripts/hooks/pre-compact-snapshot.sh && echo "PreCompact OK"
+   ```
+3. **Confirm `.power-engineer/` exists and is writable.** All three tiers assume the directory is reachable:
+   ```bash
+   test -d .power-engineer && test -w .power-engineer && echo "dir OK"
+   ```
+4. **Check `memory-errors.log` for recent failures.** Most hook/flow issues surface here before the user notices a missing handoff file:
+   ```bash
+   tail -20 .power-engineer/memory-errors.log
+   ```
+5. **Manually invoke a hook script** to see what it does in isolation (hooks run with `$CLAUDE_PROJECT_DIR` populated — simulate by setting it explicitly):
+   ```bash
+   CLAUDE_PROJECT_DIR="$PWD" bash power-engineer/scripts/hooks/session-end-handoff.sh; echo "Exit: $?"
+   CLAUDE_PROJECT_DIR="$PWD" bash power-engineer/scripts/hooks/pre-compact-snapshot.sh; echo "Exit: $?"
+   ```
+   Both scripts MUST exit 0 on every path. A non-zero exit is a bug — file it against the hook script, not the configurator.
+6. **Confirm the per-project memory directory exists** (Tier 1 + Tier 3 target):
+   ```bash
+   ls ~/.claude/projects/$(pwd | /usr/bin/sed 's|/|-|g')/memory/
+   ```
+   If the directory is missing, Tier 1 writes will fail silently until Claude recreates it on the next memory write.
+
+### Cross-references
+
+- **SessionEnd hook** — registration shape, matcher choice, timeout, fallback: Step 5 → "SessionEnd hook — automatic session handoff"
+- **PreCompact hook** — registration shape, exit-0-always invariant, fallback: Step 5 → "PreCompact hook — pre-compaction state snapshot"
+- **`/power-engineer save-phase` flow** — full step-by-step ceremony + per-step fallback: `power-engineer/references/flows/save-phase.md`
+- **Hooks research + schema provenance** — source URLs, firing semantics, known gaps: `docs/superpowers/plans/v1.4.0-hooks-research.md`
+

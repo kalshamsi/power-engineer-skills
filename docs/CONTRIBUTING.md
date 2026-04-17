@@ -189,6 +189,37 @@ test: add integration test for drift-detector
 - Install command must be verified and include `-y`
 - Update the skill count in `power-engineer/references/catalog/INDEX.md`
 
+### Bumping the catalog version
+
+When a PR changes any `power-engineer/references/catalog/**/*.md` file, it MUST also bump `power-engineer/.catalog-version` (semver). The CI `catalog-version-sync` job enforces this.
+
+Bump rules:
+- **Patch bump (X.Y.Z → X.Y.Z+1)** — adding/removing/renaming skills
+- **Minor bump (X.Y.Z → X.Y+1.0)** — adding new catalog categories (new subdirectory or top-level section)
+- **Major bump (X.Y.Z → X+1.0.0)** — structural schema changes (new required column, changed separator convention)
+
+Document the bump in the CHANGELOG entry under `### Catalog` (see below).
+
+### CHANGELOG `### Catalog` subhead
+
+Every release entry in `CHANGELOG.md` must include a `### Catalog` subhead documenting catalog changes in that release. Schema:
+
+```markdown
+### Catalog
+
+- **Catalog version:** X.Y.Z (matches `power-engineer/.catalog-version` at release time)
+- **Skills added:** (list or "none")
+- **Skills removed:** (list or "none")
+- **Skills renamed:** (list of old → new, or "none")
+- **Structural changes:** (describe schema/convention changes, or "none")
+```
+
+Enforced by `tests/lint/catalog-integrity.sh` Check 8. The subhead lives between `### Changed` and `### Removed` (per Keep-a-Changelog convention).
+
+**Pre-convention exemption:** The convention applies to entries v1.3.0 and forward. Entries sorted below `1.3.0` via `sort -V` are automatically skipped by Check 8. Additionally, a retroactive entry that pre-dates the convention may add an HTML comment `<!-- catalog-exempt: pre-convention -->` anywhere in its block to be skipped explicitly.
+
+External consumers (e.g., downstream curation workflows) parse this section for delta computation across releases.
+
 ### Module/flow changes
 
 - Describe what the module does, why the change is needed, and any downstream impact on flows
