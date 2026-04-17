@@ -200,6 +200,26 @@ Bump rules:
 
 Document the bump in the CHANGELOG entry under `### Catalog` (see below).
 
+### CHANGELOG `### Catalog` subhead
+
+Every release entry in `CHANGELOG.md` must include a `### Catalog` subhead documenting catalog changes in that release. Schema:
+
+```markdown
+### Catalog
+
+- **Catalog version:** X.Y.Z (matches `power-engineer/.catalog-version` at release time)
+- **Skills added:** (list or "none")
+- **Skills removed:** (list or "none")
+- **Skills renamed:** (list of old → new, or "none")
+- **Structural changes:** (describe schema/convention changes, or "none")
+```
+
+Enforced by `tests/lint/catalog-integrity.sh` Check 8. The subhead lives between `### Changed` and `### Removed` (per Keep-a-Changelog convention).
+
+**Pre-convention exemption:** The convention applies to entries v1.3.0 and forward. Entries sorted below `1.3.0` via `sort -V` are automatically skipped by Check 8. Additionally, a retroactive entry that pre-dates the convention may add an HTML comment `<!-- catalog-exempt: pre-convention -->` anywhere in its block to be skipped explicitly.
+
+External consumers (e.g., downstream curation workflows) parse this section for delta computation across releases.
+
 ### Module/flow changes
 
 - Describe what the module does, why the change is needed, and any downstream impact on flows
