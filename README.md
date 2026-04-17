@@ -221,6 +221,42 @@ Curated skill collections that install via specialized methods. Power Engineer p
 
 ---
 
+## What's New in v1.4.0
+
+### Catalog versioning
+
+Every catalog change now bumps `power-engineer/.catalog-version` (semver). CI enforces that any PR touching `power-engineer/references/catalog/**` includes a version bump. See [catalog version conventions](docs/CONTRIBUTING.md#bumping-the-catalog-version) for bump rules (patch / minor / major).
+
+Every release entry in `CHANGELOG.md` now includes a `### Catalog` subhead documenting the catalog version, skills added/removed/renamed, and structural changes. See [CHANGELOG `### Catalog` convention](docs/CONTRIBUTING.md#changelog--catalog-subhead) for the required schema.
+
+### Memory architecture (3-tier hooks)
+
+v1.4.0 adds a three-tier memory system so critical context survives across session boundaries and compaction events:
+
+| Hook / Command | When it fires | What it saves |
+|----------------|---------------|---------------|
+| **SessionEnd hook** | Claude Code session ends | Accomplishments, decisions, open tasks, next steps |
+| **PreCompact hook** | Context approaches compaction threshold | Working state snapshot before context is trimmed |
+| `/power-engineer save-phase` | Manual mid-session checkpoint | Current phase progress, files modified, decisions made |
+
+Fallback contracts ensure graceful degradation when hooks are unavailable.
+
+### Subagent selector
+
+A new `subagent-selector` module gives Power Engineer fine-grained control over which model tier is used for each task. Five modes:
+
+| Mode | Behavior |
+|------|----------|
+| `selector` (default) | Auto-selects model tier based on task complexity |
+| `force-opus` | Always use Opus for all subagent dispatches |
+| `force-sonnet` | Always use Sonnet for all subagent dispatches |
+| `force-haiku` | Always use Haiku for all subagent dispatches |
+| `none` | Disable model-tier selection; use Claude Code defaults |
+
+Configure via `power engineer configure` → subagent model mode.
+
+---
+
 ## Testing
 
 Power Engineer has a two-layer testing story:
