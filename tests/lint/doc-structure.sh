@@ -747,5 +747,19 @@ check "configurator PreCompact registration uses \$CLAUDE_PROJECT_DIR" \
 check "configurator.md asserts settings.local.json is user-owned" \
   "grep -qE 'settings\\.local\\.json.*(user-owned|never.*overwrit|do not touch)' power-engineer/references/modules/configurator.md"
 
+# ─── Release-process kit (v1.4.0) ───
+check "release-process.md exists" \
+  "[ -f docs/superpowers/release-process/release-process.md ]"
+
+for t in planner-prompt executor-prompt plan changelog-entry migration; do
+  check "release-process template $t exists" \
+    "[ -f docs/superpowers/release-process/templates/${t}-template.md ]"
+done
+
+# Shipping-boundary guard: release-process kit MUST NOT live inside power-engineer/
+# (would violate the invariant that only power-engineer/** ships via npx skills add).
+check "release-process kit is NOT inside power-engineer/" \
+  "! find power-engineer/ -path '*release-process*' -print -quit | grep -q ."
+
 [ "$FAIL" -eq 0 ] || exit 1
 echo "  ✓ doc structure OK"
