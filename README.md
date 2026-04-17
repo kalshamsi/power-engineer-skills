@@ -5,7 +5,7 @@
     Scan. Interview. Install. Configure. Done.
   </p>
   <p align="center">
-    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.3.0"><img src="https://img.shields.io/badge/version-1.3.0-blue" alt="Version 1.3.0"></a>
+    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.4.0"><img src="https://img.shields.io/badge/version-1.4.0-blue" alt="Version 1.4.0"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
     <img src="https://img.shields.io/badge/skills-231-orange" alt="224 Skills">
     <img src="https://github.com/kalshamsi/power-engineer-skills/actions/workflows/ci.yml/badge.svg" alt="CI">

@@ -86,7 +86,7 @@ The user's free-text response becomes the memory file's `description` frontmatte
 
 ## Step 3 -- Construct the memory file content
 
-Assemble the file body using the Step-1 scratch data plus the Step-2 user prose. Match the v1.3.0 phase-memory shape exactly — see `~/.claude/projects/<proj-slug>/memory/project_v130_phase*.md` for reference exemplars.
+Assemble the file body using the Step-1 scratch data plus the Step-2 user prose. Match the v1.4.0 phase-memory shape exactly — see `~/.claude/projects/<proj-slug>/memory/project_v140_phase*.md` for reference exemplars.
 
 ### Required frontmatter
 
