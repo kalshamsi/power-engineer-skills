@@ -4,6 +4,33 @@ All notable changes to Power Engineer are documented in this file.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.0] — 2026-04-17
+
+### Added
+- **Subagent-selector module** — prose + 3-axis decision table at `power-engineer/references/modules/subagent-selector.md`; 5-mode preference in `state.json.preferences.subagent_model_mode` (`selector` / `force-opus` / `force-sonnet` / `force-haiku` / `none`); new questionnaire Q14
+- **3-tier memory architecture** — `/power-engineer save-phase` slash command + `SessionEnd` hook (automatic handoff) + `PreCompact` hook (context-crunch snapshot); each tier with graceful fallback contract
+- **`.catalog-version` mechanism** — new `power-engineer/.catalog-version` file (initialized at 1.3.0 retroactive baseline, bumped to 1.4.0 for this release); CI `catalog-version-sync` job enforces bump on catalog changes
+- **CHANGELOG `### Catalog` convention** — structured catalog-delta reporting per release; retroactive application to v1.3.0 entry; `tests/lint/catalog-integrity.sh` Check 8 enforces
+- **Release-process framework kit** — `docs/superpowers/release-process/` with process doc + 5 required templates (planner-prompt, executor-prompt, plan, changelog-entry, migration) + 2 optional (parity, behavioral-validation); maintainer-only (not in shipped skill)
+- **7 new catalog rows** — 6 `tavily-*` sub-skills + `stitch-design` (plus `search` → `tavily-search` rename in-place in docs-research.md + data-ml.md)
+- Feedback memory documenting external-API / hooks research requirement for future plans
+
+### Changed
+- None
+
+### Catalog
+- **Catalog version:** 1.4.0 (from 1.3.0)
+- **Skills added:** tavily-best-practices, tavily-cli, tavily-crawl, tavily-extract, tavily-map, tavily-research, stitch-design (7 new rows across docs-research.md + design-systems.md)
+- **Skills removed:** none
+- **Skills renamed:** `search` → `tavily-search` (in docs-research.md + engineering/data-ml.md — corrects stale upstream package name; net-zero on row count)
+- **Structural changes:** new `.catalog-version` single-line file (power-engineer/.catalog-version); catalog row count 224 → 231
+
+### Removed
+- None
+
+### Migration
+- Existing v1.3.0 users: see `docs/MIGRATION.md`. All changes additive; no breaking changes. Re-run `/power-engineer configure` to register SessionEnd + PreCompact hooks and to set your `subagent_model_mode` preference (defaults to `selector` if skipped).
+
 ## [1.3.0] — 2026-04-16
 
 ### Added
