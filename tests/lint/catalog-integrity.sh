@@ -218,5 +218,32 @@ if [ -f ".catalog-version" ]; then
   fail ".catalog-version at repo root violates shipping boundary; move to power-engineer/.catalog-version"
 fi
 
+# Check 8: every release entry (v1.3.0 and forward) in CHANGELOG.md has a ### Catalog subhead.
+# The convention was established retroactively starting with v1.3.0. Entries sorted below 1.3.0
+# via sort -V OR tagged with <!-- catalog-exempt: pre-convention --> are skipped.
+if [ -f "CHANGELOG.md" ]; then
+  # Use line numbers from outer grep directly (avoids fragile grep -F + head -1 lookup)
+  while IFS=: read -r line_no header; do
+    # Extract version string (e.g., "1.3.0" from "## [1.3.0] — 2026-04-16")
+    version=$(echo "$header" | sed -nE 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/p')
+    # Skip pre-convention entries: sort -V says version < 1.3.0
+    lowest=$(printf '%s\n%s\n' "$version" "1.3.0" | sort -V | head -1)
+    if [ "$lowest" != "1.3.0" ] && [ "$version" != "1.3.0" ]; then
+      continue
+    fi
+    # Find where next release entry starts (or end of file)
+    next=$(awk -v start="$line_no" 'NR > start && /^## \[/ { print NR; exit }' CHANGELOG.md)
+    [ -z "$next" ] && next=$(wc -l < CHANGELOG.md)
+    block=$(sed -n "${line_no},${next}p" CHANGELOG.md)
+    # Skip if explicit exemption marker present
+    if echo "$block" | grep -q '<!-- catalog-exempt: pre-convention -->'; then
+      continue
+    fi
+    if ! echo "$block" | grep -qE '^### Catalog[[:space:]]*$'; then
+      fail "CHANGELOG.md release '$header' (line $line_no) missing '### Catalog' subhead"
+    fi
+  done < <(grep -nE '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' CHANGELOG.md)
+fi
+
 [ "$FAIL" -eq 0 ] || exit 1
 echo "  ✓ catalog integrity OK"
