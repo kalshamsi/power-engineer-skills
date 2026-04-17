@@ -8,11 +8,13 @@ Two-layer verification:
 
 | Script | Purpose |
 |--------|---------|
-| catalog-integrity.sh | 4-column schema, INDEX ↔ file symmetry, no dupes, skill count matches README badge |
+| catalog-integrity.sh | Canonical 5-col-with-Install schema, INDEX ↔ file symmetry, no dupes, skill count matches README badge; **Check 7**: `.catalog-version` exists, is semver (`X.Y.Z`, exactly 5 bytes, no trailing newline), not at repo root; **Check 8**: every CHANGELOG `## [X.Y.Z]` release (v1.3.0+) has a `### Catalog` subhead |
 | install-syntax.sh | Bare `npx skills add` form + `/plugin install` + `/plugin marketplace add` patterns; no version pinning in catalog rows |
-| doc-structure.sh | Module / flow / router invariants migrated from tests/integration/ |
+| doc-structure.sh | Module / flow / router invariants migrated from tests/integration/; v1.4.0 additions: **subagent-selector** module (3-axis decision table, all 5 model modes); **save-phase** flow exists and is routed in SKILL.md; **configurator hooks** — SessionEnd + PreCompact hook scripts exist and are executable, registration commands use `$CLAUDE_PROJECT_DIR`, `settings.local.json` is asserted user-owned (never overwritten); **release-process kit** — 1 process doc + 5 templates exist in `docs/superpowers/release-process/`, shipping-boundary guard asserts none live inside `power-engineer/` |
 | url-validation.sh | HEAD-check every GitHub URL in the catalog (session-cached) |
 | scanner-rules.sh | Runs `power-engineer/references/modules/detection-rules.yaml` against `tests/fixtures/` |
+
+ShellCheck runs as a separate CI step (`.github/workflows/ci.yml`) against `scripts/*.sh` (maintainer utilities) and `power-engineer/scripts/hooks/*.sh` (hook scripts that ship with the skill).
 
 ## Layer 2 — Fixtures (archetype verification)
 
