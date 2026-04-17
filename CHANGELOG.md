@@ -23,6 +23,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Permissions hook schema (`power-engineer/references/modules/permissions.md`): `PreToolUse` entry corrected from flat array-of-strings to nested `{type, command}` objects (matches Claude Code hooks schema; flat format caused a Settings Error on launch)
 - README badges: honest claims — `fixtures-5-scanner-verified`, auto-generated skill count, CI status
 
+### Catalog
+
+- **Catalog version:** pre-convention baseline; recorded retroactively as `1.3.0` in `power-engineer/.catalog-version` (file introduced in v1.4.0)
+- **Skills added:** none
+- **Skills removed:** none
+- **Skills renamed:** none
+- **Structural changes:** 220 install commands normalized via `@latest` strip; catalog row count reconciled 238 → 224 (cross-category duplicates removed)
+
 ### Removed
 - `tests/integration/` (14 scripts) — invariants migrated to `tests/lint/`
 - `tests/run-tests.sh` — replaced by `tests/run-all.sh`
