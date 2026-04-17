@@ -694,5 +694,58 @@ check "[from test-security-resolver-wiring.sh] No duplicate pci-dss-audit in Com
 check "[from test-security-resolver-wiring.sh] No duplicate mobile-security in Custom block" \
   "[ \$(awk '/\*\*Custom:\*\*/,/^---/' '$RESOLVER' | grep -c 'mobile-security') -le 1 ]"
 
+# ─── Subagent-selector module (v1.4.0) ───
+check "subagent-selector.md exists" \
+  "[ -f power-engineer/references/modules/subagent-selector.md ]"
+
+check "subagent-selector.md has 3-axis decision table" \
+  "grep -qE '^\| Task profile \| Low-risk single \| High-risk single \| Low-risk parallel fan-out \|' power-engineer/references/modules/subagent-selector.md"
+
+check "subagent-selector.md documents all 5 modes" \
+  "grep -q 'force-opus' power-engineer/references/modules/subagent-selector.md && grep -q 'force-sonnet' power-engineer/references/modules/subagent-selector.md && grep -q 'force-haiku' power-engineer/references/modules/subagent-selector.md"
+
+# ─── Save-phase flow (v1.4.0) ───
+check "save-phase.md flow exists" \
+  "[ -f power-engineer/references/flows/save-phase.md ]"
+
+check "SKILL.md routes 'save-phase' to flows/save-phase.md" \
+  "grep -qE 'save-phase[^|]*\|[^|]*references/flows/save-phase\.md' power-engineer/SKILL.md"
+
+# ─── Configurator extensions (v1.4.0) ───
+check "configurator.md preferences block includes subagent_model_mode" \
+  "grep -A 10 '\"preferences\"' power-engineer/references/modules/configurator.md | grep -q '\"subagent_model_mode\"'"
+
+check "configurator.md references SessionEnd hook" \
+  "grep -q 'SessionEnd' power-engineer/references/modules/configurator.md"
+
+check "configurator.md references PreCompact hook" \
+  "grep -q 'PreCompact' power-engineer/references/modules/configurator.md"
+
+# ─── Hook scripts ship inside skill (v1.4.0 shipping-boundary enforcement) ───
+check "SessionEnd hook script exists and is executable" \
+  "test -x power-engineer/scripts/hooks/session-end-handoff.sh"
+
+check "PreCompact hook script exists and is executable" \
+  "test -x power-engineer/scripts/hooks/pre-compact-snapshot.sh"
+
+check "SessionEnd hook script always exits 0 (never blocks session termination)" \
+  "grep -q 'exit 0' power-engineer/scripts/hooks/session-end-handoff.sh"
+
+check "PreCompact hook script always exits 0 (never blocks compaction)" \
+  "grep -q 'exit 0' power-engineer/scripts/hooks/pre-compact-snapshot.sh"
+
+# ─── Configurator registration uses $CLAUDE_PROJECT_DIR (portable for both dogfood + end-user) ───
+# Accepts either end-user form ($CLAUDE_PROJECT_DIR/.claude/hooks/...) OR dogfood form
+# ($CLAUDE_PROJECT_DIR/power-engineer/scripts/hooks/...), since configurator.md documents both shapes.
+check "configurator SessionEnd registration uses \$CLAUDE_PROJECT_DIR" \
+  "grep -qE '\"command\":.*\\\$CLAUDE_PROJECT_DIR.*session-end-handoff' power-engineer/references/modules/configurator.md"
+
+check "configurator PreCompact registration uses \$CLAUDE_PROJECT_DIR" \
+  "grep -qE '\"command\":.*\\\$CLAUDE_PROJECT_DIR.*pre-compact-snapshot' power-engineer/references/modules/configurator.md"
+
+# ─── Configurator regen safety: never overwrite settings.local.json ───
+check "configurator.md asserts settings.local.json is user-owned" \
+  "grep -qE 'settings\\.local\\.json.*(user-owned|never.*overwrit|do not touch)' power-engineer/references/modules/configurator.md"
+
 [ "$FAIL" -eq 0 ] || exit 1
 echo "  ✓ doc structure OK"
