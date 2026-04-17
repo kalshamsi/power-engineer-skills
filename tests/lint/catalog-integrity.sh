@@ -190,5 +190,33 @@ else
   pass "skill count: $CATALOG_COUNT (matches README badge)"
 fi
 
+# Check 7: .catalog-version file exists, is single-line semver, no trailing newline
+CATALOG_VERSION_FILE="power-engineer/.catalog-version"
+if [ ! -f "$CATALOG_VERSION_FILE" ]; then
+  fail ".catalog-version file missing at $CATALOG_VERSION_FILE"
+else
+  CV_BYTES=$(wc -c < "$CATALOG_VERSION_FILE" | tr -d ' ')
+  CV_LINES=$(wc -l < "$CATALOG_VERSION_FILE" | tr -d ' ')
+  CV_CONTENT=$(cat "$CATALOG_VERSION_FILE")
+
+  # No trailing newline means wc -l reports 0
+  if [ "$CV_LINES" -ne 0 ]; then
+    fail ".catalog-version has trailing newline (wc -l=$CV_LINES, expected 0)"
+  fi
+
+  # Semver pattern: X.Y.Z with numeric components
+  if ! echo "$CV_CONTENT" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+    fail ".catalog-version content '$CV_CONTENT' is not valid semver"
+  else
+    pass ".catalog-version: $CV_CONTENT (semver, no trailing newline, $CV_BYTES bytes)"
+  fi
+fi
+
+# Shipping-boundary check: .catalog-version MUST NOT exist at repo root
+# (would violate the invariant that only power-engineer/** ships via npx skills add)
+if [ -f ".catalog-version" ]; then
+  fail ".catalog-version at repo root violates shipping boundary; move to power-engineer/.catalog-version"
+fi
+
 [ "$FAIL" -eq 0 ] || exit 1
 echo "  ✓ catalog integrity OK"
