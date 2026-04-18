@@ -235,9 +235,12 @@ git commit -m "<type>(<scope>): <subject>"
 - [ ] **Step 2: Verify the v<X.Y.Z> changelog entry is template-derived (dogfood check)**
 
 ```bash
+# Use the flag-based awk pattern rather than the `/^## \[X.Y.Z\]/,/^## \[/`
+# range form — the range form closes on the start line when start + end regex
+# both match the same `## [` header, truncating the extracted subheads to zero.
 diff \
   <(grep -E '^### ' docs/superpowers/release-process/templates/changelog-entry-template.md) \
-  <(awk '/^## \[<X.Y.Z>\]/,/^## \[/' CHANGELOG.md | grep -E '^### ') \
+  <(awk '/^## \[<X.Y.Z>\]/{flag=1; next} flag && /^## \[/{exit} flag' CHANGELOG.md | grep -E '^### ') \
   && echo "OK: v<X.Y.Z> CHANGELOG structurally derived from template" \
   || echo "FAIL: changelog entry diverges from template shape (dogfooding gap)"
 ```
