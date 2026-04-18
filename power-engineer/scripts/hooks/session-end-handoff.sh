@@ -15,6 +15,16 @@ set -euo pipefail
 #     so session termination is never blocked or delayed.
 #   - Uses CLAUDE_PROJECT_DIR (populated by Claude Code) to locate the project.
 
+# ── Operator observability: surface prior hook failures ──────────────────────
+# If memory-errors.log already has entries from a prior invocation, emit a
+# one-line stderr note so operators notice silent-failure accumulation. This
+# does NOT block the hook (exit 0 on every path is still the contract).
+_prior_errlog="${CLAUDE_PROJECT_DIR:-$PWD}/.power-engineer/memory-errors.log"
+if [[ -s "$_prior_errlog" ]]; then
+    printf 'session-end-handoff.sh: prior hook errors logged at %s\n' "$_prior_errlog" >&2
+fi
+unset _prior_errlog
+
 # ── Resolve project root ─────────────────────────────────────────────────────
 # CLAUDE_PROJECT_DIR is set by Claude Code at hook invocation. Fall back to the
 # current working directory if the var is unset (e.g., during manual testing).
@@ -79,7 +89,7 @@ fi
 # a $(cat <<EOF) command substitution. The block avoids heredoc parser quirks
 # around apostrophes in prose, keeps variable expansion explicit, and is
 # ShellCheck-friendly.
-handoff_file="${state_dir}/session-handoff-${timestamp_filename}.md"
+handoff_file="${state_dir}/session-handoff-${timestamp_filename}-$$.md"
 
 if ! {
     printf '# Session Handoff — %s\n\n' "$timestamp_iso"
