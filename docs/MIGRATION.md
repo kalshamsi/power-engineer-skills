@@ -1,5 +1,36 @@
 # Migration Guide
 
+## v1.4.0 → v1.4.1
+
+**TL;DR:** Two defensive-hardening fixes to the v1.4.0 SessionEnd + PreCompact hook scripts. All changes additive. Your existing skills + state continue to work.
+
+### What changed
+1. **Hook output filenames include process ID.** Both `session-end-handoff.sh` and `pre-compact-snapshot.sh` now append `$$` (current shell PID) to the timestamped output filename. Prevents sub-second collision when hooks fire in rapid succession.
+2. **Operator observability for silent hook failures.** Both hooks now emit a one-line stderr warning at start when `.power-engineer/memory-errors.log` contains prior entries. The warning is non-blocking (hook still exits 0) and surfaces the accumulated-failure case that would otherwise stay silent.
+
+### What users must do
+Nothing required. Upgrade is `npx skills add power-engineer@1.4.1` (or the pinned-SHA equivalent). Existing `.power-engineer/` state is preserved.
+
+### Optional
+Periodically check `.power-engineer/memory-errors.log` to surface silent hook failures:
+
+```bash
+cat .power-engineer/memory-errors.log
+```
+
+An empty file means no failures have been recorded. A non-empty file means at least one prior hook invocation encountered a failure (mkdir, write, etc.); the v1.4.1 stderr warning at hook start surfaces this automatically, but occasional manual inspection is a useful belt-and-suspenders habit for production projects.
+
+### Rollback
+To roll back to v1.4.0:
+
+```bash
+git revert <v1.4.1-release-commit>
+# or selectively
+git checkout v1.4.0 -- power-engineer/scripts/hooks/
+```
+
+No state cleanup required — v1.4.1 hook output files interleave cleanly with v1.4.0 output files (filename prefix unchanged; only the suffix adds `-$$`).
+
 ## v1.3.0 → v1.4.0
 
 **TL;DR:** All additive. Your existing skills + state continue to work. Re-run `/power-engineer configure` to enable new hooks and set your subagent-model preference.
