@@ -4,6 +4,27 @@ All notable changes to Power Engineer are documented in this file.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.1] — 2026-04-18
+
+### Added
+- Stderr warning at hook start when `.power-engineer/memory-errors.log` contains prior entries — operator-observability surface for silent hook failures (addresses v1.4.0 security review ⚠️ MINOR #2)
+
+### Changed
+- `power-engineer/scripts/hooks/session-end-handoff.sh` and `power-engineer/scripts/hooks/pre-compact-snapshot.sh` output filenames now include process ID (`$$`) alongside the UTC second-resolution timestamp — prevents filename collision on sub-second concurrent invocations (addresses v1.4.0 security review ⚠️ MINOR #1)
+
+### Catalog
+- **Catalog version:** 1.4.0 (unchanged)
+- **Skills added:** none
+- **Skills removed:** none
+- **Skills renamed:** none
+- **Structural changes:** none
+
+### Removed
+- None
+
+### Migration
+- Existing v1.4.0 users: see `docs/MIGRATION.md`. All changes additive; no breaking changes. Re-running `/power-engineer configure` is NOT required — the hook scripts are shipped in-place via `npx skills add`. Operators are advised to periodically check `.power-engineer/memory-errors.log` for silent hook failures (now surfaced at hook start via stderr).
+
 ## [1.4.0] — 2026-04-17
 
 ### Added
