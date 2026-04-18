@@ -51,16 +51,17 @@ Files created or modified, grouped by responsibility:
 
 **Files:** None (git operation)
 
-- [ ] **Step 1: Create branch tracking origin**
+- [ ] **Step 1: Create local branch (no push per user HARD CONSTRAINT)**
 
 ```bash
 git checkout main
 git pull
 git checkout -b v1.4.1-upgrade
-git push -u origin v1.4.1-upgrade
 ```
 
-Expected: `v1.4.1-upgrade` tracks `origin/v1.4.1-upgrade`. This push is the single mid-release exception to the push-at-release-time policy (per `release-process.md` §4).
+Expected: local `v1.4.1-upgrade` branch on base `d91f905` (v1.4.0 squash).
+
+**Push policy for v1.4.1:** User-level HARD CONSTRAINT overrides the `release-process.md` §4 Phase 0 branch-push exception. Branch stays local-only through Phase 0, 1, 2, and the audit steps of Phase 3. First (and only) push happens in Phase 3 Task 3.4 Step 1, immediately before `gh pr create --draft`. Rationale: user-directive tightens the §4 exception; all implementation commits stay locally revertible without coordination with origin.
 
 - [ ] **Step 2: Confirm clean starting state**
 
