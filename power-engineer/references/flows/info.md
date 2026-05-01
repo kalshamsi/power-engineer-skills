@@ -124,10 +124,6 @@ Inline action by health state:
 - `⚠ Missing` -- "Re-run install or `/power-engineer update`."
 - `ℹ Not installed` -- "Run the install command above to add this skill."
 
-If the catalog has no row for the skill (state entry exists but catalog is
-silent), render `Catalog metadata` with `Category: (not in catalog)` and
-omit the `Related` and `Install command` lines.
-
 Exit after rendering -- info never prompts for further action and never
 writes to state, disk, or configurator outputs.
 
@@ -137,6 +133,7 @@ writes to state, disk, or configurator outputs.
 |---|---|
 | Skill name not in state.json AND not in catalog | Error: "Skill '<name>' not in state.json or catalog. Run `/power-engineer catalog` to browse." |
 | In state.json but disk dir gone | Render with Health: ✗ Missing + action: "Re-run install or `/power-engineer update`." |
+| State entry exists but no catalog row | Render with Category: (not in catalog); omit Related and Install command lines. |
 | In catalog but not installed | Render without state-installed lines; Health: ℹ Not installed; action: install command. |
 | SKILL.md present but malformed frontmatter | Description: "(unparseable frontmatter)"; rest of output unaffected. |
 | Path traversal attempt in skill name (e.g. `../foo`) | Reject at Step 2 regex validation. No FS read. |
