@@ -172,7 +172,6 @@
 | Skill | Source | Install | Description | Trigger | When to use |
 |-------|--------|---------|-------------|---------|-------------|
 | claude-code-skill-security-check | aliksir/claude-code-skill-security-check | `npx skills add aliksir/claude-code-skill-security-check -y` | Scan skills for prompt injection, data exfiltration, permission bypass, supply chain risks. | `/claude-code-skill-security-check` | When vetting a new skill for prompt injection or supply chain risks |
-| mcp-security-audit | larrygmaguire-hash/mcp-security-audit | `npx skills add larrygmaguire-hash/mcp-security-audit -y` | Audit MCP servers before installation. | `/mcp-security-audit` | When auditing an MCP server for security risks before installing |
 | safety-guard | affaan-m/everything-claude-code | `npx skills add affaan-m/everything-claude-code --skill safety-guard -y` | Prevent destructive ops: rm -rf, force push, DROP TABLE, chmod 777. | `/safety-guard` | When adding guardrails to prevent dangerous destructive operations |
 
 ---
