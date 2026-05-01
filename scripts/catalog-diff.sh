@@ -31,6 +31,25 @@ readonly CATALOG_DIR='power-engineer/references/catalog'
 readonly VERSION_FILE='power-engineer/.catalog-version'
 readonly CATALOG_GLOB='power-engineer/references/catalog/**/*.md'
 
+# Tempfile paths used by do_ref_diff. Declared at module scope so the
+# EXIT trap (cleanup_ref_diff) can reference them after the function
+# has returned — bash locals go out of scope on function return, but
+# the EXIT trap fires at shell exit, after main() has unwound.
+REF_DIFF_A_OUT=''
+REF_DIFF_A_LIST=''
+REF_DIFF_B_OUT=''
+REF_DIFF_B_LIST=''
+
+# ────────────────────────────────────────────────────────────────────
+# cleanup_ref_diff — Remove tempfiles created by do_ref_diff.
+# Registered as the EXIT trap before any tempfiles are created.
+# Safe to call when paths are still empty (rm -f tolerates missing args).
+# ────────────────────────────────────────────────────────────────────
+
+cleanup_ref_diff() {
+    rm -f "$REF_DIFF_A_OUT" "$REF_DIFF_A_LIST" "$REF_DIFF_B_OUT" "$REF_DIFF_B_LIST"
+}
+
 # ────────────────────────────────────────────────────────────────────
 # usage()
 # ────────────────────────────────────────────────────────────────────
@@ -49,6 +68,9 @@ Formats (optional; default = changelog):
   --format=changelog                Paste-ready CHANGELOG '### Catalog' block.
   --format=diff                     Human-readable bulleted diff.
   --format=json                     Machine-readable JSON.
+
+Note: --ci-check --format=json emits a status object {ok, message?, files_changed?, ...},
+      not the diff envelope. Use --ref-diff or --version-diff for the 5-key diff JSON.
 
 Examples:
   ./scripts/catalog-diff.sh --ref-diff v1.3.0 v1.4.0
@@ -347,7 +369,8 @@ render_json() {
     removed_json="$(printf '%s\n' "${REMOVED[@]+"${REMOVED[@]}"}" | sed '/^$/d' | json_array_from_lines)"
 
     # Renamed: each entry is "old\tnew" — emit as objects.
-    {
+    # Use command substitution (subshell) — no tempfile needed, no /tmp race.
+    renamed_json="$(
         printf '['
         local first=1 entry old new
         for entry in "${RENAMED[@]+"${RENAMED[@]}"}"; do
@@ -364,10 +387,7 @@ render_json() {
             printf '{"from": "%s", "to": "%s"}' "$old" "$new"
         done
         printf ']'
-    } >/tmp/.catalog-diff-renamed.$$
-
-    renamed_json="$(cat /tmp/.catalog-diff-renamed.$$)"
-    rm -f /tmp/.catalog-diff-renamed.$$
+    )"
 
     structural_json="$(printf '%s\n' "${STRUCTURAL[@]+"${STRUCTURAL[@]}"}" | sed '/^$/d' | json_array_from_lines)"
 
@@ -386,11 +406,6 @@ render_changelog() {
     printf '### Catalog\n\n'
 
     # Skills added.
-    # Note: printf calls in this function use a leading space character
-    # ' - ...' instead of '- ...' to avoid bash printf parsing the leading
-    # dash as a flag (POSIX printf treats arg-starting `-` as flag intro).
-    # The space is then trimmed via sed at end. Simpler workaround: use
-    # `printf '%s\n' "- foo"` so the dash is in an argument, not the format.
     if [ "${#ADDED[@]}" -eq 0 ]; then
         printf '%s\n' '- Skills added: none'
     else
@@ -510,18 +525,18 @@ do_ref_diff() {
     local ref_b="$2"
     local fmt="$3"
 
-    local a_outfile a_listfile b_outfile b_listfile
-    a_outfile="$(mktemp)"; a_listfile="$(mktemp)"
-    b_outfile="$(mktemp)"; b_listfile="$(mktemp)"
+    # Register the cleanup trap BEFORE creating tempfiles so a SIGINT
+    # window between mktemp calls cannot leak files. cleanup_ref_diff
+    # tolerates empty paths via rm -f.
+    trap cleanup_ref_diff EXIT
 
-    # Trap cleanup of these tempfiles on exit.
-    # shellcheck disable=SC2064  # intentional: expand paths now, not at trap time
-    trap "rm -f '$a_outfile' '$a_listfile' '$b_outfile' '$b_listfile'" EXIT
+    REF_DIFF_A_OUT="$(mktemp)";  REF_DIFF_A_LIST="$(mktemp)"
+    REF_DIFF_B_OUT="$(mktemp)";  REF_DIFF_B_LIST="$(mktemp)"
 
-    parse_catalog_at_ref "$ref_a" "$a_outfile" "$a_listfile"
-    parse_catalog_at_ref "$ref_b" "$b_outfile" "$b_listfile"
+    parse_catalog_at_ref "$ref_a" "$REF_DIFF_A_OUT" "$REF_DIFF_A_LIST"
+    parse_catalog_at_ref "$ref_b" "$REF_DIFF_B_OUT" "$REF_DIFF_B_LIST"
 
-    compute_diff "$a_outfile" "$b_outfile" "$a_listfile" "$b_listfile"
+    compute_diff "$REF_DIFF_A_OUT" "$REF_DIFF_B_OUT" "$REF_DIFF_A_LIST" "$REF_DIFF_B_LIST"
 
     local a_version b_version
     a_version="$(read_catalog_version_at_ref "$ref_a")"
@@ -550,16 +565,24 @@ do_version_diff() {
     local tag2="v${v2}"
 
     if ! git rev-parse --verify --quiet --end-of-options "${tag1}^{commit}" >/dev/null 2>&1; then
-        err "version '${v1}' not found in \`git tag\`"
-        printf 'Available tags:\n' >&2
-        git tag --sort=-creatordate | sed 's/^/  /' >&2
+        if [ "$fmt" = 'json' ]; then
+            json_emit_error "version '${v1}' not found in git tag"
+        else
+            err "version '${v1}' not found in \`git tag\`"
+            printf 'Available tags:\n' >&2
+            git tag --sort=-creatordate | sed 's/^/  /' >&2
+        fi
         return 2
     fi
 
     if ! git rev-parse --verify --quiet --end-of-options "${tag2}^{commit}" >/dev/null 2>&1; then
-        err "version '${v2}' not found in \`git tag\`"
-        printf 'Available tags:\n' >&2
-        git tag --sort=-creatordate | sed 's/^/  /' >&2
+        if [ "$fmt" = 'json' ]; then
+            json_emit_error "version '${v2}' not found in git tag"
+        else
+            err "version '${v2}' not found in \`git tag\`"
+            printf 'Available tags:\n' >&2
+            git tag --sort=-creatordate | sed 's/^/  /' >&2
+        fi
         return 2
     fi
 
