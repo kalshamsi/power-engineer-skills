@@ -85,15 +85,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check .catalog-version bumps when catalog changes
-        run: |
-          CATALOG_CHANGED=$(git diff --name-only origin/main...HEAD -- 'power-engineer/references/catalog/**/*.md' | wc -l | tr -d ' ')
-          VERSION_CHANGED=$(git diff --name-only origin/main...HEAD -- 'power-engineer/.catalog-version' | wc -l | tr -d ' ')
+      - name: catalog-version-sync
+        run: ./scripts/catalog-diff.sh --ci-check
 
-          if [ "$CATALOG_CHANGED" -gt 0 ] && [ "$VERSION_CHANGED" -eq 0 ]; then
-            echo "✗ Catalog files changed but .catalog-version was not bumped."
-            echo "Files changed:"
-            git diff --name-only origin/main...HEAD -- 'power-engineer/references/catalog/**/*.md'
-            exit 1
-          fi
-          echo "✓ catalog-version sync OK"
+  catalog-diff-self-test:
+    name: catalog-diff-self-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run catalog-diff self-test
+        run: bash tests/lint/catalog-diff.sh
