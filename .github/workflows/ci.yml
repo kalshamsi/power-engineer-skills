@@ -85,11 +85,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: catalog-version-sync
+      - name: Run catalog-diff.sh --ci-check
         run: ./scripts/catalog-diff.sh --ci-check
 
   catalog-diff-self-test:
-    name: catalog-diff-self-test
+    name: Catalog-diff self-test
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
