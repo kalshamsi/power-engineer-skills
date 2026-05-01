@@ -7,7 +7,7 @@
   <p align="center">
     <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.4.1"><img src="https://img.shields.io/badge/version-1.4.1-blue" alt="Version 1.4.1"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
-    <img src="https://img.shields.io/badge/skills-231-orange" alt="231 Skills">
+    <img src="https://img.shields.io/badge/skills-230-orange" alt="230 Skills">
     <img src="https://github.com/kalshamsi/power-engineer-skills/actions/workflows/ci.yml/badge.svg" alt="CI">
     <img src="https://img.shields.io/badge/fixtures-5%20scanner--verified-blue" alt="Fixtures">
   </p>
