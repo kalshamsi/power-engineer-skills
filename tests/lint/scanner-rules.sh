@@ -221,6 +221,15 @@ run_fixture() {
   local fixture="$1"
   local dir="$FIXTURES_DIR/$fixture"
   local expected="$dir/expected.md"
+
+  # Behavioral fixtures (EXEC.md present) are manual-harness fixtures with a
+  # different shape (expected-after.md, not expected.md). Skip them — they
+  # don't use detection-rules.yaml.
+  if [ -f "$dir/EXEC.md" ]; then
+    echo "→ $fixture (behavioral fixture — skip)"
+    return
+  fi
+
   [ -f "$expected" ] || { fail "$fixture: missing expected.md"; return; }
 
   echo "→ $fixture"
