@@ -225,6 +225,13 @@ REMOVED=()
 RENAMED=()
 STRUCTURAL=()
 ROW_COUNT_DELTA=0
+# Raw row counts at refs A and B — used by render_changelog to print the
+# author-convention row-count math line ("231 -> 230") that Catalog
+# entries restate even when STRUCTURAL[] is empty (Task 2.3 dogfood fix).
+# Kept as separate globals (not just delta) so the renderer can show both
+# endpoints without re-reading the parse outputs.
+ROW_COUNT_A=0
+ROW_COUNT_B=0
 
 compute_diff() {
     local a_outfile="$1"
@@ -237,11 +244,15 @@ compute_diff() {
     RENAMED=()
     STRUCTURAL=()
     ROW_COUNT_DELTA=0
+    ROW_COUNT_A=0
+    ROW_COUNT_B=0
 
     # Row count delta (uses raw line counts — total skill rows across catalog).
     local a_count b_count
     a_count="$(wc -l <"$a_outfile" | tr -d ' ')"
     b_count="$(wc -l <"$b_outfile" | tr -d ' ')"
+    ROW_COUNT_A=$a_count
+    ROW_COUNT_B=$b_count
     ROW_COUNT_DELTA=$((b_count - a_count))
 
     # Names only (for added/removed).
@@ -396,6 +407,42 @@ render_json() {
 }
 
 # ────────────────────────────────────────────────────────────────────
+# _render_row_count_summary — Brief reason recap for the row-count math
+# line emitted by render_changelog (Task 2.3 dogfood fix).
+#
+# Phrasing rules (matching spec):
+#   - 1 row total contribution: "<name> added" or "<name> removed"
+#   - 2-3 rows total:           "M added, N removed" (omitting zero counts)
+#   - >3 rows total:            "net delta"
+#
+# Reads ADDED[] and REMOVED[] globals; emits the recap to stdout.
+# ────────────────────────────────────────────────────────────────────
+
+_render_row_count_summary() {
+    local a="${#ADDED[@]}"
+    local r="${#REMOVED[@]}"
+    local total=$((a + r))
+    if [ "$total" -eq 1 ]; then
+        if [ "$a" -eq 1 ]; then
+            printf '%s added' "${ADDED[0]}"
+        else
+            printf '%s removed' "${REMOVED[0]}"
+        fi
+    elif [ "$total" -gt 3 ]; then
+        printf 'net delta'
+    else
+        # 2 or 3 total — emit count phrasing, omit zero halves.
+        if [ "$a" -gt 0 ] && [ "$r" -gt 0 ]; then
+            printf '%d added, %d removed' "$a" "$r"
+        elif [ "$a" -gt 0 ]; then
+            printf '%d added' "$a"
+        else
+            printf '%d removed' "$r"
+        fi
+    fi
+}
+
+# ────────────────────────────────────────────────────────────────────
 # render_changelog — Paste-ready CHANGELOG block.
 # ────────────────────────────────────────────────────────────────────
 
@@ -433,14 +480,45 @@ render_changelog() {
     fi
 
     # Structural changes.
+    #
+    # The v1.4.0 + v1.4.2 author convention restates row-count math inside
+    # this line whenever ADDED or REMOVED is non-empty, even when STRUCTURAL
+    # (whole-file additions/removals) is empty. We emit the same shape so
+    # --format=changelog is paste-ready without manual editing
+    # (Task 2.3 dogfood fix).
+    #
+    # Cases:
+    #   1. STRUCTURAL empty AND no row-count change            -> "none"
+    #   2. STRUCTURAL empty AND ADDED/REMOVED non-empty        -> inline row-count math
+    #   3. STRUCTURAL non-empty                                -> file list + nested row-count note
+    local row_summary
+    row_summary="$(_render_row_count_summary)"
+    local row_delta_signed row_word
+    if [ "$ROW_COUNT_DELTA" -gt 0 ]; then
+        row_delta_signed="+${ROW_COUNT_DELTA}"
+    else
+        row_delta_signed="${ROW_COUNT_DELTA}"
+    fi
+    # Mirror the v1.4.2 author verbatim block: singular "row" for ±1, plural otherwise.
+    if [ "$ROW_COUNT_DELTA" -eq 1 ] || [ "$ROW_COUNT_DELTA" -eq -1 ]; then
+        row_word='row'
+    else
+        row_word='rows'
+    fi
     if [ "${#STRUCTURAL[@]}" -eq 0 ]; then
-        printf '%s\n' '- Structural changes: none'
+        if [ "${#ADDED[@]}" -eq 0 ] && [ "${#REMOVED[@]}" -eq 0 ]; then
+            printf '%s\n' '- Structural changes: none'
+        else
+            printf '%s\n' "- Structural changes: catalog row count ${ROW_COUNT_A} -> ${ROW_COUNT_B} (${row_delta_signed} ${row_word}, ${row_summary})"
+        fi
     else
         printf '%s\n' "- Structural changes (${#STRUCTURAL[@]}):"
         local s
         for s in "${STRUCTURAL[@]}"; do
             printf '  - %s\n' "$s"
         done
+        printf '  - row count delta: %s -> %s (%s %s, %s)\n' \
+            "$ROW_COUNT_A" "$ROW_COUNT_B" "$row_delta_signed" "$row_word" "$row_summary"
     fi
 
     # Catalog version delta.

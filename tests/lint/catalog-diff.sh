@@ -61,8 +61,20 @@ else
   pass "conflicting mode flags rejected"
 fi
 
+# Test 7: --format=changelog emits row-count math line when REMOVED is
+# non-empty AND STRUCTURAL[] is empty (Task 2.3 dogfood fix). The v1.4.1 ->
+# HEAD case removes mcp-security-audit (1 row) without any whole-file
+# additions/removals — exactly the divergence the fix targets. Match on
+# substrings so future row-count drift doesn't make the test brittle.
+output=$(./scripts/catalog-diff.sh --ref-diff v1.4.1 HEAD --format=changelog 2>&1)
+if echo "$output" | grep -qE "Structural changes:.*row count.*231.*230"; then
+  pass "--format=changelog emits row-count math when ADDED/REMOVED non-empty + STRUCTURAL empty"
+else
+  fail "--format=changelog should emit 'Structural changes: ... row count 231 -> 230 ...' for v1.4.1 -> HEAD"
+fi
+
 if [ "$FAIL" -eq 0 ]; then
-  echo "  ✓ catalog-diff.sh self-test: all 6 cases passed"
+  echo "  ✓ catalog-diff.sh self-test: all 7 cases passed"
   exit 0
 else
   echo "  ✗ catalog-diff.sh self-test: $FAIL failures"
