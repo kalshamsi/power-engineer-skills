@@ -4,6 +4,36 @@ All notable changes to Power Engineer are documented in this file.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.2] — 2026-05-01
+
+### Added
+- `/power-engineer uninstall <skill>` — new flow at `power-engineer/references/flows/uninstall.md`. Removes skill entry from `state.json` AND deletes skill directory; disambiguates name collisions via AskUserQuestion; smart-cleanup with confirmation for orphan/stale-state edge cases; triggers full configurator regen on success.
+- `/power-engineer info <skill>` — new flow at `power-engineer/references/flows/info.md`. Read-only display: identity header + Description (from SKILL.md frontmatter) + Catalog metadata (category + related + install command) + Health status with action suggestion.
+- `scripts/catalog-diff.sh` — multi-mode maintainer/CI tool. Modes: `--ref-diff` (compare catalog at two git refs), `--version-diff` (resolve via tags then ref-diff), `--ci-check` (replaces `catalog-version-sync` workflow body — single source of truth for bump validation). Formats: `--format=changelog` (default, paste-ready `### Catalog` block), `diff`, `json`.
+- Drift-sweep formalization — new Phase 8.5 task block in `docs/superpowers/release-process/templates/executor-prompt-template.md` + new section `## 11` in `release-process.md`. First dogfood executed during v1.4.2 release ceremony.
+- `tests/lint/catalog-diff.sh` — self-test for the new script (mode coverage, format coverage, hostile-input rejection).
+- `catalog-diff-self-test` GitHub Actions job — runs `tests/lint/catalog-diff.sh` on every PR.
+- `tests/lint/doc-structure.sh` — 2 new named checks (SKILL.md route-table includes uninstall + info; every route-table entry has matching flow file).
+
+### Changed
+- `.github/workflows/ci.yml` `catalog-version-sync` job body now invokes `./scripts/catalog-diff.sh --ci-check` (job name preserved for CI history continuity); the bump-validation logic is now the single source of truth, testable locally.
+- `power-engineer/SKILL.md` — +2 route-table rows (uninstall, info) inserted at end of the utility cluster (between `help` and `configure`). No version reference (per writing-skills CSO discipline confirmed v1.4.1).
+
+### Catalog
+- **Catalog version:** 1.4.1 (from 1.4.0 — bumped in pre-flight chore commit `e9ce5e6` between v1.4.1 release and v1.4.2 release work)
+- **Skills added:** none
+- **Skills removed:** mcp-security-audit (`larrygmaguire-hash/mcp-security-audit` returned HTTP 404 — upstream repo deleted/renamed; removed in chore commit `e9ce5e6`)
+- **Skills renamed:** none
+- **Structural changes:** catalog row count 231 → 230 (-1 row, mcp-security-audit removed)
+
+> Note: The chore commit landed on main between v1.4.1 and v1.4.2 release tags. From an end-user upgrading v1.4.1 → v1.4.2, catalog DID evolve. v1.4.2 itself does not change catalog within its own scope — the row removal is recorded here for end-user visibility per the v1.4.0 catalog convention.
+
+### Removed
+- None
+
+### Migration
+- Existing v1.4.1 users: see `docs/MIGRATION.md`. All changes additive; no breaking changes. Re-running `/power-engineer configure` is NOT required — the new flow files and route-table rows take effect on next skill load. The new `scripts/catalog-diff.sh` and CI workflow update are maintainer-side only and do not affect end-user behavior.
+
 ## [1.4.1] — 2026-04-18
 
 ### Added
