@@ -71,7 +71,7 @@ Scan codebase → Adaptive interview → Resolve skills → Install → Configur
 
 Skills are reusable instruction sets that extend what Claude can do inside your project. A `test-driven-development` skill teaches Claude TDD. A `systematic-debugging` skill gives it structured root-cause analysis. Skills activate by name (`/skill-name`) or automatically when Claude detects the right context.
 
-**Power Engineer curates 224 of them** across 16 catalog files and installs exactly the ones your project needs.
+**Power Engineer curates 230 of them** across 16 catalog files and installs exactly the ones your project needs.
 
 ---
 
@@ -100,7 +100,7 @@ All commands are prefixed with `power engineer` in chat (e.g., `power engineer f
 
 ## Catalog
 
-224 skills across 16 catalog files. Browse at [`power-engineer/references/catalog/`](./power-engineer/references/catalog/) or start with [`INDEX.md`](./power-engineer/references/catalog/INDEX.md).
+230 skills across 16 catalog files. Browse at [`power-engineer/references/catalog/`](./power-engineer/references/catalog/) or start with [`INDEX.md`](./power-engineer/references/catalog/INDEX.md).
 
 | Category | What's included |
 |----------|----------------|
