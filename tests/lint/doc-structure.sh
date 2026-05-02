@@ -761,5 +761,22 @@ done
 check "release-process kit is NOT inside power-engineer/" \
   "! find power-engineer/ -path '*release-process*' -print -quit | grep -q ."
 
+# ─── SKILL.md route table integrity (v1.4.2) ──────────────
+check "SKILL.md route table includes uninstall + info rows" \
+  "grep -q 'power engineer uninstall' power-engineer/SKILL.md && \
+   grep -q 'power engineer info' power-engineer/SKILL.md"
+
+# shellcheck disable=SC2016
+# (single-quoted block is intentional — the inner $flow_path and $((...))
+# expansions must happen at eval-time inside check(), not at call-site.)
+check "every SKILL.md route-table flow file exists" \
+  '
+  fail_count=0
+  while IFS= read -r flow_path; do
+    [ -f "power-engineer/references/flows/$flow_path" ] || fail_count=$((fail_count + 1))
+  done < <(grep -oE "references/flows/[a-z-]+\.md" power-engineer/SKILL.md | sed "s|references/flows/||" | sort -u)
+  [ "$fail_count" -eq 0 ]
+  '
+
 [ "$FAIL" -eq 0 ] || exit 1
 echo "  ✓ doc structure OK"

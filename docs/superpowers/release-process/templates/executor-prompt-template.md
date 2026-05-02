@@ -533,6 +533,35 @@ The full-release rollback recipe is documented in each upgrade plan's "Risk & Ro
 
 ---
 
+## Phase 8.5 — Drift sweep (mandatory)
+
+**Goal:** Catch pre-existing repo drift before release ceremony exposes it to users. Formalized in v1.4.2 after v1.4.0/v1.4.1 surfaced drift ad-hoc.
+
+**Placement:** Phase 8.5 runs immediately before `## Final end-to-end audit (before tag push)`. For releases using the standard 9-phase shape, this falls between Phase 8 (Docs + Integration) and Phase 9 (Release Ceremony). For lightweight 4-phase releases (v1.4.1+), Phase 8.5 becomes the first task of the release ceremony phase.
+
+### Task 8.5.1: Scan repo for pre-existing drift
+
+- [ ] Run `scripts/update-skill-count.sh` and verify no working-tree diff
+- [ ] Open `power-engineer/references/catalog/INDEX.md` and confirm "Total skills catalogued" matches actual catalog row count
+- [ ] Confirm `power-engineer/.catalog-version` matches the version declared in CHANGELOG `### Catalog` for the current release entry
+- [ ] `git status` should show no uncommitted changes to non-shipping files (CLAUDE.md, .gitignore, etc.)
+- [ ] Inspect README image alt-text against rendered badge content (skill count, version, etc.)
+
+### Task 8.5.2: Fix any drift in-place
+
+- [ ] Each drift fix is a separate commit, NOT amended into release commits
+- [ ] Commit message: `chore: drift-sweep <Nx items>` with bullet list of fixed items
+- [ ] If no drift found, document this explicitly in the empty checkpoint: `git commit --allow-empty -m "checkpoint: Phase 8.5 drift-sweep clean"`
+
+### Audit
+
+- [ ] Sonnet (Template B) by default — mechanical check of drift findings + fix correctness
+- [ ] Upgrade to Opus if findings need judgment (e.g., ambiguous "correct" alt-text)
+
+**Reference:** `docs/superpowers/release-process/release-process.md` §11.
+
+---
+
 ## Final end-to-end audit (before tag push)
 
 Before dispatching the final tag-push step, dispatch a **final end-to-end auditor** (separate from the per-task Dual-auditor):

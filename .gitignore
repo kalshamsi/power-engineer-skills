@@ -31,6 +31,7 @@ scripts/*
 !scripts/strip-cli-version-from-catalog.sh
 !scripts/update-skill-count.sh
 !scripts/run-behavioral-fixtures.sh
+!scripts/catalog-diff.sh
 
 # ── Test artifacts (runtime output, not the test scripts) ────
 test-projects/

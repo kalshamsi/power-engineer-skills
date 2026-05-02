@@ -1,0 +1,56 @@
+{
+  "version": "2.0",
+  "created": "2026-05-01",
+  "updated": "2026-05-01",
+  "project": {
+    "name": "uninstall-info-flow-fixture",
+    "language": "none",
+    "framework": "none",
+    "sdks": [],
+    "cloud_database": [],
+    "team_size": 1,
+    "is_monorepo": false
+  },
+  "questionnaire_answers": {},
+  "installed_skills": [
+    {
+      "name": "synthetic-skill",
+      "repo": "test-fixtures/repo-a",
+      "scope": "project",
+      "installed_at": "2026-04-30",
+      "installed_by": "power-engineer"
+    },
+    {
+      "name": "synthetic-skill",
+      "repo": "test-fixtures/repo-b",
+      "scope": "project",
+      "installed_at": "2026-04-30",
+      "installed_by": "power-engineer"
+    },
+    {
+      "name": "synthetic-skill-orphan",
+      "repo": "test-fixtures/repo-a",
+      "scope": "project",
+      "installed_at": "2026-04-29",
+      "installed_by": "power-engineer"
+    },
+    {
+      "name": "synthetic-skill-healthy",
+      "repo": "test-fixtures/repo-a",
+      "scope": "project",
+      "installed_at": "2026-04-28",
+      "installed_by": "power-engineer"
+    }
+  ],
+  "scan_snapshot": {
+    "source_file_count": 0,
+    "package_json_hash": "00000000",
+    "dependency_count": 0
+  },
+  "preferences": {
+    "security_level": "standard",
+    "auto_update": true,
+    "skills_cli_version": "1.5.0",
+    "subagent_model_mode": "selector"
+  }
+}

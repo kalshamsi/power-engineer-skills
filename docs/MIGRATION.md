@@ -1,5 +1,30 @@
 # Migration Guide
 
+## v1.4.1 → v1.4.2
+
+**Status:** Additive. No breaking changes. No re-configuration required.
+
+### What changed (user-visible)
+
+- New command: `/power-engineer uninstall <skill>` — removes a skill entry from `state.json` AND deletes the skill directory. Disambiguates name collisions; smart-cleanup with confirmation for orphan/stale-state edge cases.
+- New command: `/power-engineer info <skill>` — read-only introspection (identity, description, catalog metadata, health status).
+
+### What changed (maintainer-visible)
+
+- New script: `scripts/catalog-diff.sh` — multi-mode catalog comparison tool. Replaces `catalog-version-sync` CI job body (single source of truth for bump validation). Maintainers can now run `./scripts/catalog-diff.sh --ci-check` locally to debug PR failures.
+- New release ceremony step: Phase 8.5 drift sweep (formalized in `docs/superpowers/release-process/release-process.md` §11 + `executor-prompt-template.md`).
+
+### Required actions
+
+- None. All changes are additive.
+- Optional: re-run `/power-engineer configure` to refresh the cheatsheet (the new commands appear in `power-engineer/references/flows/` automatically; no re-configuration required for them to work).
+
+### Compatibility notes
+
+- `.catalog-version` is at `1.4.1` — set by the pre-flight chore commit `e9ce5e6` (PR #7) which removed the dead mcp-security-audit row, NOT by any change inside v1.4.2's release scope. End users upgrading v1.4.1 → v1.4.2 will therefore see one fewer catalog row (mcp-security-audit removed) and `.catalog-version` advanced 1.4.0 → 1.4.1.
+- `power-engineer/SKILL.md` route table has 2 new rows (info, uninstall). Existing rows unchanged.
+- CI `catalog-version-sync` job name preserved (history continuity); only the run body changed.
+
 ## v1.4.0 → v1.4.1
 
 **TL;DR:** Two defensive-hardening fixes to the v1.4.0 SessionEnd + PreCompact hook scripts. All changes additive. Your existing skills + state continue to work.

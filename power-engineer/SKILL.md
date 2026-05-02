@@ -42,6 +42,8 @@ Check the user's message and follow the matching route:
 | "power engineer drift"                   | Read `references/flows/update.md`                         |
 | "power engineer catalog"                 | Read `references/flows/catalog-browse.md`                 |
 | "power engineer help"                   | Read `references/flows/help.md`                           |
+| "power engineer info <skill>"            | Read `references/flows/info.md`                           |
+| "power engineer uninstall <skill>"       | Read `references/flows/uninstall.md`                      |
 | "power engineer configure"             | Read `references/flows/configure.md`                      |
 | "power engineer save-phase"            | Read `references/flows/save-phase.md`                     |
 | "power engineer frontend"               | Read `references/flows/frontend.md`                       |

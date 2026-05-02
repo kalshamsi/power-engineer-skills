@@ -1,30 +1,40 @@
 <!-- Replace <OLD.VER>, <NEW.VER>, <release-commit>, and bracketed placeholders before committing. -->
+<!--
+  STRUCTURE NOTES (v1.4.2+):
+  - This 4-section structure applies to additive releases (the common case).
+  - For BREAKING-CHANGE releases, RESTORE a `### Rollback` section after
+    `### Compatibility notes` with concrete revert commands (typically
+    `git revert <release-commit>` or per-file `git checkout v<OLD.VER> -- <paths>`).
+  - Prior entries (v1.3.0→v1.4.0, v1.4.0→v1.4.1) follow the OLD 4-section
+    template (`### What changed` / `### What users must do` / `### Optional`
+    / `### Rollback`). Preserved as historical drift; do NOT retroactively
+    rewrite.
+  - Per `release-process.md` §9 (Template Dogfooding Expectation): the
+    in-place template fix that produced this structure landed in v1.4.2's
+    release ceremony alongside the v1.4.1 → v1.4.2 entry that surfaced
+    the dogfood divergence.
+-->
 
 ## v<OLD.VER> → v<NEW.VER>
 
-**TL;DR:** <one-sentence summary>.
+**Status:** <Additive | Breaking | Mixed>. <one-sentence summary>.
 
-### What changed
-1. <change 1>
-2. <change 2>
+### What changed (user-visible)
 
-### What users must do
-<required actions, or "nothing">
+- <user-facing change 1>
+- <user-facing change 2>
 
-### Optional
-Optional steps users may run to take advantage of new features. If this
-release adds a new hook, slash command, or preference, document the
-command to enable it here. Omit the section body and write "None." if the
-release has no optional follow-ups.
+### What changed (maintainer-visible)
 
-### Rollback
-Commands to revert to the previous version. Typically `git revert
-<release-commit>`, `git checkout v<OLD.VER> -- <paths>`, or a per-file
-selective revert. Name the previous version explicitly in this body so
-users grepping for "v<OLD.VER>" find the rollback path.
+- <maintainer-facing change 1>
+- <maintainer-facing change 2>
 
-```bash
-git revert <release-commit>
-# or
-git checkout v<OLD.VER> -- <paths>
-```
+### Required actions
+
+- <required action, or "None. All changes are additive.">
+- Optional: <optional follow-up action, or omit if none>
+
+### Compatibility notes
+
+- <version-state change 1, e.g., `.catalog-version` advanced X → Y>
+- <preserved invariant 1, e.g., CI job name preserved>
