@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # tests/lint/catalog-diff.sh (run by tests/run-all.sh) needs historical tags + origin/main
 
       - name: Install yq
         run: sudo snap install yq || { sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && sudo chmod +x /usr/local/bin/yq; }
