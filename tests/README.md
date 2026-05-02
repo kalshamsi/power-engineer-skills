@@ -34,13 +34,12 @@ automatically on every PR.
 ### Behavioral fixtures (manual harness)
 
 `tests/fixtures/uninstall-info-flow/` (v1.4.2) — manual harness for the v1.4.2
-`uninstall` and `info` flows. Four scenarios cover happy-path uninstall, info
-rendering for an installed skill, info rendering for an unknown skill, and the
-"no Power Engineer setup found" guard. Run before tag push: `bash
-tests/fixtures/uninstall-info-flow/run.sh` (or follow the README in that
-directory). Behavioral fixtures complement the lint layer — they exercise the
-flow files end-to-end against synthetic state, catching regressions that
-structural lint can't see.
+`uninstall` and `info` flows. Four scenarios cover ambiguous-name disambiguation,
+orphan/stale-state cleanup, happy-path uninstall, and info render for an
+installed skill. Run before tag push: follow
+`tests/fixtures/uninstall-info-flow/EXEC.md`. Behavioral fixtures complement the
+lint layer — they exercise the flow files end-to-end against synthetic state,
+catching regressions that structural lint can't see.
 
 ## Coverage philosophy
 

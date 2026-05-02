@@ -43,6 +43,15 @@ At the **Phase 3 release ceremony**, before tag push. The fixture is part
 of the v1.4.2 release checklist alongside the existing scanner-rules
 fixtures and the `tests/run-all.sh` lint suite.
 
+## Schema notes
+
+Note on the `scope` field: `initial-state.json` populates `scope: "project"` on
+each entry because `uninstall.md` Step 3 and `info.md` Step 3 both read it to
+compute the install path. The configurator template in
+`power-engineer/references/modules/configurator.md` (lines ~60-65) does not yet
+document this field — flagged as a separate documentation gap to address in a
+future cycle.
+
 ## Manual-harness note
 
 This fixture is **not** wired into `scripts/run-behavioral-fixtures.sh`.

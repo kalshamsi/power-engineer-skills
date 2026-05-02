@@ -30,7 +30,7 @@ For each scenario you run, start by copying the fixture into a fresh
 subdirectory of `$FIX_TMP`:
 
 ```bash
-SCENARIO_DIR="$FIX_TMP/scenario-$(date +%s)"
+SCENARIO_DIR=$(mktemp -d "$FIX_TMP/scenario.XXXXXX")
 mkdir -p "$SCENARIO_DIR/.power-engineer" \
          "$SCENARIO_DIR/.claude/skills"
 
