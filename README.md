@@ -5,7 +5,7 @@
     Scan. Interview. Install. Configure. Done.
   </p>
   <p align="center">
-    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.4.1"><img src="https://img.shields.io/badge/version-1.4.1-blue" alt="Version 1.4.1"></a>
+    <a href="https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.4.2"><img src="https://img.shields.io/badge/version-1.4.2-blue" alt="Version 1.4.2"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
     <img src="https://img.shields.io/badge/skills-230-orange" alt="230 Skills">
     <img src="https://github.com/kalshamsi/power-engineer-skills/actions/workflows/ci.yml/badge.svg" alt="CI">
@@ -221,16 +221,35 @@ Curated skill collections that install via specialized methods. Power Engineer p
 
 ---
 
-## What's New in v1.4.1
+## What's New in v1.4.2
 
-v1.4.1 is a strict-patch release addressing the two ⚠️ MINOR findings from the v1.4.0 security review:
+### `/power-engineer uninstall <skill>`
 
-- **Filename collision prevention.** SessionEnd + PreCompact hook output filenames now include the current shell PID (`$$`) alongside the UTC timestamp, preventing clobber on sub-second concurrent invocations.
-- **Silent-failure observability.** Both hooks emit a one-line stderr warning at start when `.power-engineer/memory-errors.log` has accumulated prior failures. The warning is non-blocking (exit-0 hook contract preserved) and surfaces silent-failure accumulation that was otherwise invisible.
+Remove an installed skill cleanly — drops the entry from `.power-engineer/state.json` AND deletes the skill directory. Disambiguates when the same skill name exists from multiple repos. Smart-cleanup with confirmation for orphan dirs and stale state entries.
 
-No catalog changes. No new skills. No architectural changes. All additive. See [`CHANGELOG.md`](CHANGELOG.md) and [`docs/MIGRATION.md`](docs/MIGRATION.md) for full detail.
+```bash
+/power-engineer uninstall agent-browser
+# → If 2 entries match (vercel-labs/agent-browser + inferen-sh/skills),
+#   AskUserQuestion picks which to remove.
+```
 
-For the v1.4.0 feature set (catalog versioning, 3-tier memory architecture, subagent selector), see the [v1.4.0 release notes](https://github.com/kalshamsi/power-engineer-skills/releases/tag/v1.4.0) or the v1.4.0 CHANGELOG entry.
+### `/power-engineer info <skill>`
+
+Read-only introspection of any skill — installed or just cataloged.
+
+```bash
+/power-engineer info mcp-builder
+# → Identity (name + repo + path) + Description + Catalog metadata + Health
+```
+
+### `scripts/catalog-diff.sh` (maintainer)
+
+Multi-mode tool for catalog deltas. Powers the CI `catalog-version-sync` gate locally testable.
+
+```bash
+./scripts/catalog-diff.sh --ref-diff v1.4.1 HEAD --format=changelog
+# → Paste-ready ### Catalog block for CHANGELOG.
+```
 
 ---
 
