@@ -560,6 +560,8 @@ The full-release rollback recipe is documented in each upgrade plan's "Risk & Ro
 
 **Reference:** `docs/superpowers/release-process/release-process.md` §11.
 
+---
+
 ## Final end-to-end audit (before tag push)
 
 Before dispatching the final tag-push step, dispatch a **final end-to-end auditor** (separate from the per-task Dual-auditor):
