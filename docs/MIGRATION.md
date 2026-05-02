@@ -21,7 +21,7 @@
 
 ### Compatibility notes
 
-- `.catalog-version` is at `1.4.1` (set by pre-flight chore commit `e9ce5e6` removing the dead mcp-security-audit row). v1.4.2 itself does not change catalog within its own scope. End users upgrading from v1.4.1 → v1.4.2 will see one fewer catalog row (mcp-security-audit removed) and `.catalog-version` advanced 1.4.0 → 1.4.1.
+- `.catalog-version` is at `1.4.1` — set by the pre-flight chore commit `e9ce5e6` (PR #7) which removed the dead mcp-security-audit row, NOT by any change inside v1.4.2's release scope. End users upgrading v1.4.1 → v1.4.2 will therefore see one fewer catalog row (mcp-security-audit removed) and `.catalog-version` advanced 1.4.0 → 1.4.1.
 - `power-engineer/SKILL.md` route table has 2 new rows (info, uninstall). Existing rows unchanged.
 - CI `catalog-version-sync` job name preserved (history continuity); only the run body changed.
 

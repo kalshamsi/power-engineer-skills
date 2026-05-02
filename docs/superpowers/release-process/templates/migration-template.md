@@ -9,6 +9,10 @@
     template (`### What changed` / `### What users must do` / `### Optional`
     / `### Rollback`). Preserved as historical drift; do NOT retroactively
     rewrite.
+  - Per `release-process.md` §9 (Template Dogfooding Expectation): the
+    in-place template fix that produced this structure landed in v1.4.2's
+    release ceremony alongside the v1.4.1 → v1.4.2 entry that surfaced
+    the dogfood divergence.
 -->
 
 ## v<OLD.VER> → v<NEW.VER>
