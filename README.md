@@ -244,7 +244,7 @@ Read-only introspection of any skill — installed or just cataloged.
 
 ### `scripts/catalog-diff.sh` (maintainer)
 
-Multi-mode tool for catalog deltas. Powers the CI `catalog-version-sync` gate locally testable.
+Multi-mode tool for catalog deltas. Powers the CI `catalog-version-sync` gate — now testable locally.
 
 ```bash
 ./scripts/catalog-diff.sh --ref-diff v1.4.1 HEAD --format=changelog
